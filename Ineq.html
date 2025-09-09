@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Linear Inequalities Tutorial</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #166088;
+            --accent: #4cb5f5;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --inequality: #8a2be2;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--inequality), #6a0dad);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            gap: 5px;
+        }
+        
+        .tab-btn {
+            padding: 10px 20px;
+            background-color: #e9ecef;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab-btn:hover {
+            background-color: #dee2e6;
+        }
+        
+        .tab-btn.active {
+            background-color: white;
+            color: var(--inequality);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+        
+        .content-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            min-height: 400px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .definition-box {
+            background-color: #f0e6ff;
+            border-left: 5px solid var(--inequality);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .example-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--success);
+        }
+        
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .important-note {
+            background-color: #fff3cd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--warning);
+        }
+        
+        .practice-box {
+            background-color: #e6f7ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--accent);
+        }
+        
+        .solution-toggle {
+            background-color: var(--inequality);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .solution-toggle:hover {
+            background-color: #6a0dad;
+        }
+        
+        .solution {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            border: 1px dashed var(--inequality);
+        }
+        
+        .solution.show {
+            display: block;
+        }
+        
+        .interactive-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--danger);
+        }
+        
+        .equation-input {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .solve-btn {
+            background-color: var(--inequality);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .solve-btn:hover {
+            background-color: #6a0dad;
+        }
+        
+        .solution-steps {
+            margin-top: 20px;
+        }
+        
+        .number-line {
+            height: 40px;
+            background-color: #f8f9fa;
+            margin: 15px 0;
+            position: relative;
+            border-top: 2px solid #333;
+        }
+        
+        .point {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: var(--inequality);
+            border-radius: 50%;
+            top: -5px;
+            transform: translateX(-50%);
+        }
+        
+        .arrow {
+            position: absolute;
+            top: -8px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid var(--inequality);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: #6c757d;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                border-radius: 5px;
+                margin-bottom: 5px;
+            }
+            
+            .content-section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MAT115 Khalid Kassou</h1>
+            <h1>Solving Linear Inequalities</h1>
+            <p class="subtitle">From Basics to Advanced Problems</p>
+        </header>
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab(0)">Introduction</button>
+            <button class="tab-btn" onclick="showTab(1)">Basic Inequalities</button>
+            <button class="tab-btn" onclick="showTab(2)">One-Step Inequalities</button>
+            <button class="tab-btn" onclick="showTab(3)">Multi-Step Inequalities</button>
+            <button class="tab-btn" onclick="showTab(4)">Compound Inequalities</button>
+            <button class="tab-btn" onclick="showTab(5)">Practice Problems</button>
+        </div>
+        
+        <div class="content-section">
+            <!-- Introduction Tab -->
+            <div class="tab-content active" id="tab0">
+                <h2>What are Linear Inequalities?</h2>
+                <div class="definition-box">
+                    <p>A linear inequality is a mathematical statement that relates a linear expression as either less than, greater than, less than or equal to, or greater than or equal to another linear expression.</p>
+                    <p>Examples of linear inequalities:</p>
+                    <ul>
+                        <li>x > 5 (x is greater than 5)</li>
+                        <li>2y + 3 ≤ 11 (2y plus 3 is less than or equal to 11)</li>
+                        <li>-3z + 2 ≥ 4z - 5 (-3z plus 2 is greater than or equal to 4z minus 5)</li>
+                    </ul>
+                </div>
+                
+                <h3>Inequality Symbols</h3>
+                <div class="example-box">
+                    <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                        <tr>
+                            <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Symbol</th>
+                            <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Meaning</th>
+                            <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Example</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">&lt;</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Less than</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">x &lt; 3</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">&gt;</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Greater than</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">x &gt; 3</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">≤</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Less than or equal to</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">x ≤ 3</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">≥</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Greater than or equal to</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">x ≥ 3</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="important-note">
+                    <h4>Important Rule!</h4>
+                    <p>When multiplying or dividing both sides of an inequality by a negative number, the inequality sign must be reversed.</p>
+                    <p>Example: If -2x > 6, then x < -3 (sign reversed from > to <)</p>
+                </div>
+            </div>
+            
+            <!-- Basic Inequalities Tab -->
+            <div class="tab-content" id="tab1">
+                <h2>Basic Inequalities and Number Lines</h2>
+                <div class="definition-box">
+                    <p>Solving basic inequalities follows similar principles to solving equations, with one crucial exception: when multiplying or dividing by a negative number, the inequality sign must be reversed.</p>
+                </div>
+                
+                <h3>Graphing Inequalities on Number Lines</h3>
+                <div class="example-box">
+                    <h4>Example 1: x > 2</h4>
+                    <p>This includes all numbers greater than 2 but not including 2.</p>
+                    <div class="number-line">
+                        <div class="point" style="left: 30%;"></div>
+                        <div class="arrow" style="left: 30%;"></div>
+                        <div style="position: absolute; left: 30%; top: 25px;">2</div>
+                        <div class="arrow" style="left: 90%; transform: rotate(270deg);"></div>
+                    </div>
+                    <p>An open circle at 2 indicates that 2 is not included, and the arrow shows all values greater than 2.</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 2: x ≤ -1</h4>
+                    <p>This includes all numbers less than or equal to -1.</p>
+                    <div class="number-line">
+                        <div class="point" style="left: 20%; background-color: var(--success);"></div>
+                        <div class="arrow" style="left: 20%; transform: rotate(180deg); border-top-color: var(--success);"></div>
+                        <div style="position: absolute; left: 20%; top: 25px;">-1</div>
+                        <div class="arrow" style="left: 10%; transform: rotate(90deg); border-top-color: var(--success);"></div>
+                    </div>
+                    <p>A closed circle at -1 indicates that -1 is included, and the arrow shows all values less than -1.</p>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Practice: Graph x ≥ 3 on the number line</h4>
+                    <div class="number-line" id="practiceNumberLine"></div>
+                    <button class="solution-toggle" onclick="toggleSolution('solution1')">Show Solution</button>
+                    <div class="solution" id="solution1">
+                        <p>For x ≥ 3, we use a closed circle at 3 (since 3 is included) and an arrow pointing to the right (for values greater than 3).</p>
+                        <div class="number-line">
+                            <div class="point" style="left: 40%; background-color: var(--success);"></div>
+                            <div style="position: absolute; left: 40%; top: 25px;">3</div>
+                            <div class="arrow" style="left: 80%; transform: rotate(270deg); border-top-color: var(--success);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- One-Step Inequalities Tab -->
+            <div class="tab-content" id="tab2">
+                <h2>One-Step Inequalities</h2>
+                <div class="definition-box">
+                    <p>One-step inequalities can be solved with a single operation. Remember the special rule for negative coefficients!</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 1: x + 3 > 7</h4>
+                    <div class="step">x + 3 > 7</div>
+                    <div class="step">x + 3 - 3 > 7 - 3 (Subtract 3 from both sides)</div>
+                    <div class="step">x > 4</div>
+                    <p>Solution: All numbers greater than 4.</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 2: -2x ≤ 8</h4>
+                    <div class="step">-2x ≤ 8</div>
+                    <div class="step">-2x ÷ (-2) ≥ 8 ÷ (-2) (Divide both sides by -2, reverse the sign)</div>
+                    <div class="step">x ≥ -4</div>
+                    <p>Solution: All numbers greater than or equal to -4.</p>
+                </div>
+                
+                <div class="important-note">
+                    <h4>Remember!</h4>
+                    <p>When multiplying or dividing both sides of an inequality by a negative number, you must reverse the inequality sign.</p>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Practice Problem</h4>
+                    <p>Solve: -5x > 15</p>
+                    <button class="solution-toggle" onclick="toggleSolution('solution2')">Show Solution</button>
+                    <div class="solution" id="solution2">
+                        <div class="step">-5x > 15</div>
+                        <div class="step">-5x ÷ (-5) < 15 ÷ (-5) (Divide by -5, reverse the sign)</div>
+                        <div class="step">x < -3</div>
+                        <p>Solution: All numbers less than -3.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Multi-Step Inequalities Tab -->
+            <div class="tab-content" id="tab3">
+                <h2>Multi-Step Inequalities</h2>
+                <div class="definition-box">
+                    <p>Multi-step inequalities require multiple operations to solve. Follow the same steps as solving equations, but remember to reverse the inequality sign if you multiply or divide by a negative number.</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 1: 3x + 5 < 14</h4>
+                    <div class="step">3x + 5 < 14</div>
+                    <div class="step">3x + 5 - 5 < 14 - 5 (Subtract 5 from both sides)</div>
+                    <div class="step">3x < 9</div>
+                    <div class="step">3x ÷ 3 < 9 ÷ 3 (Divide both sides by 3)</div>
+                    <div class="step">x < 3</div>
+                    <p>Solution: All numbers less than 3.</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 2: 4 - 2x ≥ 10</h4>
+                    <div class="step">4 - 2x ≥ 10</div>
+                    <div class="step">4 - 2x - 4 ≥ 10 - 4 (Subtract 4 from both sides)</div>
+                    <div class="step">-2x ≥ 6</div>
+                    <div class="step">-2x ÷ (-2) ≤ 6 ÷ (-2) (Divide by -2, reverse the sign)</div>
+                    <div class="step">x ≤ -3</div>
+                    <p>Solution: All numbers less than or equal to -3.</p>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Practice Problem</h4>
+                    <p>Solve: 2(x - 3) + 5 ≥ 7</p>
+                    <button class="solution-toggle" onclick="toggleSolution('solution3')">Show Solution</button>
+                    <div class="solution" id="solution3">
+                        <div class="step">2(x - 3) + 5 ≥ 7</div>
+                        <div class="step">2x - 6 + 5 ≥ 7 (Distribute)</div>
+                        <div class="step">2x - 1 ≥ 7 (Combine like terms)</div>
+                        <div class="step">2x - 1 + 1 ≥ 7 + 1 (Add 1 to both sides)</div>
+                        <div class="step">2x ≥ 8</div>
+                        <div class="step">2x ÷ 2 ≥ 8 ÷ 2 (Divide both sides by 2)</div>
+                        <div class="step">x ≥ 4</div>
+                        <p>Solution: All numbers greater than or equal to 4.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Compound Inequalities Tab -->
+            <div class="tab-content" id="tab4">
+                <h2>Compound Inequalities</h2>
+                <div class="definition-box">
+                    <p>Compound inequalities are two inequalities joined by "and" or "or".</p>
+                    <ul>
+                        <li>"And" means both conditions must be true (intersection)</li>
+                        <li>"Or" means either condition can be true (union)</li>
+                    </ul>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 1: And Inequality (-2 ≤ x < 3)</h4>
+                    <div class="step">This means x ≥ -2 AND x < 3</div>
+                    <div class="step">Solve each part separately:</div>
+                    <div class="step">x ≥ -2</div>
+                    <div class="step">x < 3</div>
+                    <p>Solution: All numbers between -2 and 3, including -2 but not including 3.</p>
+                    <div class="number-line">
+                        <div class="point" style="left: 20%; background-color: var(--success);"></div>
+                        <div class="point" style="left: 50%;"></div>
+                        <div style="position: absolute; left: 20%; top: 25px;">-2</div>
+                        <div style="position: absolute; left: 50%; top: 25px;">3</div>
+                        <div style="position: absolute; left: 20%; width: 30%; height: 10px; background-color: var(--inequality); top: -2px;"></div>
+                    </div>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 2: Or Inequality (x ≤ -1 or x > 2)</h4>
+                    <div class="step">This means x ≤ -1 OR x > 2</div>
+                    <div class="step">Solve each part separately:</div>
+                    <div class="step">x ≤ -1</div>
+                    <div class="step">x > 2</div>
+                    <p>Solution: All numbers less than or equal to -1 or greater than 2.</p>
+                    <div class="number-line">
+                        <div class="point" style="left: 20%; background-color: var(--success);"></div>
+                        <div class="point" style="left: 60%;"></div>
+                        <div style="position: absolute; left: 20%; top: 25px;">-1</div>
+                        <div style="position: absolute; left: 60%; top: 25px;">2</div>
+                        <div class="arrow" style="left: 10%; transform: rotate(90deg); border-top-color: var(--inequality);"></div>
+                        <div class="arrow" style="left: 80%; transform: rotate(270deg); border-top-color: var(--inequality);"></div>
+                    </div>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Practice Problem</h4>
+                    <p>Solve: -3 ≤ 2x + 1 < 5</p>
+                    <button class="solution-toggle" onclick="toggleSolution('solution4')">Show Solution</button>
+                    <div class="solution" id="solution4">
+                        <div class="step">-3 ≤ 2x + 1 < 5</div>
+                        <div class="step">-3 - 1 ≤ 2x + 1 - 1 < 5 - 1 (Subtract 1 from all parts)</div>
+                        <div class="step">-4 ≤ 2x < 4</div>
+                        <div class="step">-4 ÷ 2 ≤ 2x ÷ 2 < 4 ÷ 2 (Divide all parts by 2)</div>
+                        <div class="step">-2 ≤ x < 2</div>
+                        <p>Solution: All numbers between -2 and 2, including -2 but not including 2.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Practice Problems Tab -->
+            <div class="tab-content" id="tab5">
+                <h2>Practice Problems</h2>
+                <p>Test your understanding with these practice problems. Try to solve them on your own before checking the solutions.</p>
+                
+                <div class="practice-box">
+                    <h4>Problem 1: One-Step Inequality</h4>
+                    <p>Solve: x - 7 > 2</p>
+                    <button class="solution-toggle" onclick="toggleSolution('practice1')">Show Solution</button>
+                    <div class="solution" id="practice1">
+                        <div class="step">x - 7 > 2</div>
+                        <div class="step">x - 7 + 7 > 2 + 7 (Add 7 to both sides)</div>
+                        <div class="step">x > 9</div>
+                        <p>Solution: All numbers greater than 9.</p>
+                    </div>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Problem 2: Inequality with Negative Coefficient</h4>
+                    <p>Solve: -3x ≥ 12</p>
+                    <button class="solution-toggle" onclick="toggleSolution('practice2')">Show Solution</button>
+                    <div class="solution" id="practice2">
+                        <div class="step">-3x ≥ 12</div>
+                        <div class="step">-3x ÷ (-3) ≤ 12 ÷ (-3) (Divide by -3, reverse the sign)</div>
+                        <div class="step">x ≤ -4</div>
+                        <p>Solution: All numbers less than or equal to -4.</p>
+                    </div>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Problem 3: Multi-Step Inequality</h4>
+                    <p>Solve: 2x + 3 ≤ 4x - 5</p>
+                    <button class="solution-toggle" onclick="toggleSolution('practice3')">Show Solution</button>
+                    <div class="solution" id="practice3">
+                        <div class="step">2x + 3 ≤ 4x - 5</div>
+                        <div class="step">2x - 4x + 3 ≤ 4x - 4x - 5 (Subtract 4x from both sides)</div>
+                        <div class="step">-2x + 3 ≤ -5</div>
+                        <div class="step">-2x + 3 - 3 ≤ -5 - 3 (Subtract 3 from both sides)</div>
+                        <div class="step">-2x ≤ -8</div>
+                        <div class="step">-2x ÷ (-2) ≥ -8 ÷ (-2) (Divide by -2, reverse the sign)</div>
+                        <div class="step">x ≥ 4</div>
+                        <p>Solution: All numbers greater than or equal to 4.</p>
+                    </div>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Problem 4: Compound Inequality</h4>
+                    <p>Solve: -4 < 3x + 2 ≤ 8</p>
+                    <button class="solution-toggle" onclick="toggleSolution('practice4')">Show Solution</button>
+                    <div class="solution" id="practice4">
+                        <div class="step">-4 < 3x + 2 ≤ 8</div>
+                        <div class="step">-4 - 2 < 3x + 2 - 2 ≤ 8 - 2 (Subtract 2 from all parts)</div>
+                        <div class="step">-6 < 3x ≤ 6</div>
+                        <div class="step">-6 ÷ 3 < 3x ÷ 3 ≤ 6 ÷ 3 (Divide all parts by 3)</div>
+                        <div class="step">-2 < x ≤ 2</div>
+                        <p>Solution: All numbers greater than -2 and less than or equal to 2.</p>
+                    </div>
+                </div>
+                
+                <div class="interactive-box">
+                    <h4>Interactive Inequality Solver</h4>
+                    <p>Enter a linear inequality to solve (e.g., 2x+5<13):</p>
+                    <input type="text" class="equation-input" id="inequalityToSolve" placeholder="Enter inequality">
+                    <button class="solve-btn" onclick="solveInequality()">Solve</button>
+                    
+                    <div class="solution-steps" id="solutionSteps"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Linear Inequalities Tutorial © 2023 | Created for educational purposes</p>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the selected tab
+        function showTab(tabIndex) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            
+            // Show the selected tab content
+            document.getElementById('tab' + tabIndex).classList.add('active');
+            
+            // Update active tab button
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach((btn, index) => {
+                if (index === tabIndex) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+        
+        // Function to toggle solution visibility
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            solution.classList.toggle('show');
+        }
+        
+        // Function to solve inequalities entered by the user
+        function solveInequality() {
+            const inequalityInput = document.getElementById('inequalityToSolve').value;
+            const solutionSteps = document.getElementById('solutionSteps');
+            
+            if (!inequalityInput) {
+                solutionSteps.innerHTML = '<p class="step">Please enter an inequality to solve.</p>';
+                return;
+            }
+            
+            // Simple inequality solver for demonstration purposes
+            // This is a simplified version that handles basic inequalities
+            
+            try {
+                let inequality = inequalityInput.replace(/\s/g, ''); // Remove spaces
+                
+                // Check if inequality has valid comparison operators
+                const operators = ['<', '>', '<=', '≥', '≥', '='];
+                let hasOperator = operators.some(op => inequality.includes(op));
+                
+                if (!hasOperator) {
+                    solutionSteps.innerHTML = '<p class="step">Please enter a valid inequality with a comparison operator (<, >, ≤, ≥).</p>';
+                    return;
+                }
+                
+                // Simple demonstration - not a full inequality parser
+                solutionSteps.innerHTML = `
+                    <p class="step">Solving: ${inequalityInput}</p>
+                    <p class="step">This interactive solver is a simplified demonstration.</p>
+                    <p class="step">For the inequality: ${inequalityInput}</p>
+                    <p class="step">You would typically:</p>
+                    <p class="step">1. Simplify both sides if needed</p>
+                    <p class="step">2. Move variable terms to one side</p>
+                    <p class="step">3. Move constant terms to the other side</p>
+                    <p class="step">4. Isolate the variable</p>
+                    <p class="step">5. <strong>Remember to reverse the inequality sign if you multiply or divide by a negative number!</strong></p>
+                    <p class="step">Try applying the techniques you've learned in this tutorial!</p>
+                `;
+                
+            } catch (error) {
+                solutionSteps.innerHTML = '<p class="step">Error solving inequality. Please check your input and try again.</p>';
+            }
+        }
+        
+        // Initialize the practice number line
+        document.addEventListener('DOMContentLoaded', function() {
+            const numberLine = document.getElementById('practiceNumberLine');
+            numberLine.innerHTML = `
+                <div style="position: absolute; left: 10%; top: 25px;">-5</div>
+                <div style="position: absolute; left: 30%; top: 25px;">0</div>
+                <div style="position: absolute; left: 50%; top: 25px;">5</div>
+                <div style="position: absolute; left: 70%; top: 25px;">10</div>
+            `;
+        });
+    </script>
+</body>
+</html>
