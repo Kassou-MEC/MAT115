@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absolute Value Equations and Inequalities</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #166088;
+            --accent: #4cb5f5;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --absolute: #8a2be2;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--absolute), #6a0dad);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            gap: 5px;
+        }
+        
+        .tab-btn {
+            padding: 10px 20px;
+            background-color: #e9ecef;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab-btn:hover {
+            background-color: #dee2e6;
+        }
+        
+        .tab-btn.active {
+            background-color: white;
+            color: var(--absolute);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+        
+        .content-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            min-height: 400px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .definition-box {
+            background-color: #f0e6ff;
+            border-left: 5px solid var(--absolute);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .example-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--success);
+        }
+        
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .important-note {
+            background-color: #fff3cd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--warning);
+        }
+        
+        .practice-box {
+            background-color: #e6f7ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--accent);
+        }
+        
+        .solution-toggle {
+            background-color: var(--absolute);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .solution-toggle:hover {
+            background-color: #6a0dad;
+        }
+        
+        .solution {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            border: 1px dashed var(--absolute);
+        }
+        
+        .solution.show {
+            display: block;
+        }
+        
+        .interactive-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--danger);
+        }
+        
+        .equation-input {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .solve-btn {
+            background-color: var(--absolute);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .solve-btn:hover {
+            background-color: #6a0dad;
+        }
+        
+        .solution-steps {
+            margin-top: 20px;
+        }
+        
+        .number-line {
+            height: 40px;
+            background-color: #f8f9fa;
+            margin: 15px 0;
+            position: relative;
+            border-top: 2px solid #333;
+        }
+        
+        .point {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: var(--absolute);
+            border-radius: 50%;
+            top: -5px;
+            transform: translateX(-50%);
+        }
+        
+        .closed-point {
+            background-color: var(--success);
+        }
+        
+        .arrow {
+            position: absolute;
+            top: -8px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid var(--absolute);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: #6c757d;
+        }
+        
+        .visual-explanation {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .visual-item {
+            text-align: center;
+            margin: 10px;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .absolute-graph {
+            height: 100px;
+            position: relative;
+            margin: 10px 0;
+        }
+        
+        .graph-line {
+            position: absolute;
+            height: 3px;
+            background-color: var(--absolute);
+            transform-origin: left center;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                border-radius: 5px;
+                margin-bottom: 5px;
+            }
+            
+            .content-section {
+                padding: 15px;
+            }
+            
+            .visual-explanation {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+            <h1>MAT115 Khalid Kassou</h1>
+            <h1>Absolute Value Equations & Inequalities</h1>
+            <p class="subtitle">Understanding and Solving from Basics to Advanced</p>
+        </header>
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab(0)">Introduction</button>
+            <button class="tab-btn" onclick="showTab(1)">Basic Equations</button>
+            <button class="tab-btn" onclick="showTab(2)">Basic Inequalities</button>
+            <button class="tab-btn" onclick="showTab(3)">Advanced Equations</button>
+            <button class="tab-btn" onclick="showTab(4)">Advanced Inequalities</button>
+            <button class="tab-btn" onclick="showTab(5)">Practice Problems</button>
+        </div>
+        
+        <div class="content-section">
+            <!-- Introduction Tab -->
+            <div class="tab-content active" id="tab0">
+                <h2>What is Absolute Value?</h2>
+                <div class="definition-box">
+                    <p>The absolute value of a number is its distance from zero on the number line, regardless of direction.</p>
+                    <p>Mathematically, for any real number x:</p>
+                    <p style="text-align: center; font-size: 1.5rem; margin: 10px 0;">|x| = { x, if x ≥ 0; -x, if x < 0 }</p>
+                </div>
+                
+                <div class="visual-explanation">
+                    <div class="visual-item">
+                        <h4>Distance Interpretation</h4>
+                        <p>|x| represents distance from 0</p>
+                        <div class="number-line">
+                            <div class="point" style="left: 30%;"></div>
+                            <div class="point" style="left: 70%;"></div>
+                            <div style="position: absolute; left: 30%; top: 25px;">-4</div>
+                            <div style="position: absolute; left: 70%; top: 25px;">4</div>
+                            <div style="position: absolute; left: 50%; top: 25px;">0</div>
+                        </div>
+                        <p>Both -4 and 4 are 4 units from 0, so | -4 | = 4 and | 4 | = 4</p>
+                    </div>
+                    
+                    <div class="visual-item">
+                        <h4>Graph of y = |x|</h4>
+                        <div class="absolute-graph">
+                            <div class="graph-line" style="width: 100px; top: 50px; left: 50%; transform: rotate(45deg);"></div>
+                            <div class="graph-line" style="width: 100px; top: 50px; left: 50%; transform: rotate(-45deg);"></div>
+                        </div>
+                        <p>V-shaped graph with vertex at (0,0)</p>
+                    </div>
+                </div>
+                
+                <div class="important-note">
+                    <h4>Key Properties of Absolute Value</h4>
+                    <ul>
+                        <li>|x| ≥ 0 for all x (absolute value is always non-negative)</li>
+                        <li>|x| = 0 if and only if x = 0</li>
+                        <li>|xy| = |x||y|</li>
+                        <li>|x/y| = |x|/|y| for y ≠ 0</li>
+                        <li>|x + y| ≤ |x| + |y| (Triangle Inequality)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Basic Equations Tab -->
+            <div class="tab-content" id="tab1">
+                <h2>Solving Basic Absolute Value Equations</h2>
+                <div class="definition-box">
+                    <p>For equations of the form |x| = a, where a is a positive real number:</p>
+                    <p style="text-align: center; font-size: 1.5rem; margin: 10px 0;">|x| = a ⇔ x = a or x = -a</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 1: |x| = 5</h4>
+                    <div class="step">|x| = 5</div>
+                    <div class="step">x = 5 or x = -5</div>
+                    <p>Solution: x = 5 or x = -5</p>
+                    <div class="number-line">
+                        <div class="point" style="left: 30%;"></div>
+                        <div class="point" style="left: 70%;"></div>
+                        <div style="position: absolute; left: 30%; top: 25px;">-5</div>
+                        <div style="position: absolute; left: 70%; top: 25px;">5</div>
+                    </div>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 2: |2x - 3| = 7</h4>
+                    <div class="step">|2x - 3| = 7</div>
+                    <div class="step">Case 1: 2x - 3 = 7</div>
+                    <div class="step" style="margin-left: 20px;">2x = 10 → x = 5</div>
+                    <div class="step">Case 2: 2x - 3 = -7</div>
+                    <div class="step" style="margin-left: 20px;">2x = -4 → x = -2</div>
+                    <p>Solution: x = 5 or x = -2</p>
+                </div>
+                
+                <div class="important-note">
+                    <h4>Important Note</h4>
+                    <p>If |expression| = a negative number, there is no solution because absolute value is always non-negative.</p>
+                    <p>Example: |x| = -5 has no solution.</p>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Practice Problem</h4>
+                    <p>Solve: |3x + 2| = 8</p>
+                    <button class="solution-toggle" onclick="toggleSolution('solution1')">Show Solution</button>
+                    <div class="solution" id="solution1">
+                        <div class="step">|3x + 2| = 8</div>
+                        <div class="step">Case 1: 3x + 2 = 8</div>
+                        <div class="step" style="margin-left: 20px;">3x = 6 → x = 2</div>
+                        <div class="step">Case 2: 3x + 2 = -8</div>
+                        <div class="step" style="margin-left: 20px;">3x = -10 → x = -10/3</div>
+                        <p>Solution: x = 2 or x = -10/3</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Basic Inequalities Tab -->
+            <div class="tab-content" id="tab2">
+                <h2>Solving Basic Absolute Value Inequalities</h2>
+                <div class="definition-box">
+                    <p>For inequalities with absolute values, we consider two cases based on the properties of absolute value:</p>
+                    <ul>
+                        <li>|x| < a ⇔ -a < x < a (for a > 0)</li>
+                        <li>|x| > a ⇔ x < -a or x > a (for a > 0)</li>
+                    </ul>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 1: |x| < 4</h4>
+                    <div class="step">|x| < 4</div>
+                    <div class="step">-4 < x < 4</div>
+                    <p>Solution: All numbers between -4 and 4</p>
+                    <div class="number-line">
+                        <div class="point" style="left: 30%;"></div>
+                        <div class="point" style="left: 70%;"></div>
+                        <div style="position: absolute; left: 30%; top: 25px;">-4</div>
+                        <div style="position: absolute; left: 70%; top: 25px;">4</div>
+                        <div style="position: absolute; left: 30%; width: 40%; height: 10px; background-color: var(--absolute); top: -2px;"></div>
+                    </div>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 2: |x| ≥ 3</h4>
+                    <div class="step">|x| ≥ 3</div>
+                    <div class="step">x ≤ -3 or x ≥ 3</div>
+                    <p>Solution: All numbers less than or equal to -3 or greater than or equal to 3</p>
+                    <div class="number-line">
+                        <div class="point closed-point" style="left: 30%;"></div>
+                        <div class="point closed-point" style="left: 70%;"></div>
+                        <div style="position: absolute; left: 30%; top: 25px;">-3</div>
+                        <div style="position: absolute; left: 70%; top: 25px;">3</div>
+                        <div class="arrow" style="left: 10%; transform: rotate(90deg); border-top-color: var(--absolute);"></div>
+                        <div class="arrow" style="left: 90%; transform: rotate(270deg); border-top-color: var(--absolute);"></div>
+                    </div>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Practice Problem</h4>
+                    <p>Solve: |2x - 1| ≤ 5</p>
+                    <button class="solution-toggle" onclick="toggleSolution('solution2')">Show Solution</button>
+                    <div class="solution" id="solution2">
+                        <div class="step">|2x - 1| ≤ 5</div>
+                        <div class="step">-5 ≤ 2x - 1 ≤ 5</div>
+                        <div class="step">-5 + 1 ≤ 2x ≤ 5 + 1</div>
+                        <div class="step">-4 ≤ 2x ≤ 6</div>
+                        <div class="step">-2 ≤ x ≤ 3</div>
+                        <p>Solution: All numbers between -2 and 3, inclusive</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Advanced Equations Tab -->
+            <div class="tab-content" id="tab3">
+                <h2>Advanced Absolute Value Equations</h2>
+                <div class="definition-box">
+                    <p>More complex absolute value equations may require:</p>
+                    <ul>
+                        <li>Isolating the absolute value expression first</li>
+                        <li>Considering special cases when the expression equals 0</li>
+                        <li>Checking for extraneous solutions</li>
+                    </ul>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 1: |2x - 4| + 3 = 9</h4>
+                    <div class="step">|2x - 4| + 3 = 9</div>
+                    <div class="step">|2x - 4| = 6 (Isolate the absolute value)</div>
+                    <div class="step">Case 1: 2x - 4 = 6</div>
+                    <div class="step" style="margin-left: 20px;">2x = 10 → x = 5</div>
+                    <div class="step">Case 2: 2x - 4 = -6</div>
+                    <div class="step" style="margin-left: 20px;">2x = -2 → x = -1</div>
+                    <p>Solution: x = 5 or x = -1</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 2: |3x + 2| = |x - 1|</h4>
+                    <div class="step">|3x + 2| = |x - 1|</div>
+                    <div class="step">Case 1: 3x + 2 = x - 1</div>
+                    <div class="step" style="margin-left: 20px;">2x = -3 → x = -3/2</div>
+                    <div class="step">Case 2: 3x + 2 = -(x - 1)</div>
+                    <div class="step" style="margin-left: 20px;">3x + 2 = -x + 1</div>
+                    <div class="step" style="margin-left: 20px;">4x = -1 → x = -1/4</div>
+                    <p>Solution: x = -3/2 or x = -1/4</p>
+                </div>
+                
+                <div class="important-note">
+                    <h4>Special Case: |expression| = 0</h4>
+                    <p>If |expression| = 0, then the expression must equal 0.</p>
+                    <p>Example: |2x - 6| = 0 → 2x - 6 = 0 → x = 3</p>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Practice Problem</h4>
+                    <p>Solve: 2|4x - 3| - 5 = 7</p>
+                    <button class="solution-toggle" onclick="toggleSolution('solution3')">Show Solution</button>
+                    <div class="solution" id="solution3">
+                        <div class="step">2|4x - 3| - 5 = 7</div>
+                        <div class="step">2|4x - 3| = 12</div>
+                        <div class="step">|4x - 3| = 6</div>
+                        <div class="step">Case 1: 4x - 3 = 6</div>
+                        <div class="step" style="margin-left: 20px;">4x = 9 → x = 9/4</div>
+                        <div class="step">Case 2: 4x - 3 = -6</div>
+                        <div class="step" style="margin-left: 20px;">4x = -3 → x = -3/4</div>
+                        <p>Solution: x = 9/4 or x = -3/4</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Advanced Inequalities Tab -->
+            <div class="tab-content" id="tab4">
+                <h2>Advanced Absolute Value Inequalities</h2>
+                <div class="definition-box">
+                    <p>More complex absolute value inequalities may require:</p>
+                    <ul>
+                        <li>Isolating the absolute value expression first</li>
+                        <li>Considering the direction of the inequality</li>
+                        <li>Solving compound inequalities</li>
+                        <li>Checking solutions in the original inequality</li>
+                    </ul>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 1: |2x - 3| > 7</h4>
+                    <div class="step">|2x - 3| > 7</div>
+                    <div class="step">Case 1: 2x - 3 > 7</div>
+                    <div class="step" style="margin-left: 20px;">2x > 10 → x > 5</div>
+                    <div class="step">Case 2: 2x - 3 < -7</div>
+                    <div class="step" style="margin-left: 20px;">2x < -4 → x < -2</div>
+                    <p>Solution: x < -2 or x > 5</p>
+                    <div class="number-line">
+                        <div class="point" style="left: 20%;"></div>
+                        <div class="point" style="left: 80%;"></div>
+                        <div style="position: absolute; left: 20%; top: 25px;">-2</div>
+                        <div style="position: absolute; left: 80%; top: 25px;">5</div>
+                        <div class="arrow" style="left: 10%; transform: rotate(90deg); border-top-color: var(--absolute);"></div>
+                        <div class="arrow" style="left: 90%; transform: rotate(270deg); border-top-color: var(--absolute);"></div>
+                    </div>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 2: |3x + 1| + 2 ≤ 8</h4>
+                    <div class="step">|3x + 1| + 2 ≤ 8</div>
+                    <div class="step">|3x + 1| ≤ 6</div>
+                    <div class="step">-6 ≤ 3x + 1 ≤ 6</div>
+                    <div class="step">-7 ≤ 3x ≤ 5</div>
+                    <div class="step">-7/3 ≤ x ≤ 5/3</div>
+                    <p>Solution: All numbers between -7/3 and 5/3, inclusive</p>
+                    <div class="number-line">
+                        <div class="point closed-point" style="left: 20%;"></div>
+                        <div class="point closed-point" style="left: 60%;"></div>
+                        <div style="position: absolute; left: 20%; top: 25px;">-7/3</div>
+                        <div style="position: absolute; left: 60%; top: 25px;">5/3</div>
+                        <div style="position: absolute; left: 20%; width: 40%; height: 10px; background-color: var(--absolute); top: -2px;"></div>
+                    </div>
+                </div>
+                
+                <div class="important-note">
+                    <h4>Special Case: |expression| < negative number</h4>
+                    <p>If |expression| < a negative number, there is no solution.</p>
+                    <p>Example: |x| < -3 has no solution.</p>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Practice Problem</h4>
+                    <p>Solve: |2 - 3x| ≥ 4</p>
+                    <button class="solution-toggle" onclick="toggleSolution('solution4')">Show Solution</button>
+                    <div class="solution" id="solution4">
+                        <div class="step">|2 - 3x| ≥ 4</div>
+                        <div class="step">Case 1: 2 - 3x ≥ 4</div>
+                        <div class="step" style="margin-left: 20px;">-3x ≥ 2 → x ≤ -2/3</div>
+                        <div class="step">Case 2: 2 - 3x ≤ -4</div>
+                        <div class="step" style="margin-left: 20px;">-3x ≤ -6 → x ≥ 2</div>
+                        <p>Solution: x ≤ -2/3 or x ≥ 2</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Practice Problems Tab -->
+            <div class="tab-content" id="tab5">
+                <h2>Practice Problems</h2>
+                <p>Test your understanding with these practice problems. Try to solve them on your own before checking the solutions.</p>
+                
+                <div class="practice-box">
+                    <h4>Problem 1: Basic Equation</h4>
+                    <p>Solve: |x + 5| = 3</p>
+                    <button class="solution-toggle" onclick="toggleSolution('practice1')">Show Solution</button>
+                    <div class="solution" id="practice1">
+                        <div class="step">|x + 5| = 3</div>
+                        <div class="step">Case 1: x + 5 = 3 → x = -2</div>
+                        <div class="step">Case 2: x + 5 = -3 → x = -8</div>
+                        <p>Solution: x = -2 or x = -8</p>
+                    </div>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Problem 2: Basic Inequality</h4>
+                    <p>Solve: |2x - 1| < 7</p>
+                    <button class="solution-toggle" onclick="toggleSolution('practice2')">Show Solution</button>
+                    <div class="solution" id="practice2">
+                        <div class="step">|2x - 1| < 7</div>
+                        <div class="step">-7 < 2x - 1 < 7</div>
+                        <div class="step">-6 < 2x < 8</div>
+                        <div class="step">-3 < x < 4</div>
+                        <p>Solution: All numbers between -3 and 4</p>
+                    </div>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Problem 3: Advanced Equation</h4>
+                    <p>Solve: |3x - 2| = |x + 4|</p>
+                    <button class="solution-toggle" onclick="toggleSolution('practice3')">Show Solution</button>
+                    <div class="solution" id="practice3">
+                        <div class="step">|3x - 2| = |x + 4|</div>
+                        <div class="step">Case 1: 3x - 2 = x + 4</div>
+                        <div class="step" style="margin-left: 20px;">2x = 6 → x = 3</div>
+                        <div class="step">Case 2: 3x - 2 = -(x + 4)</div>
+                        <div class="step" style="margin-left: 20px;">3x - 2 = -x - 4</div>
+                        <div class="step" style="margin-left: 20px;">4x = -2 → x = -1/2</div>
+                        <p>Solution: x = 3 or x = -1/2</p>
+                    </div>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Problem 4: Advanced Inequality</h4>
+                    <p>Solve: |2x + 3| ≥ 5</p>
+                    <button class="solution-toggle" onclick="toggleSolution('practice4')">Show Solution</button>
+                    <div class="solution" id="practice4">
+                        <div class="step">|2x + 3| ≥ 5</div>
+                        <div class="step">Case 1: 2x + 3 ≥ 5</div>
+                        <div class="step" style="margin-left: 20px;">2x ≥ 2 → x ≥ 1</div>
+                        <div class="step">Case 2: 2x + 3 ≤ -5</div>
+                        <div class="step" style="margin-left: 20px;">2x ≤ -8 → x ≤ -4</div>
+                        <p>Solution: x ≤ -4 or x ≥ 1</p>
+                    </div>
+                </div>
+                
+                <div class="interactive-box">
+                    <h4>Interactive Solver</h4>
+                    <p>Enter an absolute value equation or inequality to solve (e.g., |2x+1|=5 or |x-3|<2):</p>
+                    <input type="text" class="equation-input" id="absoluteToSolve" placeholder="Enter equation or inequality">
+                    <button class="solve-btn" onclick="solveAbsolute()">Solve</button>
+                    
+                    <div class="solution-steps" id="solutionSteps"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Absolute Value Equations & Inequalities Tutorial © 2023 | Created for educational purposes</p>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the selected tab
+        function showTab(tabIndex) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            
+            // Show the selected tab content
+            document.getElementById('tab' + tabIndex).classList.add('active');
+            
+            // Update active tab button
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach((btn, index) => {
+                if (index === tabIndex) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+        
+        // Function to toggle solution visibility
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            solution.classList.toggle('show');
+        }
+        
+        // Function to solve absolute value problems entered by the user
+        function solveAbsolute() {
+            const absoluteInput = document.getElementById('absoluteToSolve').value;
+            const solutionSteps = document.getElementById('solutionSteps');
+            
+            if (!absoluteInput) {
+                solutionSteps.innerHTML = '<p class="step">Please enter an equation or inequality to solve.</p>';
+                return;
+            }
+            
+            // Simple solver for demonstration purposes
+            // This is a simplified version that handles basic cases
+            
+            try {
+                let expression = absoluteInput.replace(/\s/g, ''); // Remove spaces
+                
+                // Check if expression has absolute value bars
+                if (!expression.includes('|')) {
+                    solutionSteps.innerHTML = '<p class="step">Please enter an absolute value expression with | symbols.</p>';
+                    return;
+                }
+                
+                // Simple demonstration - not a full equation parser
+                solutionSteps.innerHTML = `
+                    <p class="step">Solving: ${absoluteInput}</p>
+                    <p class="step">This interactive solver is a simplified demonstration.</p>
+                    <p class="step">For the expression: ${absoluteInput}</p>
+                    <p class="step">You would typically:</p>
+                    <p class="step">1. Isolate the absolute value expression if needed</p>
+                    <p class="step">2. Consider the two cases (equal to positive and negative)</p>
+                    <p class="step">3. For inequalities, determine the appropriate compound inequality</p>
+                    <p class="step">4. Solve each case separately</p>
+                    <p class="step">5. Check for extraneous solutions if necessary</p>
+                    <p class="step">Try applying the techniques you've learned in this tutorial!</p>
+                `;
+                
+            } catch (error) {
+                solutionSteps.innerHTML = '<p class="step">Error solving expression. Please check your input and try again.</p>';
+            }
+        }
+    </script>
+</body>
+</html>
