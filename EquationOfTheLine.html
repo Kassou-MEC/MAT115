@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Math Presentation: Slopes and Equations of Lines</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e9ecef;
+            color: #212529;
+        }
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #007bff;
+        }
+        .slide {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .slide:hover {
+            transform: translateY(-5px);
+        }
+        .nav-buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .nav-buttons button {
+            padding: 12px 24px;
+            margin: 0 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .nav-buttons button:hover {
+            background-color: #0056b3;
+        }
+        .nav-buttons button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        canvas {
+            border: 1px solid #ced4da;
+            display: block;
+            margin: 20px auto;
+            border-radius: 5px;
+        }
+        .interactive {
+            text-align: center;
+            margin: 25px 0;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .interactive input, .interactive select {
+            padding: 8px;
+            margin: 0 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+        .interactive button {
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .interactive button:hover {
+            background-color: #218838;
+        }
+        .example {
+            background-color: #f1f3f5;
+            padding: 15px;
+            border-left: 5px solid #007bff;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        #slides {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive Presentation: Mastering Slopes and Equations of Lines</h1>
+        <div id="slides">
+            <!-- Slide 1: Simple Slope Calculation -->
+            <div class="slide" id="slide-1">
+                <h2>Section 1: Simple Slope Calculation from Two Points</h2>
+                <p><strong>Definition:</strong> Slope m = (y₂ - y₁) / (x₂ - x₁). This measures the line's steepness.</p>
+                <div class="example">
+                    <p><strong>Simple Example:</strong> Points (0, 0) and (2, 4). m = (4 - 0) / (2 - 0) = 4/2 = 2.</p>
+                    <p><strong>Another Example:</strong> Points (1, 3) and (5, 11). m = (11 - 3) / (5 - 1) = 8/4 = 2.</p>
+                </div>
+                <div class="interactive">
+                    <h3>Try It: Calculate Slope</h3>
+                    <label>x₁: <input type="number" id="x1" value="0"></label>
+                    <label>y₁: <input type="number" id="y1" value="0"></label>
+                    <label>x₂: <input type="number" id="x2" value="2"></label>
+                    <label>y₂: <input type="number" id="y2" value="4"></label>
+                    <button onclick="calculateSlope()">Calculate</button>
+                    <p id="slope-result"></p>
+                </div>
+            </div>
+
+            <!-- Slide 2: Determine Slope from Graph -->
+            <div class="slide" id="slide-2">
+                <h2>Section 2: Determine Slope from a Graph</h2>
+                <p><strong>Method:</strong> Pick two points on the line, then use the slope formula.</p>
+                <div class="example">
+                    <p><strong>Example:</strong> Line passing through (0,1) and (3,7). Slope = (7-1)/(3-0) = 6/3 = 2.</p>
+                    <p><strong>Tip:</strong> For graphs, count the rise and run visually.</p>
+                </div>
+                <div class="interactive">
+                    <h3>Interactive Graph: Estimate Slope</h3>
+                    <canvas id="graph-canvas-slope" width="400" height="400"></canvas>
+                    <p>Line drawn from (0,0) to (4,8). Calculate slope: 8/4 = 2.</p>
+                </div>
+            </div>
+
+            <!-- Slide 3: Graph from 1 Point and Slope -->
+            <div class="slide" id="slide-3">
+                <h2>Section 3: Determine Graph from One Point and Slope</h2>
+                <p><strong>Method:</strong> Start at the point, use slope to find another point (rise/run), then draw the line.</p>
+                <div class="example">
+                    <p><strong>Example:</strong> Point (1,2), slope 3. From (1,2), right 1 up 3 to (2,5). Draw line.</p>
+                    <p><strong>Another:</strong> Point (0,4), slope -1/2. Right 2 down 1 to (2,3).</p>
+                </div>
+                <div class="interactive">
+                    <h3>Interactive: Plot Line</h3>
+                    <label>x: <input type="number" id="px" value="0"></label>
+                    <label>y: <input type="number" id="py" value="0"></label>
+                    <label>Slope: <input type="number" id="pslope" value="1" step="0.1"></label>
+                    <button onclick="drawFromPointSlope()">Draw</button>
+                    <canvas id="graph-canvas-point-slope" width="400" height="400"></canvas>
+                </div>
+            </div>
+
+            <!-- Slide 4: Graph from 2 Points -->
+            <div class="slide" id="slide-4">
+                <h2>Section 4: Determine Graph from Two Points</h2>
+                <p><strong>Method:</strong> Plot the two points and connect them with a straight line.</p>
+                <div class="example">
+                    <p><strong>Example:</strong> Points (1,1) and (3,5). Plot and connect.</p>
+                    <p><strong>Another:</strong> Points (-2,3) and (4,-3). Plot and connect.</p>
+                </div>
+                <div class="interactive">
+                    <h3>Interactive: Plot from Points</h3>
+                    <label>x1: <input type="number" id="gx1" value="0"></label>
+                    <label>y1: <input type="number" id="gy1" value="0"></label>
+                    <label>x2: <input type="number" id="gx2" value="4"></label>
+                    <label>y2: <input type="number" id="gy2" value="8"></label>
+                    <button onclick="drawFromTwoPoints()">Draw</button>
+                    <canvas id="graph-canvas-two-points" width="400" height="400"></canvas>
+                </div>
+            </div>
+
+            <!-- Slide 5: Slope-Intercept from 2 Points -->
+            <div class="slide" id="slide-5">
+                <h2>Section 5: Slope-Intercept Form from Two Points</h2>
+                <p><strong>Method:</strong> Find slope m, then use one point to find b in y = mx + b.</p>
+                <div class="example">
+                    <p><strong>Example:</strong> Points (2,3), (4,7). m=(7-3)/(4-2)=2. Using (2,3): 3=2*2 + b => b=-1. y=2x-1.</p>
+                    <p><strong>Another:</strong> (0,5), (3,2). m=(2-5)/(3-0)=-1. b=5. y=-x+5.</p>
+                </div>
+                <div class="interactive">
+                    <h3>Interactive: Find Equation</h3>
+                    <label>x1: <input type="number" id="ex1" value="0"></label>
+                    <label>y1: <input type="number" id="ey1" value="5"></label>
+                    <label>x2: <input type="number" id="ex2" value="3"></label>
+                    <label>y2: <input type="number" id="ey2" value="2"></label>
+                    <button onclick="calcSlopeInterceptTwoPoints()">Calculate</button>
+                    <p id="si-result-two"></p>
+                </div>
+            </div>
+
+            <!-- Slide 6: Slope-Intercept from 1 Point and Slope -->
+            <div class="slide" id="slide-6">
+                <h2>Section 6: Slope-Intercept from One Point and Slope</h2>
+                <p><strong>Method:</strong> Plug into y = mx + b to solve for b.</p>
+                <div class="example">
+                    <p><strong>Example:</strong> Point (3,4), m=2. 4=2*3 + b => b=-2. y=2x-2.</p>
+                    <p><strong>Another:</strong> Point (1,-1), m=-3. -1=-3*1 + b => b=2. y=-3x+2.</p>
+                </div>
+                <div class="interactive">
+                    <h3>Interactive: Find Equation</h3>
+                    <label>x: <input type="number" id="sx" value="3"></label>
+                    <label>y: <input type="number" id="sy" value="4"></label>
+                    <label>m: <input type="number" id="sm" value="2" step="0.1"></label>
+                    <button onclick="calcSlopeInterceptOnePoint()">Calculate</button>
+                    <p id="si-result-one"></p>
+                </div>
+            </div>
+
+            <!-- Slide 7: Standard Form -->
+            <div class="slide" id="slide-7">
+                <h2>Section 7: Standard Form of a Line</h2>
+                <p><strong>Definition:</strong> Ax + By = C, where A, B, C are integers, A ≥ 0.</p>
+                <div class="example">
+                    <p><strong>Example:</strong> From y=2x+3: -2x + y = 3 or 2x - y = -3 (standardize to 2x - y = -3).</p>
+                    <p><strong>Another:</strong> From points (1,2), (3,6): m=2, y=2x. 2x - y = 0.</p>
+                </div>
+                <div class="interactive">
+                    <h3>Interactive: Convert to Standard</h3>
+                    <label>m: <input type="number" id="stdm" value="2" step="0.1"></label>
+                    <label>b: <input type="number" id="stdb" value="3"></label>
+                    <button onclick="convertToStandard()">Convert</button>
+                    <p id="standard-result"></p>
+                </div>
+            </div>
+
+            <!-- Slide 8: Equation Parallel to Another Line -->
+            <div class="slide" id="slide-8">
+                <h2>Section 8: Equation of Line Parallel to Another</h2>
+                <p><strong>Method:</strong> Use same slope m, then find b using a point.</p>
+                <div class="example">
+                    <p><strong>Example:</strong> Parallel to y=3x+1, through (2,4). m=3. 4=3*2 + b => b=-2. y=3x-2.</p>
+                    <p><strong>Another:</strong> Parallel to y=-x+5, through (0,0). y=-x.</p>
+                </div>
+                <div class="interactive">
+                    <h3>Interactive: Find Parallel Equation</h3>
+                    <label>Original m: <input type="number" id="parm" value="3" step="0.1"></label>
+                    <label>Point x: <input type="number" id="parx" value="2"></label>
+                    <label>Point y: <input type="number" id="pary" value="4"></label>
+                    <button onclick="calcParallel()">Calculate</button>
+                    <p id="parallel-result"></p>
+                </div>
+            </div>
+
+            <!-- Slide 9: Equation Perpendicular to Another Line -->
+            <div class="slide" id="slide-9">
+                <h2>Section 9: Equation of Line Perpendicular to Another</h2>
+                <p><strong>Method:</strong> Use negative reciprocal slope (-1/m), then find b using a point.</p>
+                <div class="example">
+                    <p><strong>Example:</strong> Perp to y=2x-1, through (3,5). m=-1/2. 5=(-1/2)*3 + b => b=6.5. y=-0.5x+6.5.</p>
+                    <p><strong>Another:</strong> Perp to y=4x+2, through (1,0). m=-1/4. 0=-1/4*1 + b => b=0.25. y=-0.25x+0.25.</p>
+                </div>
+                <div class="interactive">
+                    <h3>Interactive: Find Perpendicular Equation</h3>
+                    <label>Original m: <input type="number" id="perm" value="2" step="0.1"></label>
+                    <label>Point x: <input type="number" id="perx" value="3"></label>
+                    <label>Point y: <input type="number" id="pery" value="5"></label>
+                    <button onclick="calcPerpendicular()">Calculate</button>
+                    <p id="perpendicular-result"></p>
+                </div>
+            </div>
+
+            <!-- Slide 10: Vertical and Horizontal Lines -->
+            <div class="slide" id="slide-10">
+                <h2>Section 10: Vertical and Horizontal Lines</h2>
+                <p><strong>Definition:</strong> Horizontal: y = k (slope 0). Vertical: x = h (undefined slope).</p>
+                <div class="example">
+                    <p><strong>Example Horizontal:</strong> y = 4.</p>
+                    <p><strong>Example Vertical:</strong> x = -1.</p>
+                </div>
+                <div class="interactive">
+                    <h3>Interactive Graph</h3>
+                    <label>Type: <select id="line-type"><option value="horizontal">Horizontal</option><option value="vertical">Vertical</option></select></label>
+                    <label>Value: <input type="number" id="const-value" value="0"></label>
+                    <button onclick="drawSpecialLine()">Draw</button>
+                    <canvas id="graph-canvas-special" width="400" height="400"></canvas>
+                </div>
+            </div>
+
+            <!-- Slide 11: Point-Slope Form -->
+            <div class="slide" id="slide-11">
+                <h2>Section 11: Point-Slope Form</h2>
+                <p><strong>Definition:</strong> y - y₁ = m(x - x₁).</p>
+                <div class="example">
+                    <p><strong>Example:</strong> Point (4,6), m=1. y-6=1(x-4).</p>
+                    <p><strong>From 2 Points:</strong> (1,2), (5,10). m=2. y-2=2(x-1).</p>
+                </div>
+                <div class="interactive">
+                    <h3>Interactive: Generate Equation</h3>
+                    <label>x₁: <input type="number" id="psx1" value="4"></label>
+                    <label>y₁: <input type="number" id="psy1" value="6"></label>
+                    <label>m: <input type="number" id="psm" value="1" step="0.1"></label>
+                    <button onclick="genPointSlope()">Generate</button>
+                    <p id="ps-result"></p>
+                </div>
+            </div>
+        </div>
+        <div class="nav-buttons">
+            <button id="prev-btn" onclick="prevSlide()" disabled>Previous</button>
+            <button id="next-btn" onclick="nextSlide()">Next</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 11;
+
+        // Initialize slides
+        function initializeSlides() {
+            const slides = document.getElementById('slides');
+            if (!slides) {
+                console.error('Slides container not found');
+                return;
+            }
+            slides.style.display = 'block';
+            // Ensure all slides are hidden except the first
+            for (let i = 1; i <= totalSlides; i++) {
+                const slide = document.getElementById(`slide-${i}`);
+                if (slide) {
+                    slide.classList.remove('active');
+                } else {
+                    console.warn(`Slide ${i} not found`);
+                }
+            }
+            const firstSlide = document.getElementById(`slide-${currentSlide}`);
+            if (firstSlide) {
+                firstSlide.classList.add('active');
+                console.log(`Initialized slide ${currentSlide}`);
+            }
+            updateButtons();
+        }
+
+        function showSlide(n) {
+            if (n < 1 || n > totalSlides) {
+                console.warn(`Invalid slide number: ${n}`);
+                return;
+            }
+            // Hide all slides
+            for (let i = 1; i <= totalSlides; i++) {
+                const slide = document.getElementById(`slide-${i}`);
+                if (slide) {
+                    slide.classList.remove('active');
+                }
+            }
+            // Show the requested slide
+            const targetSlide = document.getElementById(`slide-${n}`);
+            if (targetSlide) {
+                targetSlide.classList.add('active');
+                currentSlide = n;
+                console.log(`Showing slide ${n}`);
+                updateButtons();
+            } else {
+                console.error(`Slide ${n} not found`);
+            }
+        }
+
+        function updateButtons() {
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            if (prevBtn && nextBtn) {
+                prevBtn.disabled = currentSlide === 1;
+                nextBtn.disabled = currentSlide === totalSlides;
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                showSlide(currentSlide + 1);
+            } else {
+                console.log('At last slide');
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                showSlide(currentSlide - 1);
+            } else {
+                console.log('At first slide');
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing slides');
+            initializeSlides();
+            // Ensure graph on slide 2 is drawn
+            drawSlide2Graph();
+        });
+
+        // Graph drawing helper
+        function drawAxes(ctx, ox, oy, w, h, scale) {
+            ctx.strokeStyle = '#ced4da';
+            ctx.beginPath();
+            ctx.moveTo(0, oy); ctx.lineTo(w, oy);
+            ctx.moveTo(ox, 0); ctx.lineTo(ox, h);
+            ctx.stroke();
+        }
+
+        function drawLine(ctx, m, b, ox, oy, scale, color = 'blue') {
+            ctx.strokeStyle = color;
+            ctx.beginPath();
+            const xStart = -ox / scale;
+            const yStart = m * xStart + b;
+            ctx.moveTo(ox + xStart * scale, oy - yStart * scale);
+            const xEnd = (ctx.canvas.width - ox) / scale;
+            const yEnd = m * xEnd + b;
+            ctx.lineTo(ox + xEnd * scale, oy - yEnd * scale);
+            ctx.stroke();
+        }
+
+        function drawPoint(ctx, x, y, ox, oy, scale, color = 'red') {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(ox + x * scale, oy - y * scale, 5, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+
+        // Slide 2: Graph for Slope (static example)
+        function drawSlide2Graph() {
+            const ctxSlope = document.getElementById('graph-canvas-slope').getContext('2d');
+            const wSlope = ctxSlope.canvas.width;
+            const hSlope = ctxSlope.canvas.height;
+            const scale = 40;
+            const oxSlope = wSlope / 2;
+            const oySlope = hSlope / 2;
+            ctxSlope.clearRect(0, 0, wSlope, hSlope);
+            drawAxes(ctxSlope, oxSlope, oySlope, wSlope, hSlope, scale);
+            drawLine(ctxSlope, 2, 0, oxSlope, oySlope, scale);
+            drawPoint(ctxSlope, 0, 0, oxSlope, oySlope, scale);
+            drawPoint(ctxSlope, 4, 8, oxSlope, oySlope, scale);
+        }
+
+        // Slide 1: Calculate Slope
+        function calculateSlope() {
+            const x1 = parseFloat(document.getElementById('x1').value);
+            const y1 = parseFloat(document.getElementById('y1').value);
+            const x2 = parseFloat(document.getElementById('x2').value);
+            const y2 = parseFloat(document.getElementById('y2').value);
+            if (x2 === x1) {
+                document.getElementById('slope-result').innerText = 'Slope is undefined (vertical line)';
+            } else {
+                const m = (y2 - y1) / (x2 - x1);
+                document.getElementById('slope-result').innerText = `Slope m = ${m}`;
+            }
+        }
+
+        // Slide 3: Draw from Point and Slope
+        function drawFromPointSlope() {
+            const ctx = document.getElementById('graph-canvas-point-slope').getContext('2d');
+            const w = ctx.canvas.width;
+            const h = ctx.canvas.height;
+            const ox = w / 2;
+            const oy = h / 2;
+            ctx.clearRect(0, 0, w, h);
+            drawAxes(ctx, ox, oy, w, h, scale);
+            const px = parseFloat(document.getElementById('px').value);
+            const py = parseFloat(document.getElementById('py').value);
+            const m = parseFloat(document.getElementById('pslope').value);
+            const b = py - m * px; // Calculate intercept
+            drawLine(ctx, m, b, ox, oy, scale);
+            drawPoint(ctx, px, py, ox, oy, scale);
+        }
+
+        // Slide 4: Draw from Two Points
+        function drawFromTwoPoints() {
+            const ctx = document.getElementById('graph-canvas-two-points').getContext('2d');
+            const w = ctx.canvas.width;
+            const h = ctx.canvas.height;
+            const ox = w / 2;
+            const oy = h / 2;
+            ctx.clearRect(0, 0, w, h);
+            drawAxes(ctx, ox, oy, w, h, scale);
+            const x1 = parseFloat(document.getElementById('gx1').value);
+            const y1 = parseFloat(document.getElementById('gy1').value);
+            const x2 = parseFloat(document.getElementById('gx2').value);
+            const y2 = parseFloat(document.getElementById('gy2').value);
+            if (x1 !== x2) {
+                const m = (y2 - y1) / (x2 - x1);
+                const b = y1 - m * x1;
+                drawLine(ctx, m, b, ox, oy, scale);
+            } else {
+                // Vertical line
+                ctx.strokeStyle = 'blue';
+                ctx.beginPath();
+                ctx.moveTo(ox + x1 * scale, 0);
+                ctx.lineTo(ox + x1 * scale, h);
+                ctx.stroke();
+            }
+            drawPoint(ctx, x1, y1, ox, oy, scale);
+            drawPoint(ctx, x2, y2, ox, oy, scale);
+        }
+
+        // Slide 5: Slope-Intercept from Two Points
+        function calcSlopeInterceptTwoPoints() {
+            const x1 = parseFloat(document.getElementById('ex1').value);
+            const y1 = parseFloat(document.getElementById('ey1').value);
+            const x2 = parseFloat(document.getElementById('ex2').value);
+            const y2 = parseFloat(document.getElementById('ey2').value);
+            if (x1 === x2) {
+                document.getElementById('si-result-two').innerText = 'Vertical line: x = ' + x1;
+                return;
+            }
+            const m = (y2 - y1) / (x2 - x1);
+            const b = y1 - m * x1;
+            document.getElementById('si-result-two').innerText = `y = ${m}x + ${b}`;
+        }
+
+        // Slide 6: Slope-Intercept from One Point and Slope
+        function calcSlopeInterceptOnePoint() {
+            const x = parseFloat(document.getElementById('sx').value);
+            const y = parseFloat(document.getElementById('sy').value);
+            const m = parseFloat(document.getElementById('sm').value);
+            const b = y - m * x;
+            document.getElementById('si-result-one').innerText = `y = ${m}x + ${b}`;
+        }
+
+        // Slide 7: Convert to Standard Form
+        function convertToStandard() {
+            let m = parseFloat(document.getElementById('stdm').value);
+            let b = parseFloat(document.getElementById('stdb').value);
+            // y = mx + b => mx - y = -b, multiply by -1 if m < 0 to make A positive
+            let A = -m;
+            let B = 1;
+            let C = b;
+            if (A < 0) {
+                A = -A;
+                B = -B;
+                C = -C;
+            }
+            document.getElementById('standard-result').innerText = `${A}x + ${B}y = ${C}`;
+        }
+
+        // Slide 8: Parallel Equation
+        function calcParallel() {
+            const m = parseFloat(document.getElementById('parm').value);
+            const x = parseFloat(document.getElementById('parx').value);
+            const y = parseFloat(document.getElementById('pary').value);
+            const b = y - m * x;
+            document.getElementById('parallel-result').innerText = `Parallel equation: y = ${m}x + ${b}`;
+        }
+
+        // Slide 9: Perpendicular Equation
+        function calcPerpendicular() {
+            const origM = parseFloat(document.getElementById('perm').value);
+            if (origM === 0) {
+                document.getElementById('perpendicular-result').innerText = 'Perpendicular is vertical line.';
+                return;
+            }
+            const m = -1 / origM;
+            const x = parseFloat(document.getElementById('perx').value);
+            const y = parseFloat(document.getElementById('pery').value);
+            const b = y - m * x;
+            document.getElementById('perpendicular-result').innerText = `Perpendicular equation: y = ${m}x + ${b}`;
+        }
+
+        // Slide 10: Special Lines
+        function drawSpecialLine() {
+            const ctx = document.getElementById('graph-canvas-special').getContext('2d');
+            const w = ctx.canvas.width;
+            const h = ctx.canvas.height;
+            const ox = w / 2;
+            const oy = h / 2;
+            ctx.clearRect(0, 0, w, h);
+            drawAxes(ctx, ox, oy, w, h, scale);
+            const type = document.getElementById('line-type').value;
+            const val = parseFloat(document.getElementById('const-value').value);
+            ctx.strokeStyle = 'green';
+            ctx.beginPath();
+            if (type === 'horizontal') {
+                ctx.moveTo(0, oy - val * scale);
+                ctx.lineTo(w, oy - val * scale);
+            } else {
+                ctx.moveTo(ox + val * scale, 0);
+                ctx.lineTo(ox + val * scale, h);
+            }
+            ctx.stroke();
+        }
+
+        // Slide 11: Point-Slope
+        function genPointSlope() {
+            const x1 = document.getElementById('psx1').value;
+            const y1 = document.getElementById('psy1').value;
+            const m = document.getElementById('psm').value;
+            document.getElementById('ps-result').innerText = `y - ${y1} = ${m}(x - ${x1})`;
+        }
+
+        // Define scale globally for all graphs
+        const scale = 40;
+    </script>
+</body>
+</html>

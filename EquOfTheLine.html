@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slope and Linear Equations</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #166088;
+            --accent: #4cb5f5;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --slope: #8a2be2;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--slope), #6a0dad);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            gap: 5px;
+        }
+        
+        .tab-btn {
+            padding: 10px 20px;
+            background-color: #e9ecef;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab-btn:hover {
+            background-color: #dee2e6;
+        }
+        
+        .tab-btn.active {
+            background-color: white;
+            color: var(--slope);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+        
+        .content-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            min-height: 400px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .definition-box {
+            background-color: #f0e6ff;
+            border-left: 5px solid var(--slope);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .example-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--success);
+        }
+        
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .important-note {
+            background-color: #fff3cd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--warning);
+        }
+        
+        .practice-box {
+            background-color: #e6f7ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--accent);
+        }
+        
+        .solution-toggle {
+            background-color: var(--slope);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .solution-toggle:hover {
+            background-color: #6a0dad;
+        }
+        
+        .solution {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            border: 1px dashed var(--slope);
+        }
+        
+        .solution.show {
+            display: block;
+        }
+        
+        .interactive-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--danger);
+        }
+        
+        .equation-input {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .solve-btn {
+            background-color: var(--slope);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .solve-btn:hover {
+            background-color: #6a0dad;
+        }
+        
+        .solution-steps {
+            margin-top: 20px;
+        }
+        
+        .coordinate-plane {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            background-color: #f8f9fa;
+        }
+        
+        .graph-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: #6c757d;
+        }
+        
+        .visual-explanation {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .visual-item {
+            text-align: center;
+            margin: 10px;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .slope-triangle {
+            width: 200px;
+            height: 150px;
+            position: relative;
+            margin: 0 auto;
+            border-left: 2px solid #333;
+            border-bottom: 2px solid #333;
+        }
+        
+        .slope-label {
+            position: absolute;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                border-radius: 5px;
+                margin-bottom: 5px;
+            }
+            
+            .content-section {
+                padding: 15px;
+            }
+            
+            .visual-explanation {
+                flex-direction: column;
+            }
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        
+        th {
+            background-color: #f0e6ff;
+        }
+        
+        .case-box {
+            background-color: #e8f4fc;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Slope and Linear Equations</h1>
+            <p class="subtitle">Understanding Slope, Graphing Lines, and Line Equations</p>
+        </header>
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab(0)">Introduction</button>
+            <button class="tab-btn" onclick="showTab(1)">Understanding Slope</button>
+            <button class="tab-btn" onclick="showTab(2)">Graphing from Points</button>
+            <button class="tab-btn" onclick="showTab(3)">Graphing from Slope</button>
+            <button class="tab-btn" onclick="showTab(4)">Finding Slope</button>
+            <button class="tab-btn" onclick="showTab(5)">Practice</button>
+        </div>
+        
+        <div class="content-section">
+            <!-- Introduction Tab -->
+            <div class="tab-content active" id="tab0">
+                <h2>Introduction to Slope and Linear Equations</h2>
+                <div class="definition-box">
+                    <p>Slope is a measure of the steepness of a line. It describes both the direction and the steepness of the line.</p>
+                    <p style="text-align: center; font-size: 1.5rem; margin: 10px 0;">m = (y₂ - y₁) / (x₂ - x₁) = rise / run</p>
+                    <p>where (x₁, y₁) and (x₂, y₂) are any two distinct points on the line.</p>
+                </div>
+                
+                <h3>What You'll Learn</h3>
+                <ul>
+                    <li>How to calculate and interpret slope</li>
+                    <li>Graphing lines given two points</li>
+                    <li>Graphing lines given a point and slope</li>
+                    <li>Finding slope from a graph</li>
+                    <li>Different forms of linear equations</li>
+                </ul>
+                
+                <div class="example-box">
+                    <h4>Real-World Application</h4>
+                    <p>Slope is used in many real-world contexts:</p>
+                    <ul>
+                        <li>Architecture: Roof pitch, ramp design</li>
+                        <li>Economics: Rate of change in prices</li>
+                        <li>Geography: Steepness of hills and mountains</li>
+                        <li>Physics: Velocity and acceleration</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Understanding Slope Tab -->
+            <div class="tab-content" id="tab1">
+                <h2>Understanding Slope</h2>
+                <div class="definition-box">
+                    <p>Slope (m) is calculated as the ratio of the vertical change (rise) to the horizontal change (run) between two points on a line.</p>
+                    <p style="text-align: center; font-size: 1.5rem; margin: 10px 0;">m = rise / run = (y₂ - y₁) / (x₂ - x₁)</p>
+                </div>
+                
+                <div class="visual-explanation">
+                    <div class="visual-item">
+                        <h4>Positive Slope</h4>
+                        <div class="coordinate-plane">
+                            <canvas id="positiveSlopeCanvas" class="graph-canvas"></canvas>
+                        </div>
+                        <p>Line rises from left to right</p>
+                    </div>
+                    
+                    <div class="visual-item">
+                        <h4>Negative Slope</h4>
+                        <div class="coordinate-plane">
+                            <canvas id="negativeSlopeCanvas" class="graph-canvas"></canvas>
+                        </div>
+                        <p>Line falls from left to right</p>
+                    </div>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example: Calculating Slope</h4>
+                    <p>Find the slope between points (2, 3) and (5, 11)</p>
+                    <div class="step">Identify points: (x₁, y₁) = (2, 3), (x₂, y₂) = (5, 11)</div>
+                    <div class="step">Apply slope formula: m = (11 - 3) / (5 - 2)</div>
+                    <div class="step">Calculate: m = 8 / 3</div>
+                    <div class="step">The slope is 8/3, which means for every 3 units horizontally, the line rises 8 units vertically.</div>
+                </div>
+                
+                <div class="important-note">
+                    <h4>Special Cases</h4>
+                    <ul>
+                        <li><strong>Horizontal lines</strong> have slope = 0 (no vertical change)</li>
+                        <li><strong>Vertical lines</strong> have undefined slope (no horizontal change)</li>
+                    </ul>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Practice Problem</h4>
+                    <p>Find the slope between points (-1, 4) and (3, -2)</p>
+                    <button class="solution-toggle" onclick="toggleSolution('solution1')">Show Solution</button>
+                    <div class="solution" id="solution1">
+                        <div class="step">Identify points: (x₁, y₁) = (-1, 4), (x₂, y₂) = (3, -2)</div>
+                        <div class="step">Apply slope formula: m = (-2 - 4) / (3 - (-1))</div>
+                        <div class="step">Calculate: m = (-6) / (4) = -3/2</div>
+                        <div class="step">The slope is -3/2, which means for every 2 units horizontally, the line falls 3 units vertically.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Graphing from Points Tab -->
+            <div class="tab-content" id="tab2">
+                <h2>Graphing Lines Given Two Points</h2>
+                <div class="definition-box">
+                    <p>To graph a line given two points:</p>
+                    <ol>
+                        <li>Plot both points on the coordinate plane</li>
+                        <li>Draw a straight line through both points</li>
+                        <li>Extend the line in both directions</li>
+                    </ol>
+                </div>
+                
+                <div class="case-box">
+                    <h4>Case 1: Graphing from Two Points</h4>
+                    <p>Graph the line that passes through points (-2, 3) and (4, -1)</p>
+                    <button class="solution-toggle" onclick="toggleSolution('case1')">Show Solution</button>
+                    <div class="solution" id="case1">
+                        <div class="step">Plot point A: (-2, 3)</div>
+                        <div class="step">Plot point B: (4, -1)</div>
+                        <div class="step">Draw a line through both points:</div>
+                        <div class="coordinate-plane">
+                            <canvas id="twoPointsCanvas" class="graph-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="case-box">
+                    <h4>Case 2: Finding Equation from Two Points</h4>
+                    <p>Find the equation of the line that passes through points (1, 2) and (3, 8)</p>
+                    <button class="solution-toggle" onclick="toggleSolution('case2')">Show Solution</button>
+                    <div class="solution" id="case2">
+                        <div class="step">Find slope: m = (8 - 2) / (3 - 1) = 6 / 2 = 3</div>
+                        <div class="step">Use point-slope form with point (1, 2): y - 2 = 3(x - 1)</div>
+                        <div class="step">Simplify: y - 2 = 3x - 3</div>
+                        <div class="step">Final equation: y = 3x - 1</div>
+                    </div>
+                </div>
+                
+                <div class="case-box">
+                    <h4>Case 3: Special Case - Horizontal Line</h4>
+                    <p>Graph the line that passes through points (-3, 4) and (2, 4)</p>
+                    <button class="solution-toggle" onclick="toggleSolution('case3')">Show Solution</button>
+                    <div class="solution" id="case3">
+                        <div class="step">Both points have the same y-coordinate (y = 4)</div>
+                        <div class="step">This is a horizontal line: y = 4</div>
+                        <div class="step">Graph:</div>
+                        <div class="coordinate-plane">
+                            <canvas id="horizontalLineCanvas" class="graph-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="case-box">
+                    <h4>Case 4: Special Case - Vertical Line</h4>
+                    <p>Graph the line that passes through points (5, -2) and (5, 3)</p>
+                    <button class="solution-toggle" onclick="toggleSolution('case4')">Show Solution</button>
+                    <div class="solution" id="case4">
+                        <div class="step">Both points have the same x-coordinate (x = 5)</div>
+                        <div class="step">This is a vertical line: x = 5</div>
+                        <div class="step">Graph:</div>
+                        <div class="coordinate-plane">
+                            <canvas id="verticalLineCanvas" class="graph-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Graphing from Slope Tab -->
+            <div class="tab-content" id="tab3">
+                <h2>Graphing Lines Given a Point and Slope</h2>
+                <div class="definition-box">
+                    <p>To graph a line given a point and slope:</p>
+                    <ol>
+                        <li>Plot the given point</li>
+                        <li>Use the slope (rise/run) to find additional points</li>
+                        <li>Draw a straight line through the points</li>
+                        <li>Extend the line in both directions</li>
+                    </ol>
+                </div>
+                
+                <div class="case-box">
+                    <h4>Case 1: Positive Slope</h4>
+                    <p>Graph the line that passes through point (1, 2) with slope 2/3</p>
+                    <button class="solution-toggle" onclick="toggleSolution('case5')">Show Solution</button>
+                    <div class="solution" id="case5">
+                        <div class="step">Plot the given point: (1, 2)</div>
+                        <div class="step">Slope = 2/3 means rise = 2, run = 3</div>
+                        <div class="step">From (1, 2), move up 2 units and right 3 units to point (4, 4)</div>
+                        <div class="step">Draw a line through these points:</div>
+                        <div class="coordinate-plane">
+                            <canvas id="positiveSlopeExampleCanvas" class="graph-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="case-box">
+                    <h4>Case 2: Negative Slope</h4>
+                    <p>Graph the line that passes through point (-2, 3) with slope -1/2</p>
+                    <button class="solution-toggle" onclick="toggleSolution('case6')">Show Solution</button>
+                    <div class="solution" id="case6">
+                        <div class="step">Plot the given point: (-2, 3)</div>
+                        <div class="step">Slope = -1/2 means rise = -1, run = 2</div>
+                        <div class="step">From (-2, 3), move down 1 unit and right 2 units to point (0, 2)</div>
+                        <div class="step">Draw a line through these points:</div>
+                        <div class="coordinate-plane">
+                            <canvas id="negativeSlopeExampleCanvas" class="graph-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="case-box">
+                    <h4>Case 3: Finding Equation from Point and Slope</h4>
+                    <p>Find the equation of the line that passes through point (2, -1) with slope 3</p>
+                    <button class="solution-toggle" onclick="toggleSolution('case7')">Show Solution</button>
+                    <div class="solution" id="case7">
+                        <div class="step">Use point-slope form: y - y₁ = m(x - x₁)</div>
+                        <div class="step">Substitute values: y - (-1) = 3(x - 2)</div>
+                        <div class="step">Simplify: y + 1 = 3x - 6</div>
+                        <div class="step">Final equation: y = 3x - 7</div>
+                    </div>
+                </div>
+                
+                <div class="case-box">
+                    <h4>Case 4: Zero Slope</h4>
+                    <p>Graph the line that passes through point (-3, 4) with slope 0</p>
+                    <button class="solution-toggle" onclick="toggleSolution('case8')">Show Solution</button>
+                    <div class="solution" id="case8">
+                        <div class="step">Slope = 0 means a horizontal line</div>
+                        <div class="step">All points have the same y-coordinate: y = 4</div>
+                        <div class="step">Graph:</div>
+                        <div class="coordinate-plane">
+                            <canvas id="zeroSlopeCanvas" class="graph-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Finding Slope Tab -->
+            <div class="tab-content" id="tab4">
+                <h2>Finding Slope from a Graph</h2>
+                <div class="definition-box">
+                    <p>To find the slope from a graph:</p>
+                    <ol>
+                        <li>Identify two clear points on the line</li>
+                        <li>Determine the rise (vertical change) and run (horizontal change) between them</li>
+                        <li>Calculate slope = rise / run</li>
+                    </ol>
+                </div>
+                
+                <div class="case-box">
+                    <h4>Case 1: Positive Slope</h4>
+                    <p>Find the slope of this line:</p>
+                    <div class="coordinate-plane">
+                        <canvas id="findPositiveSlopeCanvas" class="graph-canvas"></canvas>
+                    </div>
+                    <button class="solution-toggle" onclick="toggleSolution('case9')">Show Solution</button>
+                    <div class="solution" id="case9">
+                        <div class="step">Identify two points: (1, 1) and (4, 3)</div>
+                        <div class="step">Rise = 3 - 1 = 2</div>
+                        <div class="step">Run = 4 - 1 = 3</div>
+                        <div class="step">Slope = rise/run = 2/3</div>
+                    </div>
+                </div>
+                
+                <div class="case-box">
+                    <h4>Case 2: Negative Slope</h4>
+                    <p>Find the slope of this line:</p>
+                    <div class="coordinate-plane">
+                        <canvas id="findNegativeSlopeCanvas" class="graph-canvas"></canvas>
+                    </div>
+                    <button class="solution-toggle" onclick="toggleSolution('case10')">Show Solution</button>
+                    <div class="solution" id="case10">
+                        <div class="step">Identify two points: (-2, 3) and (2, 1)</div>
+                        <div class="step">Rise = 1 - 3 = -2</div>
+                        <div class="step">Run = 2 - (-2) = 4</div>
+                        <div class="step">Slope = rise/run = -2/4 = -1/2</div>
+                    </div>
+                </div>
+                
+                <div class="case-box">
+                    <h4>Case 3: Zero Slope</h4>
+                    <p>Find the slope of this line:</p>
+                    <div class="coordinate-plane">
+                        <canvas id="findZeroSlopeCanvas" class="graph-canvas"></canvas>
+                    </div>
+                    <button class="solution-toggle" onclick="toggleSolution('case11')">Show Solution</button>
+                    <div class="solution" id="case11">
+                        <div class="step">This is a horizontal line</div>
+                        <div class="step">Rise = 0 (no vertical change)</div>
+                        <div class="step">Slope = 0</div>
+                    </div>
+                </div>
+                
+                <div class="case-box">
+                    <h4>Case 4: Undefined Slope</h4>
+                    <p>Find the slope of this line:</p>
+                    <div class="coordinate-plane">
+                        <canvas id="findUndefinedSlopeCanvas" class="graph-canvas"></canvas>
+                    </div>
+                    <button class="solution-toggle" onclick="toggleSolution('case12')">Show Solution</button>
+                    <div class="solution" id="case12">
+                        <div class="step">This is a vertical line</div>
+                        <div class="step">Run = 0 (no horizontal change)</div>
+                        <div class="step">Slope is undefined (division by zero)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Practice Tab -->
+            <div class="tab-content" id="tab5">
+                <h2>Practice Problems</h2>
+                <p>Test your understanding with these practice problems. Try to solve them on your own before checking the solutions.</p>
+                
+                <div class="practice-box">
+                    <h4>Problem 1: Graphing from Two Points</h4>
+                    <p>Graph the line that passes through points (-3, -2) and (1, 4).</p>
+                    <button class="solution-toggle" onclick="toggleSolution('practice1')">Show Solution</button>
+                    <div class="solution" id="practice1">
+                        <div class="step">Plot point A: (-3, -2)</div>
+                        <div class="step">Plot point B: (1, 4)</div>
+                        <div class="step">Draw a line through both points:</div>
+                        <div class="coordinate-plane">
+                            <canvas id="practice1Canvas" class="graph-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Problem 2: Finding Slope from Graph</h4>
+                    <p>Find the slope of this line:</p>
+                    <div class="coordinate-plane">
+                        <canvas id="practice2Canvas" class="graph-canvas"></canvas>
+                    </div>
+                    <button class="solution-toggle" onclick="toggleSolution('practice2')">Show Solution</button>
+                    <div class="solution" id="practice2">
+                        <div class="step">Identify two points: (-2, -1) and (2, 3)</div>
+                        <div class="step">Rise = 3 - (-1) = 4</div>
+                        <div class="step">Run = 2 - (-2) = 4</div>
+                        <div class="step">Slope = rise/run = 4/4 = 1</div>
+                    </div>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Problem 3: Graphing from Point and Slope</h4>
+                    <p>Graph the line that passes through point (0, -3) with slope 4/5.</p>
+                    <button class="solution-toggle" onclick="toggleSolution('practice3')">Show Solution</button>
+                    <div class="solution" id="practice3">
+                        <div class="step">Plot the given point: (0, -3)</div>
+                        <div class="step">Slope = 4/5 means rise = 4, run = 5</div>
+                        <div class="step">From (0, -3), move up 4 units and right 5 units to point (5, 1)</div>
+                        <div class="step">Draw a line through these points:</div>
+                        <div class="coordinate-plane">
+                            <canvas id="practice3Canvas" class="graph-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="interactive-box">
+                    <h4>Interactive Practice</h4>
+                    <p>Find the equation of a line with slope <input type="number" id="slopeValue" placeholder="m" style="width: 60px;"> that passes through point (<input type="number" id="xValue" placeholder="x" style="width: 60px;">, <input type="number" id="yValue" placeholder="y" style="width: 60px;">).</p>
+                    <button class="solve-btn" onclick="findEquation()">Find Equation</button>
+                    
+                    <div class="solution-steps" id="equationSolution"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Slope and Linear Equations Tutorial © 2023 | Created for educational purposes</p>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the selected tab
+        function showTab(tabIndex) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            
+            // Show the selected tab content
+            document.getElementById('tab' + tabIndex).classList.add('active');
+            
+            // Update active tab button
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach((btn, index) => {
+                if (index === tabIndex) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Redraw canvases when tab is shown
+            setTimeout(drawAllCanvases, 100);
+        }
+        
+        // Function to toggle solution visibility
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            solution.classList.toggle('show');
+            
+            // Redraw canvases when solution is shown
+            if (solution.classList.contains('show')) {
+                setTimeout(drawAllCanvases, 100);
+            }
+        }
+        
+        // Function to draw coordinate plane
+        function drawCoordinatePlane(canvasId, points = [], lines = []) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw grid
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 0.5;
+            
+            // Vertical lines
+            for (let x = 0; x <= width; x += width / 20) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+            }
+            
+            // Horizontal lines
+            for (let y = 0; y <= height; y += height / 20) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+            
+            // Draw axes
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            
+            // x-axis
+            ctx.beginPath();
+            ctx.moveTo(0, height / 2);
+            ctx.lineTo(width, height / 2);
+            ctx.stroke();
+            
+            // y-axis
+            ctx.beginPath();
+            ctx.moveTo(width / 2, 0);
+            ctx.lineTo(width / 2, height);
+            ctx.stroke();
+            
+            // Draw arrows
+            ctx.beginPath();
+            ctx.moveTo(width - 10, height / 2 - 5);
+            ctx.lineTo(width, height / 2);
+            ctx.lineTo(width - 10, height / 2 + 5);
+            ctx.fillStyle = '#000';
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.moveTo(width / 2 - 5, 10);
+            ctx.lineTo(width / 2, 0);
+            ctx.lineTo(width / 2 + 5, 10);
+            ctx.fill();
+            
+            // Draw labels
+            ctx.font = '12px Arial';
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // x-axis labels
+            for (let i = -10; i <= 10; i += 2) {
+                if (i === 0) continue;
+                const x = width / 2 + i * (width / 20);
+                ctx.fillText(i.toString(), x, height / 2 + 15);
+            }
+            
+            // y-axis labels
+            for (let i = -10; i <= 10; i += 2) {
+                if (i === 0) continue;
+                const y = height / 2 - i * (height / 20);
+                ctx.fillText(i.toString(), width / 2 - 15, y);
+            }
+            
+            // Origin label
+            ctx.fillText('0', width / 2 - 8, height / 2 + 15);
+            
+            // Draw points
+            points.forEach(point => {
+                const x = width / 2 + point.x * (width / 20);
+                const y = height / 2 - point.y * (height / 20);
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, Math.PI * 2);
+                ctx.fillStyle = point.color || '#f00';
+                ctx.fill();
+                
+                if (point.label) {
+                    ctx.fillStyle = '#000';
+                    ctx.fillText(point.label, x, y - 10);
+                }
+            });
+            
+            // Draw lines
+            lines.forEach(line => {
+                if (line.points && line.points.length >= 2) {
+                    ctx.beginPath();
+                    ctx.moveTo(
+                        width / 2 + line.points[0].x * (width / 20),
+                        height / 2 - line.points[0].y * (height / 20)
+                    );
+                    
+                    for (let i = 1; i < line.points.length; i++) {
+                        ctx.lineTo(
+                            width / 2 + line.points[i].x * (width / 20),
+                            height / 2 - line.points[i].y * (height / 20)
+                        );
+                    }
+                    
+                    ctx.strokeStyle = line.color || '#00f';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+            });
+        }
+        
+        // Function to draw all canvases
+        function drawAllCanvases() {
+            // Positive slope example
+            drawCoordinatePlane('positiveSlopeCanvas', [], [
+                {points: [
+                    {x: -5, y: -5},
+                    {x: 5, y: 5}
+                ], color: '#00f'}
+            ]);
+            
+            // Negative slope example
+            drawCoordinatePlane('negativeSlopeCanvas', [], [
+                {points: [
+                    {x: -5, y: 5},
+                    {x: 5, y: -5}
+                ], color: '#00f'}
+            ]);
+            
+            // Two points example
+            drawCoordinatePlane('twoPointsCanvas', [
+                {x: -2, y: 3, color: '#f00', label: '(-2, 3)'},
+                {x: 4, y: -1, color: '#f00', label: '(4, -1)'}
+            ], [
+                {points: [
+                    {x: -3, y: 4},
+                    {x: -2, y: 3},
+                    {x: 4, y: -1},
+                    {x: 5, y: -2}
+                ], color: '#00f'}
+            ]);
+            
+            // Horizontal line example
+            drawCoordinatePlane('horizontalLineCanvas', [
+                {x: -3, y: 4, color: '#f00', label: '(-3, 4)'},
+                {x: 2, y: 4, color: '#f00', label: '(2, 4)'}
+            ], [
+                {points: [
+                    {x: -5, y: 4},
+                    {x: 5, y: 4}
+                ], color: '#00f'}
+            ]);
+            
+            // Vertical line example
+            drawCoordinatePlane('verticalLineCanvas', [
+                {x: 5, y: -2, color: '#f00', label: '(5, -2)'},
+                {x: 5, y: 3, color: '#f00', label: '(5, 3)'}
+            ], [
+                {points: [
+                    {x: 5, y: -3},
+                    {x: 5, y: 4}
+                ], color: '#00f'}
+            ]);
+            
+            // Positive slope example
+            drawCoordinatePlane('positiveSlopeExampleCanvas', [
+                {x: 1, y: 2, color: '#f00', label: '(1, 2)'},
+                {x: 4, y: 4, color: '#f00', label: '(4, 4)'}
+            ], [
+                {points: [
+                    {x: -2, y: 0},
+                    {x: 1, y: 2},
+                    {x: 4, y: 4},
+                    {x: 7, y: 6}
+                ], color: '#00f'}
+            ]);
+            
+            // Negative slope example
+            drawCoordinatePlane('negativeSlopeExampleCanvas', [
+                {x: -2, y: 3, color: '#f00', label: '(-2, 3)'},
+                {x: 0, y: 2, color: '#f00', label: '(0, 2)'}
+            ], [
+                {points: [
+                    {x: -4, y: 4},
+                    {x: -2, y: 3},
+                    {x: 0, y: 2},
+                    {x: 2, y: 1}
+                ], color: '#00f'}
+            ]);
+            
+            // Zero slope example
+            drawCoordinatePlane('zeroSlopeCanvas', [
+                {x: -3, y: 4, color: '#f00', label: '(-3, 4)'}
+            ], [
+                {points: [
+                    {x: -5, y: 4},
+                    {x: 5, y: 4}
+                ], color: '#00f'}
+            ]);
+            
+            // Find positive slope example
+            drawCoordinatePlane('findPositiveSlopeCanvas', [
+                {x: 1, y: 1, color: '#f00', label: '(1, 1)'},
+                {x: 4, y: 3, color: '#f00', label: '(4, 3)'}
+            ], [
+                {points: [
+                    {x: -1, y: -1/3},
+                    {x: 1, y: 1},
+                    {x: 4, y: 3},
+                    {x: 6, y: 13/3}
+                ], color: '#00f'}
+            ]);
+            
+            // Find negative slope example
+            drawCoordinatePlane('findNegativeSlopeCanvas', [
+                {x: -2, y: 3, color: '#f00', label: '(-2, 3)'},
+                {x: 2, y: 1, color: '#f00', label: '(2, 1)'}
+            ], [
+                {points: [
+                    {x: -4, y: 4},
+                    {x: -2, y: 3},
+                    {x: 2, y: 1},
+                    {x: 4, y: 0}
+                ], color: '#00f'}
+            ]);
+            
+            // Find zero slope example
+            drawCoordinatePlane('findZeroSlopeCanvas', [], [
+                {points: [
+                    {x: -5, y: 2},
+                    {x: 5, y: 2}
+                ], color: '#00f'}
+            ]);
+            
+            // Find undefined slope example
+            drawCoordinatePlane('findUndefinedSlopeCanvas', [], [
+                {points: [
+                    {x: 3, y: -4},
+                    {x: 3, y: 4}
+                ], color: '#00f'}
+            ]);
+            
+            // Practice problems
+            drawCoordinatePlane('practice1Canvas', [
+                {x: -3, y: -2, color: '#f00', label: '(-3, -2)'},
+                {x: 1, y: 4, color: '#f00', label: '(1, 4)'}
+            ], [
+                {points: [
+                    {x: -4, y: -3},
+                    {x: -3, y: -2},
+                    {x: 1, y: 4},
+                    {x: 2, y: 5}
+                ], color: '#00f'}
+            ]);
+            
+            drawCoordinatePlane('practice2Canvas', [], [
+                {points: [
+                    {x: -3, y: -2},
+                    {x: -2, y: -1},
+                    {x: 2, y: 3},
+                    {x: 3, y: 4}
+                ], color: '#00f'}
+            ]);
+            
+            drawCoordinatePlane('practice3Canvas', [
+                {x: 0, y: -3, color: '#f00', label: '(0, -3)'},
+                {x: 5, y: 1, color: '#f00', label: '(5, 1)'}
+            ], [
+                {points: [
+                    {x: -5, y: -7},
+                    {x: 0, y: -3},
+                    {x: 5, y: 1},
+                    {x: 10, y: 5}
+                ], color: '#00f'}
+            ]);
+        }
+        
+        // Function to find equation from slope and point
+        function findEquation() {
+            const slope = parseFloat(document.getElementById('slopeValue').value);
+            const x = parseFloat(document.getElementById('xValue').value);
+            const y = parseFloat(document.getElementById('yValue').value);
+            const equationSolution = document.getElementById('equationSolution');
+            
+            if (isNaN(slope) || isNaN(x) || isNaN(y)) {
+                equationSolution.innerHTML = '<p class="step">Please enter valid numbers for slope and point coordinates.</p>';
+                return;
+            }
+            
+            // Calculate y-intercept
+            const b = y - slope * x;
+            
+            equationSolution.innerHTML = `
+                <p class="step">Given: slope m = ${slope}, point (${x}, ${y})</p>
+                <p class="step">Using the formula y = mx + b, substitute the known values:</p>
+                <p class="step">${y} = ${slope} × ${x} + b</p>
+                <p class="step">${y} = ${slope * x} + b</p>
+                <p class="step">b = ${y} - ${slope * x} = ${b}</p>
+                <p class="step">The equation is: y = ${slope}x + ${b}</p>
+            `;
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Draw all canvases on page load
+            drawAllCanvases();
+        });
+    </script>
+</body>
+</html>
