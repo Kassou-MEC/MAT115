@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphing Linear Equations Tutorial</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #166088;
+            --accent: #4cb5f5;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --graphing: #8a2be2;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--graphing), #6a0dad);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            gap: 5px;
+        }
+        
+        .tab-btn {
+            padding: 10px 20px;
+            background-color: #e9ecef;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab-btn:hover {
+            background-color: #dee2e6;
+        }
+        
+        .tab-btn.active {
+            background-color: white;
+            color: var(--graphing);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+        
+        .content-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            min-height: 400px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .definition-box {
+            background-color: #f0e6ff;
+            border-left: 5px solid var(--graphing);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .example-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--success);
+        }
+        
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .important-note {
+            background-color: #fff3cd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--warning);
+        }
+        
+        .practice-box {
+            background-color: #e6f7ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--accent);
+        }
+        
+        .solution-toggle {
+            background-color: var(--graphing);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .solution-toggle:hover {
+            background-color: #6a0dad;
+        }
+        
+        .solution {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            border: 1px dashed var(--graphing);
+        }
+        
+        .solution.show {
+            display: block;
+        }
+        
+        .interactive-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid var(--danger);
+        }
+        
+        .equation-input {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .solve-btn {
+            background-color: var(--graphing);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .solve-btn:hover {
+            background-color: #6a0dad;
+        }
+        
+        .solution-steps {
+            margin-top: 20px;
+        }
+        
+        .coordinate-plane {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            background-color: #f8f9fa;
+        }
+        
+        .graph-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: #6c757d;
+        }
+        
+        .visual-explanation {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .visual-item {
+            text-align: center;
+            margin: 10px;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .quadrant-diagram {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin: 0 auto;
+            border: 1px solid #333;
+        }
+        
+        .quadrant-label {
+            position: absolute;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                border-radius: 5px;
+                margin-bottom: 5px;
+            }
+            
+            .content-section {
+                padding: 15px;
+            }
+            
+            .visual-explanation {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Graphing Linear Equations</h1>
+            <p class="subtitle">Point-Plotting, Quadrants, and Intercepts</p>
+        </header>
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab(0)">Introduction</button>
+            <button class="tab-btn" onclick="showTab(1)">Coordinate System</button>
+            <button class="tab-btn" onclick="showTab(2)">Point Plotting</button>
+            <button class="tab-btn" onclick="showTab(3)">Finding Intercepts</button>
+            <button class="tab-btn" onclick="showTab(4)">Graphing Lines</button>
+            <button class="tab-btn" onclick="showTab(5)">Practice</button>
+        </div>
+        
+        <div class="content-section">
+            <!-- Introduction Tab -->
+            <div class="tab-content active" id="tab0">
+                <h2>Introduction to Graphing Linear Equations</h2>
+                <div class="definition-box">
+                    <p>A linear equation is an equation that forms a straight line when graphed on a coordinate plane. The standard form of a linear equation is:</p>
+                    <p style="text-align: center; font-size: 1.5rem; margin: 10px 0;">Ax + By = C</p>
+                    <p>where A, B, and C are constants, and x and y are variables.</p>
+                </div>
+                
+                <h3>Why Learn Graphing?</h3>
+                <p>Graphing linear equations helps us:</p>
+                <ul>
+                    <li>Visualize relationships between variables</li>
+                    <li>Solve systems of equations</li>
+                    <li>Understand rates of change and slopes</li>
+                    <li>Make predictions based on data trends</li>
+                    <li>Apply mathematical concepts to real-world problems</li>
+                </ul>
+                
+                <div class="example-box">
+                    <h4>Example: Real-World Application</h4>
+                    <p>The equation y = 5x + 10 could represent:</p>
+                    <p>A phone plan that charges $10 monthly fee plus $5 per GB of data used.</p>
+                    <p>Graphing this equation would show the total cost (y) for different amounts of data used (x).</p>
+                </div>
+            </div>
+            
+            <!-- Coordinate System Tab -->
+            <div class="tab-content" id="tab1">
+                <h2>The Coordinate Plane</h2>
+                <div class="definition-box">
+                    <p>The coordinate plane is a two-dimensional surface formed by two perpendicular number lines:</p>
+                    <ul>
+                        <li>The <strong>x-axis</strong> (horizontal number line)</li>
+                        <li>The <strong>y-axis</strong> (vertical number line)</li>
+                    </ul>
+                    <p>The point where they intersect is called the <strong>origin</strong>, with coordinates (0, 0).</p>
+                </div>
+                
+                <div class="visual-explanation">
+                    <div class="visual-item">
+                        <h4>Quadrants</h4>
+                        <div class="quadrant-diagram">
+                            <div class="quadrant-label" style="top: 20px; right: 20px;">Quadrant I<br>(+, +)</div>
+                            <div class="quadrant-label" style="top: 20px; left: 20px;">Quadrant II<br>(-, +)</div>
+                            <div class="quadrant-label" style="bottom: 20px; left: 20px;">Quadrant III<br>(-, -)</div>
+                            <div class="quadrant-label" style="bottom: 20px; right: 20px;">Quadrant IV<br>(+, -)</div>
+                        </div>
+                        <p>The coordinate plane is divided into four quadrants by the axes.</p>
+                    </div>
+                    
+                    <div class="visual-item">
+                        <h4>Coordinate Plane</h4>
+                        <div class="coordinate-plane">
+                            <canvas id="coordinateCanvas" class="graph-canvas"></canvas>
+                        </div>
+                        <p>Points are located using ordered pairs (x, y).</p>
+                    </div>
+                </div>
+                
+                <div class="important-note">
+                    <h4>Key Concepts</h4>
+                    <ul>
+                        <li>The x-coordinate indicates horizontal position (left/right)</li>
+                        <li>The y-coordinate indicates vertical position (up/down)</li>
+                        <li>Points on the x-axis have coordinates (x, 0)</li>
+                        <li>Points on the y-axis have coordinates (0, y)</li>
+                        <li>The origin is at (0, 0)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Point Plotting Tab -->
+            <div class="tab-content" id="tab2">
+                <h2>Plotting Points</h2>
+                <div class="definition-box">
+                    <p>Plotting points is the process of locating points on the coordinate plane using their coordinates (x, y).</p>
+                </div>
+                
+                <h3>How to Plot a Point</h3>
+                <ol>
+                    <li>Start at the origin (0, 0)</li>
+                    <li>Move horizontally to the x-coordinate (right for positive, left for negative)</li>
+                    <li>From there, move vertically to the y-coordinate (up for positive, down for negative)</li>
+                    <li>Mark the point at this location</li>
+                </ol>
+                
+                <div class="example-box">
+                    <h4>Example: Plotting (3, 2)</h4>
+                    <div class="step">Start at the origin (0, 0)</div>
+                    <div class="step">Move 3 units to the right (positive x-direction)</div>
+                    <div class="step">Move 2 units up (positive y-direction)</div>
+                    <div class="step">Mark the point at this location</div>
+                    <div class="coordinate-plane">
+                        <canvas id="plottingCanvas" class="graph-canvas"></canvas>
+                    </div>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example: Plotting (-2, 4)</h4>
+                    <div class="step">Start at the origin (0, 0)</div>
+                    <div class="step">Move 2 units to the left (negative x-direction)</div>
+                    <div class="step">Move 4 units up (positive y-direction)</div>
+                    <div class="step">Mark the point at this location</div>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Practice Problem</h4>
+                    <p>Plot the points (1, 3), (-2, -1), and (0, 4) on a coordinate plane.</p>
+                    <button class="solution-toggle" onclick="toggleSolution('solution1')">Show Solution</button>
+                    <div class="solution" id="solution1">
+                        <div class="coordinate-plane">
+                            <canvas id="practicePlottingCanvas" class="graph-canvas"></canvas>
+                        </div>
+                        <p>(1, 3): 1 unit right, 3 units up</p>
+                        <p>(-2, -1): 2 units left, 1 unit down</p>
+                        <p>(0, 4): On y-axis, 4 units up</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Finding Intercepts Tab -->
+            <div class="tab-content" id="tab3">
+                <h2>Finding Intercepts</h2>
+                <div class="definition-box">
+                    <p>Intercepts are points where a graph crosses the axes:</p>
+                    <ul>
+                        <li><strong>x-intercept</strong>: Where the graph crosses the x-axis (y = 0)</li>
+                        <li><strong>y-intercept</strong>: Where the graph crosses the y-axis (x = 0)</li>
+                    </ul>
+                </div>
+                
+                <h3>How to Find Intercepts</h3>
+                <div class="example-box">
+                    <h4>Finding x-intercept</h4>
+                    <p>To find the x-intercept, set y = 0 and solve for x.</p>
+                    <div class="step">Example: For 2x + 3y = 6</div>
+                    <div class="step">Set y = 0: 2x + 3(0) = 6</div>
+                    <div class="step">2x = 6</div>
+                    <div class="step">x = 3</div>
+                    <div class="step">x-intercept is (3, 0)</div>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Finding y-intercept</h4>
+                    <p>To find the y-intercept, set x = 0 and solve for y.</p>
+                    <div class="step">Example: For 2x + 3y = 6</div>
+                    <div class="step">Set x = 0: 2(0) + 3y = 6</div>
+                    <div class="step">3y = 6</div>
+                    <div class="step">y = 2</div>
+                    <div class="step">y-intercept is (0, 2)</div>
+                </div>
+                
+                <div class="important-note">
+                    <h4>Special Cases</h4>
+                    <ul>
+                        <li>Horizontal lines (y = constant) have no x-intercept (unless y = 0)</li>
+                        <li>Vertical lines (x = constant) have no y-intercept (unless x = 0)</li>
+                        <li>Lines passing through the origin have both intercepts at (0, 0)</li>
+                    </ul>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Practice Problem</h4>
+                    <p>Find the x-intercept and y-intercept of the equation 4x - 2y = 8.</p>
+                    <button class="solution-toggle" onclick="toggleSolution('solution2')">Show Solution</button>
+                    <div class="solution" id="solution2">
+                        <p><strong>x-intercept:</strong> Set y = 0</p>
+                        <div class="step">4x - 2(0) = 8</div>
+                        <div class="step">4x = 8</div>
+                        <div class="step">x = 2 → (2, 0)</div>
+                        
+                        <p><strong>y-intercept:</strong> Set x = 0</p>
+                        <div class="step">4(0) - 2y = 8</div>
+                        <div class="step">-2y = 8</div>
+                        <div class="step">y = -4 → (0, -4)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Graphing Lines Tab -->
+            <div class="tab-content" id="tab4">
+                <h2>Graphing Linear Equations</h2>
+                <div class="definition-box">
+                    <p>To graph a linear equation, we can use two main methods:</p>
+                    <ol>
+                        <li><strong>Point-plotting</strong>: Find several points that satisfy the equation and connect them</li>
+                        <li><strong>Intercept method</strong>: Find the x and y intercepts and connect them</li>
+                    </ol>
+                </div>
+                
+                <h3>Point-Plotting Method</h3>
+                <div class="example-box">
+                    <h4>Example: Graph y = 2x + 1</h4>
+                    <div class="step">Create a table of values:</div>
+                    <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
+                        <tr>
+                            <th style="padding: 8px; border: 1px solid #ddd;">x</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">y = 2x + 1</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">Point</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">-1</td>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">2(-1) + 1 = -1</td>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">(-1, -1)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">0</td>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">2(0) + 1 = 1</td>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">(0, 1)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">1</td>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">2(1) + 1 = 3</td>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">(1, 3)</td>
+                        </tr>
+                    </table>
+                    <div class="step">Plot these points and draw a line through them:</div>
+                    <div class="coordinate-plane">
+                        <canvas id="graphingCanvas" class="graph-canvas"></canvas>
+                    </div>
+                </div>
+                
+                <h3>Intercept Method</h3>
+                <div class="example-box">
+                    <h4>Example: Graph 3x + 2y = 6 using intercepts</h4>
+                    <div class="step">Find x-intercept: Set y = 0 → 3x = 6 → x = 2 → (2, 0)</div>
+                    <div class="step">Find y-intercept: Set x = 0 → 2y = 6 → y = 3 → (0, 3)</div>
+                    <div class="step">Plot these two points and draw a line through them:</div>
+                    <div class="coordinate-plane">
+                        <canvas id="interceptCanvas" class="graph-canvas"></canvas>
+                    </div>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Practice Problem</h4>
+                    <p>Graph the equation y = -x + 2 using the point-plotting method.</p>
+                    <button class="solution-toggle" onclick="toggleSolution('solution3')">Show Solution</button>
+                    <div class="solution" id="solution3">
+                        <div class="step">Create a table of values:</div>
+                        <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
+                            <tr>
+                                <th style="padding: 8px; border: 1px solid #ddd;">x</th>
+                                <th style="padding: 8px; border: 1px solid #ddd;">y = -x + 2</th>
+                                <th style="padding: 8px; border: 1px solid #ddd;">Point</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">-1</td>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">-(-1) + 2 = 3</td>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">(-1, 3)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">0</td>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">-(0) + 2 = 2</td>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">(0, 2)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">1</td>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">-(1) + 2 = 1</td>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">(1, 1)</td>
+                            </tr>
+                        </table>
+                        <div class="step">Plot these points and draw a line through them:</div>
+                        <div class="coordinate-plane">
+                            <canvas id="practiceGraphingCanvas" class="graph-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Practice Tab -->
+            <div class="tab-content" id="tab5">
+                <h2>Practice Problems</h2>
+                <p>Test your understanding with these practice problems. Try to solve them on your own before checking the solutions.</p>
+                
+                <div class="practice-box">
+                    <h4>Problem 1: Plotting Points</h4>
+                    <p>Plot the points (-3, 4), (2, -1), and (0, -3) on a coordinate plane.</p>
+                    <button class="solution-toggle" onclick="toggleSolution('practice1')">Show Solution</button>
+                    <div class="solution" id="practice1">
+                        <div class="coordinate-plane">
+                            <canvas id="practice1Canvas" class="graph-canvas"></canvas>
+                        </div>
+                        <p>(-3, 4): 3 units left, 4 units up</p>
+                        <p>(2, -1): 2 units right, 1 unit down</p>
+                        <p>(0, -3): On y-axis, 3 units down</p>
+                    </div>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Problem 2: Finding Intercepts</h4>
+                    <p>Find the x-intercept and y-intercept of the equation 5x - 2y = 10.</p>
+                    <button class="solution-toggle" onclick="toggleSolution('practice2')">Show Solution</button>
+                    <div class="solution" id="practice2">
+                        <p><strong>x-intercept:</strong> Set y = 0</p>
+                        <div class="step">5x - 2(0) = 10</div>
+                        <div class="step">5x = 10</div>
+                        <div class="step">x = 2 → (2, 0)</div>
+                        
+                        <p><strong>y-intercept:</strong> Set x = 0</p>
+                        <div class="step">5(0) - 2y = 10</div>
+                        <div class="step">-2y = 10</div>
+                        <div class="step">y = -5 → (0, -5)</div>
+                    </div>
+                </div>
+                
+                <div class="practice-box">
+                    <h4>Problem 3: Graphing Equations</h4>
+                    <p>Graph the equation 2x + y = 4 using the intercept method.</p>
+                    <button class="solution-toggle" onclick="toggleSolution('practice3')">Show Solution</button>
+                    <div class="solution" id="practice3">
+                        <div class="step">Find x-intercept: Set y = 0 → 2x = 4 → x = 2 → (2, 0)</div>
+                        <div class="step">Find y-intercept: Set x = 0 → y = 4 → (0, 4)</div>
+                        <div class="step">Plot these points and draw a line through them:</div>
+                        <div class="coordinate-plane">
+                            <canvas id="practice3Canvas" class="graph-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="interactive-box">
+                    <h4>Interactive Graphing Tool</h4>
+                    <p>Enter a linear equation to graph (e.g., y=2x+1 or 3x-2y=6):</p>
+                    <input type="text" class="equation-input" id="equationToGraph" placeholder="Enter equation">
+                    <button class="solve-btn" onclick="graphEquation()">Graph</button>
+                    
+                    <div class="solution-steps" id="graphSolution"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Graphing Linear Equations Tutorial © 2023 | Created for educational purposes</p>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the selected tab
+        function showTab(tabIndex) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            
+            // Show the selected tab content
+            document.getElementById('tab' + tabIndex).classList.add('active');
+            
+            // Update active tab button
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach((btn, index) => {
+                if (index === tabIndex) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Redraw canvases when tab is shown
+            setTimeout(drawAllCanvases, 100);
+        }
+        
+        // Function to toggle solution visibility
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            solution.classList.toggle('show');
+            
+            // Redraw canvases when solution is shown
+            if (solution.classList.contains('show')) {
+                setTimeout(drawAllCanvases, 100);
+            }
+        }
+        
+        // Function to draw coordinate plane
+        function drawCoordinatePlane(canvasId, points = [], lines = []) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw grid
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 0.5;
+            
+            // Vertical lines
+            for (let x = 0; x <= width; x += width / 20) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+            }
+            
+            // Horizontal lines
+            for (let y = 0; y <= height; y += height / 20) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+            
+            // Draw axes
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            
+            // x-axis
+            ctx.beginPath();
+            ctx.moveTo(0, height / 2);
+            ctx.lineTo(width, height / 2);
+            ctx.stroke();
+            
+            // y-axis
+            ctx.beginPath();
+            ctx.moveTo(width / 2, 0);
+            ctx.lineTo(width / 2, height);
+            ctx.stroke();
+            
+            // Draw arrows
+            ctx.beginPath();
+            ctx.moveTo(width - 10, height / 2 - 5);
+            ctx.lineTo(width, height / 2);
+            ctx.lineTo(width - 10, height / 2 + 5);
+            ctx.fillStyle = '#000';
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.moveTo(width / 2 - 5, 10);
+            ctx.lineTo(width / 2, 0);
+            ctx.lineTo(width / 2 + 5, 10);
+            ctx.fill();
+            
+            // Draw labels
+            ctx.font = '12px Arial';
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // x-axis labels
+            for (let i = -10; i <= 10; i += 2) {
+                if (i === 0) continue;
+                const x = width / 2 + i * (width / 20);
+                ctx.fillText(i.toString(), x, height / 2 + 15);
+            }
+            
+            // y-axis labels
+            for (let i = -10; i <= 10; i += 2) {
+                if (i === 0) continue;
+                const y = height / 2 - i * (height / 20);
+                ctx.fillText(i.toString(), width / 2 - 15, y);
+            }
+            
+            // Origin label
+            ctx.fillText('0', width / 2 - 8, height / 2 + 15);
+            
+            // Draw points
+            points.forEach(point => {
+                const x = width / 2 + point.x * (width / 20);
+                const y = height / 2 - point.y * (height / 20);
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, Math.PI * 2);
+                ctx.fillStyle = point.color || '#f00';
+                ctx.fill();
+                
+                if (point.label) {
+                    ctx.fillStyle = '#000';
+                    ctx.fillText(point.label, x, y - 10);
+                }
+            });
+            
+            // Draw lines
+            lines.forEach(line => {
+                if (line.points && line.points.length >= 2) {
+                    ctx.beginPath();
+                    ctx.moveTo(
+                        width / 2 + line.points[0].x * (width / 20),
+                        height / 2 - line.points[0].y * (height / 20)
+                    );
+                    
+                    for (let i = 1; i < line.points.length; i++) {
+                        ctx.lineTo(
+                            width / 2 + line.points[i].x * (width / 20),
+                            height / 2 - line.points[i].y * (height / 20)
+                        );
+                    }
+                    
+                    ctx.strokeStyle = line.color || '#00f';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+            });
+        }
+        
+        // Function to draw all canvases
+        function drawAllCanvases() {
+            // Coordinate system canvas
+            drawCoordinatePlane('coordinateCanvas');
+            
+            // Plotting examples
+            drawCoordinatePlane('plottingCanvas', [
+                {x: 3, y: 2, color: '#f00', label: '(3, 2)'}
+            ]);
+            
+            // Practice plotting
+            drawCoordinatePlane('practicePlottingCanvas', [
+                {x: 1, y: 3, color: '#f00', label: '(1, 3)'},
+                {x: -2, y: -1, color: '#00f', label: '(-2, -1)'},
+                {x: 0, y: 4, color: '#080', label: '(0, 4)'}
+            ]);
+            
+            // Graphing examples
+            drawCoordinatePlane('graphingCanvas', [
+                {x: -1, y: -1, color: '#f00'},
+                {x: 0, y: 1, color: '#f00'},
+                {x: 1, y: 3, color: '#f00'}
+            ], [
+                {points: [
+                    {x: -2, y: -3},
+                    {x: -1, y: -1},
+                    {x: 0, y: 1},
+                    {x: 1, y: 3},
+                    {x: 2, y: 5}
+                ], color: '#00f'}
+            ]);
+            
+            // Intercept examples
+            drawCoordinatePlane('interceptCanvas', [
+                {x: 2, y: 0, color: '#f00', label: '(2, 0)'},
+                {x: 0, y: 3, color: '#f00', label: '(0, 3)'}
+            ], [
+                {points: [
+                    {x: -1, y: 4.5},
+                    {x: 0, y: 3},
+                    {x: 2, y: 0},
+                    {x: 4, y: -3}
+                ], color: '#00f'}
+            ]);
+            
+            // Practice graphing
+            drawCoordinatePlane('practiceGraphingCanvas', [
+                {x: -1, y: 3, color: '#f00'},
+                {x: 0, y: 2, color: '#f00'},
+                {x: 1, y: 1, color: '#f00'}
+            ], [
+                {points: [
+                    {x: -2, y: 4},
+                    {x: -1, y: 3},
+                    {x: 0, y: 2},
+                    {x: 1, y: 1},
+                    {x: 2, y: 0}
+                ], color: '#00f'}
+            ]);
+            
+            // Practice problems
+            drawCoordinatePlane('practice1Canvas', [
+                {x: -3, y: 4, color: '#f00', label: '(-3, 4)'},
+                {x: 2, y: -1, color: '#00f', label: '(2, -1)'},
+                {x: 0, y: -3, color: '#080', label: '(0, -3)'}
+            ]);
+            
+            drawCoordinatePlane('practice3Canvas', [
+                {x: 2, y: 0, color: '#f00', label: '(2, 0)'},
+                {x: 0, y: 4, color: '#f00', label: '(0, 4)'}
+            ], [
+                {points: [
+                    {x: -1, y: 6},
+                    {x: 0, y: 4},
+                    {x: 2, y: 0},
+                    {x: 3, y: -2}
+                ], color: '#00f'}
+            ]);
+        }
+        
+        // Function to graph equation (simplified for demonstration)
+        function graphEquation() {
+            const equationInput = document.getElementById('equationToGraph').value;
+            const graphSolution = document.getElementById('graphSolution');
+            
+            if (!equationInput) {
+                graphSolution.innerHTML = '<p class="step">Please enter an equation to graph.</p>';
+                return;
+            }
+            
+            // Simple demonstration - not a full equation parser
+            graphSolution.innerHTML = `
+                <p class="step">Graphing: ${equationInput}</p>
+                <p class="step">This interactive graphing tool is a simplified demonstration.</p>
+                <p class="step">For the equation: ${equationInput}</p>
+                <p class="step">You would typically:</p>
+                <p class="step">1. Create a table of values</p>
+                <p class="step">2. Plot the points on a coordinate plane</p>
+                <p class="step">3. Draw a line through the points</p>
+                <p class="step">Try applying the techniques you've learned in this tutorial!</p>
+            `;
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Draw all canvases on page load
+            drawAllCanvases();
+        });
+    </script>
+</body>
+</html>
