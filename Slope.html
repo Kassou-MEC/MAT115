@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slope Mastery: The Ultimate Adventure</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 50%, #45b7d1 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M10,50 Q50,10 90,50 T170,50" stroke="rgba(255,255,255,0.2)" stroke-width="2" fill="none"/></svg>') repeat;
+            animation: waveMove 15s ease-in-out infinite;
+        }
+
+        @keyframes waveMove { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-50px)} }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slopeFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes slopeFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+        .header p { font-size: 1.3em; position: relative; z-index: 1; opacity: 0.95; }
+
+        .navigation {
+            display: flex; justify-content: center; gap: 8px; padding: 20px;
+            background: #f8f9fa; flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 10px 16px; background: white; border: 3px solid #ff6b6b;
+            color: #ff6b6b; border-radius: 25px; cursor: pointer; transition: .3s;
+            font-weight: bold; font-size: 13px; position: relative; overflow: hidden;
+        }
+        .nav-btn:hover { background:#ff6b6b; color:#fff; transform:translateY(-3px); box-shadow:0 8px 25px rgba(255,107,107,.4) }
+        .nav-btn.active { background:#ff6b6b; color:#fff; transform:scale(1.05) }
+
+        .content { padding: 40px; }
+
+        .slide { display: none; animation: slideIn .5s ease; }
+        .slide.active { display: block; }
+
+        @keyframes slideIn { from{opacity:0; transform:translateX(50px)} to{opacity:1; transform:translateX(0)} }
+
+        h2 {
+            color:#ff6b6b; margin-bottom:25px; font-size:2.5em; text-align:center; position:relative;
+        }
+        h2::after {
+            content:''; display:block; width:100px; height:4px; background:linear-gradient(90deg,#ff6b6b,#4ecdc4);
+            margin:15px auto; border-radius:2px;
+        }
+        h3 { color:#764ba2; margin:25px 0 15px 0; font-size:1.8em; }
+
+        .definition-box {
+            background: linear-gradient(135deg,#ff6b6b15 0%,#4ecdc415 100%);
+            border-left:5px solid #ff6b6b; padding:25px; margin:25px 0; border-radius:10px; position:relative;
+        }
+        .definition-box::before {
+            content:'📚'; position:absolute; top:-10px; left:20px; background:white; padding:5px 10px; border-radius:20px; font-size:1.2em;
+        }
+        .definition-box h4 { color:#ff6b6b; margin-bottom:15px; font-size:1.3em; }
+
+        .coordinate-plane {
+            width:400px; height:400px; margin:20px auto; position:relative; background:white;
+            border:2px solid #ddd; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,.1);
+        }
+        .grid-canvas { width:100%; height:100%; border-radius:8px; }
+
+        .interactive-graph {
+            background:#f8f9fa; border:2px solid #e9ecef; border-radius:15px; padding:25px; margin:25px 0; text-align:center;
+        }
+        .graph-controls { margin:20px 0; display:flex; justify-content:center; gap:15px; flex-wrap:wrap; align-items:center; }
+        .control-group { display:flex; flex-direction:column; align-items:center; gap:5px; }
+        .control-input { padding:8px 12px; border:2px solid #ddd; border-radius:20px; width:80px; text-align:center; font-size:14px; }
+        .control-input:focus { outline:none; border-color:#ff6b6b; box-shadow:0 0 10px rgba(255,107,107,.3) }
+
+        .action-btn {
+            background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; border:none; padding:12px 25px;
+            border-radius:25px; cursor:pointer; font-size:14px; font-weight:bold; transition:.3s; margin:5px;
+        }
+        .action-btn:hover { transform:scale(1.05); box-shadow:0 8px 20px rgba(102,126,234,.4) }
+        .action-btn:active { transform:scale(.95) }
+
+        .example-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap:20px; margin:25px 0; }
+        .example-card {
+            background:white; border:2px solid #e9ecef; border-radius:15px; padding:20px; transition:.3s; position:relative; overflow:hidden;
+        }
+        .example-card:hover { transform:translateY(-5px); box-shadow:0 10px 30px rgba(0,0,0,.1); border-color:#ff6b6b; }
+        .example-card::before { content:''; position:absolute; top:0; left:0; width:100%; height:4px; background:linear-gradient(90deg,#ff6b6b,#4ecdc4) }
+        .difficulty-badge { position:absolute; top:15px; right:15px; padding:5px 12px; border-radius:15px; font-size:12px; font-weight:bold; color:white; }
+        .easy{background:#27ae60} .medium{background:#f39c12} .hard{background:#e74c3c} .expert{background:#8e44ad}
+
+        .slope-visual { background:white; border:2px solid #4ecdc4; border-radius:15px; padding:20px; margin:20px 0; text-align:center; }
+        .slope-demo { display:flex; justify-content:space-around; align-items:center; margin:20px 0; flex-wrap:wrap; }
+        .slope-arrow { font-size:3em; color:#ff6b6b; margin:10px; animation:bounce 2s infinite; }
+        @keyframes bounce {0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}60%{transform:translateY(-5px)}}
+
+        .formula-box { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; padding:20px; border-radius:15px; margin:20px 0; text-align:center; font-size:1.3em; font-weight:bold; }
+
+        .parallel-demo,.perpendicular-demo { background:white; border:2px solid #4ecdc4; border-radius:15px; padding:20px; margin:20px 0; }
+        .line-comparison { display:flex; justify-content:space-between; margin:15px 0; padding:15px; background:#f8f9fa; border-radius:10px; }
+
+        .table-input { background:white; border:2px solid #e9ecef; border-radius:15px; padding:20px; margin:20px 0; }
+        .data-table { width:100%; border-collapse:collapse; margin:15px 0; background:white; border-radius:10px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.1); }
+        .data-table th,.data-table td { padding:12px 15px; text-align:center; border-bottom:1px solid #e9ecef; }
+        .data-table th { background:#4ecdc4; color:white; font-weight:600; }
+        .data-table tr:nth-child(even){ background:#f8f9fa; }
+        .data-table input { width:60px; padding:5px; border:1px solid #ddd; border-radius:5px; text-align:center; }
+
+        .practice-section { background:linear-gradient(135deg,#ffeaa7 0%,#fab1a0 100%); padding:30px; border-radius:20px; margin:30px 0; text-align:center; }
+        .practice-problem { background:white; padding:25px; border-radius:15px; margin:20px 0; box-shadow:0 5px 20px rgba(0,0,0,.1); }
+        .answer-input { padding:12px 20px; border:2px solid #ddd; border-radius:25px; font-size:16px; width:150px; text-align:center; margin:10px 5px; }
+        .answer-input:focus { outline:none; border-color:#ff6b6b; box-shadow:0 0 10px rgba(255,107,107,.3) }
+        .check-btn { background:#27ae60; color:white; border:none; padding:12px 25px; border-radius:25px; cursor:pointer; font-weight:bold; margin:10px; transition:.3s; }
+        .check-btn:hover { background:#2ecc71; transform:scale(1.05); }
+
+        .feedback { margin:15px 0; padding:15px; border-radius:10px; font-weight:bold; animation:feedbackPop .5s ease; }
+        @keyframes feedbackPop { 0%{transform:scale(.8); opacity:0} 100%{transform:scale(1); opacity:1} }
+        .correct { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
+        .incorrect { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
+
+        .quiz-container { background:linear-gradient(135deg,#a29bfe 0%,#6c5ce7 100%); padding:30px; border-radius:20px; margin:30px 0; }
+        .quiz-question { background:white; border-radius:15px; padding:25px; margin:20px 0; box-shadow:0 5px 20px rgba(0,0,0,.1); }
+        .quiz-question h4 { color:#6c5ce7; margin-bottom:20px; font-size:1.3em; }
+        .quiz-option { display:block; padding:15px 20px; margin:12px 0; background:#f8f9fa; border:2px solid #e9ecef; border-radius:10px; cursor:pointer; transition:.3s; position:relative; }
+        .quiz-option:hover { background:#e9ecef; transform:translateX(5px); }
+        .quiz-option.selected { background:#6c5ce7; color:white; border-color:#6c5ce7; }
+        .quiz-option.correct { background:#27ae60; color:white; border-color:#27ae60; }
+        .quiz-option.incorrect { background:#e74c3c; color:white; border-color:#e74c3c; }
+        .submit-quiz-btn {
+            background:linear-gradient(135deg,#6c5ce7 0%,#a29bfe 100%); color:white; border:none; padding:15px 40px;
+            border-radius:30px; cursor:pointer; font-size:18px; font-weight:bold; margin:25px auto; display:block; transition:.3s;
+        }
+        .submit-quiz-btn:hover { transform:scale(1.05); box-shadow:0 10px 30px rgba(108,92,231,.4) }
+        .quiz-result { text-align:center; padding:25px; background:white; border-radius:15px; margin:25px 0; font-size:1.3em; }
+
+        .fun-fact { background:linear-gradient(135deg,#74b9ff 0%,#0984e3 100%); color:white; padding:20px; border-radius:15px; margin:25px 0; position:relative; overflow:hidden; }
+        .fun-fact::before { content:'💡'; font-size:2em; position:absolute; top:-10px; right:-10px; opacity:.3; transform:rotate(15deg); }
+
+        .progress-bar { height:6px; background:#e9ecef; position:relative; margin-bottom:30px; border-radius:3px; overflow:hidden; }
+        .progress-fill { height:100%; background:linear-gradient(90deg,#ff6b6b,#4ecdc4); transition:width .5s ease; border-radius:3px; }
+
+        .math-joke { background:#fff5f5; border-left:4px solid #ff6b6b; padding:20px; margin:20px 0; border-radius:10px; font-style:italic; position:relative; }
+        .math-joke::before { content:'😄'; position:absolute; top:-5px; left:-5px; background:white; padding:5px; border-radius:50%; }
+
+        .step { background:white; margin:10px 0; padding:15px; border-radius:8px; border-left:4px solid #4ecdc4; position:relative; }
+        .step-number { display:inline-block; background:#4ecdc4; color:white; width:25px; height:25px; line-height:25px; text-align:center; border-radius:50%; margin-right:10px; font-weight:bold; font-size:12px; }
+
+        code { background:#f4f4f4; padding:3px 8px; border-radius:5px; font-family:'Courier New', monospace; color:#e83e8c; }
+
+        @media (max-width:768px){
+            .header h1{font-size:2em}
+            .navigation{gap:5px}
+            .nav-btn{padding:8px 12px; font-size:12px}
+            .content{padding:20px}
+            .example-grid{grid-template-columns:1fr}
+            .coordinate-plane{width:300px; height:300px}
+            .graph-controls{flex-direction:column; align-items:center}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📈 Slope Mastery: The Ultimate Adventure!</h1>
+        <p>Rise Over Run, Parallel Fun, and Perpendicular Puns!</p>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn active" onclick="showSlide(0)">🏠 Home</button>
+        <button class="nav-btn" onclick="showSlide(1)">📐 Slope Basics</button>
+        <button class="nav-btn" onclick="showSlide(2)">↗️ Parallel Lines</button>
+        <button class="nav-btn" onclick="showSlide(3)">⟂ Perpendicular Lines</button>
+        <button class="nav-btn" onclick="showSlide(4)">📊 Graphing from Tables</button>
+        <button class="nav-btn" onclick="showSlide(5)">🎯 Slope + Y-Intercept</button>
+        <button class="nav-btn" onclick="showSlide(6)">💪 Practice</button>
+        <button class="nav-btn" onclick="showSlide(7)">🎓 Quiz</button>
+    </div>
+
+    <div class="content">
+        <div class="progress-bar"><div class="progress-fill" id="progressBar" style="width:12.5%;"></div></div>
+
+        <!-- Slide 0 -->
+        <div class="slide active">
+            <h2>Welcome to Slope Island! 🏝️</h2>
+
+            <div class="definition-box">
+                <h4>What's Slope All About?</h4>
+                <p>Slope tells you how steep and which direction a line travels. It’s the line’s attitude—climbing uphill, sliding downhill, or chilling horizontally.</p>
+                <p><strong>Formula:</strong> Slope = Rise/Run = (Change in Y)/(Change in X)</p>
+            </div>
+
+            <div class="slope-visual">
+                <h3>The Slope Family Portrait! 👨‍👩‍👧‍👦</h3>
+                <div class="slope-demo">
+                    <div style="text-align:center;"><div class="slope-arrow">↗️</div><h4>Positive Slope</h4><p>"Always going up!"</p></div>
+                    <div style="text-align:center;"><div class="slope-arrow">↘️</div><h4>Negative Slope</h4><p>"Sliding down!"</p></div>
+                    <div style="text-align:center;"><div class="slope-arrow">➡️</div><h4>Zero Slope</h4><p>"Horizontal vibe."</p></div>
+                    <div style="text-align:center;"><div class="slope-arrow">⬆️</div><h4>Undefined Slope</h4><p>"Perfectly vertical."</p></div>
+                </div>
+            </div>
+
+            <div class="interactive-graph">
+                <h3>Interactive Slope Explorer! 🔍</h3>
+                <div class="coordinate-plane"><canvas id="mainCanvas" class="grid-canvas" width="400" height="400"></canvas></div>
+                <div class="graph-controls">
+                    <div class="control-group"><label>Point 1 - X:</label><input type="number" id="x1Input" class="control-input" value="-3" min="-10" max="10"></div>
+                    <div class="control-group"><label>Point 1 - Y:</label><input type="number" id="y1Input" class="control-input" value="-2" min="-10" max="10"></div>
+                    <div class="control-group"><label>Point 2 - X:</label><input type="number" id="x2Input" class="control-input" value="3" min="-10" max="10"></div>
+                    <div class="control-group"><label>Point 2 - Y:</label><input type="number" id="y2Input" class="control-input" value="4" min="-10" max="10"></div>
+                </div>
+                <div class="graph-controls">
+                    <button class="action-btn" onclick="calculateSlope()">Calculate Slope!</button>
+                    <button class="action-btn" onclick="randomPoints()">Random Points!</button>
+                </div>
+                <div id="slopeResult"></div>
+            </div>
+
+            <div class="formula-box">
+                <h3>The Slope Formula Decoded!</h3>
+                <p>m = (y₂ - y₁) / (x₂ - x₁)</p>
+                <div style="margin-top:15px; font-size:.9em;">Where m = slope; (x₁,y₁) and (x₂,y₂) are any two points on the line.</div>
+            </div>
+
+            <div class="math-joke"><strong>Math Joke:</strong> Why did the slope go to therapy? Too many ups and downs! 😂</div>
+        </div>
+
+        <!-- Slide 1 -->
+        <div class="slide">
+            <h2>Slope Basics: Rise Over Run! 📐</h2>
+
+            <div class="definition-box">
+                <h4>Understanding Rise and Run!</h4>
+                <p><strong>Rise</strong> is the vertical change; <strong>Run</strong> is the horizontal change. Slope = Rise / Run.</p>
+                <p><strong>Positive:</strong> uphill • <strong>Negative:</strong> downhill</p>
+            </div>
+
+            <div class="interactive-graph">
+                <h3>Slope Visualization Tool! 🎨</h3>
+                <div class="coordinate-plane"><canvas id="slopeCanvas" class="grid-canvas" width="400" height="400"></canvas></div>
+                <div class="graph-controls">
+                    <div class="control-group"><label>Slope:</label><input type="number" id="slopeInput" class="control-input" value="2" step="0.5" min="-5" max="5"></div>
+                    <div class="control-group"><label>Y-intercept:</label><input type="number" id="yInterceptInput" class="control-input" value="1" step="0.5" min="-5" max="5"></div>
+                </div>
+                <div class="graph-controls">
+                    <button class="action-btn" onclick="drawSlopeLine()">Draw Line!</button>
+                    <button class="action-btn" onclick="showRiseRun()">Show Rise/Run!</button>
+                    <button class="action-btn" onclick="clearSlopeCanvas()">Clear</button>
+                </div>
+                <div id="slopeInfo"></div>
+            </div>
+
+            <div class="example-grid">
+                <div class="example-card">
+                    <div class="difficulty-badge easy">EASY</div>
+                    <h4>Positive Integer Slope</h4>
+                    <p><strong>Points:</strong> (0,1) and (2,5) → slope 2</p>
+                    <div style="margin-top:10px; color:#27ae60;">📈 Steep upward climb!</div>
+                </div>
+                <div class="example-card">
+                    <div class="difficulty-badge easy">EASY</div>
+                    <h4>Negative Slope</h4>
+                    <p><strong>Points:</strong> (1,4) and (3,0) → slope -2</p>
+                    <div style="margin-top:10px; color:#e74c3c;">📉 Sliding downhill!</div>
+                </div>
+                <div class="example-card">
+                    <div class="difficulty-badge medium">MEDIUM</div>
+                    <h4>Fractional Slope</h4>
+                    <p><strong>Points:</strong> (2,1) and (5,3) → slope 2/3</p>
+                    <div style="margin-top:10px; color:#f39c12;">🚶‍♂️ Gentle upward stroll!</div>
+                </div>
+                <div class="example-card">
+                    <div class="difficulty-badge hard">HARD</div>
+                    <h4>Zero & Undefined</h4>
+                    <p>Horizontal slope 0; Vertical slope undefined.</p>
+                </div>
+            </div>
+
+            <div class="fun-fact">
+                <h3>Slope Personality Guide! 🎭</h3>
+                <ul style="text-align:left; padding-left:20px;">
+                    <li><strong>Slope = 1:</strong> 45° angle</li>
+                    <li><strong>Slope > 1:</strong> steep</li>
+                    <li><strong>0 &lt; Slope &lt; 1:</strong> gentle</li>
+                    <li><strong>Slope = 0:</strong> horizontal</li>
+                    <li><strong>Slope &lt; 0:</strong> downward</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide">
+            <h2>Parallel Lines: The Twin Connection! ↗️</h2>
+
+            <div class="definition-box">
+                <h4>Parallel Lines: Best Friends Forever!</h4>
+                <p>Parallel lines have identical slopes and never intersect.</p>
+            </div>
+
+            <div class="interactive-graph">
+                <h3>Parallel Line Generator! 👯‍♀️</h3>
+                <div class="coordinate-plane"><canvas id="parallelCanvas" class="grid-canvas" width="400" height="400"></canvas></div>
+                <div class="graph-controls">
+                    <div class="control-group"><label>Common Slope:</label><input type="number" id="parallelSlope" class="control-input" value="1.5" step="0.5" min="-3" max="3"></div>
+                    <div class="control-group"><label>Line 1 Y-int:</label><input type="number" id="parallel1Y" class="control-input" value="2" step="0.5" min="-5" max="5"></div>
+                    <div class="control-group"><label>Line 2 Y-int:</label><input type="number" id="parallel2Y" class="control-input" value="-1" step="0.5" min="-5" max="5"></div>
+                </div>
+                <div class="graph-controls">
+                    <button class="action-btn" onclick="drawParallelLines()">Draw Parallel Lines!</button>
+                    <button class="action-btn" onclick="randomParallel()">Random Parallel!</button>
+                    <button class="action-btn" onclick="clearParallelCanvas()">Clear</button>
+                </div>
+                <div id="parallelInfo"></div>
+            </div>
+
+            <div class="parallel-demo">
+                <h3>Parallel Line Detective Work! 🕵️</h3>
+                <div class="line-comparison">
+                    <div><strong>Line 1:</strong> y = 3x + 2 • <strong>Slope:</strong> 3</div>
+                    <div style="font-size:2em; color:#4ecdc4;">||</div>
+                    <div><strong>Line 2:</strong> y = 3x - 5 • <strong>Slope:</strong> 3</div>
+                </div>
+                <p style="text-align:center; margin-top:15px; font-weight:bold; color:#27ae60;">✅ Same slope → PARALLEL!</p>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide">
+            <h2>Perpendicular Lines: The Perfect Right Angle! ⟂</h2>
+
+            <div class="definition-box">
+                <h4>Perpendicular Lines: The 90° Club!</h4>
+                <p>If slope of one line is m, a perpendicular line has slope -1/m. Condition: m₁ × m₂ = -1.</p>
+            </div>
+
+            <div class="formula-box">
+                <h3>The Perpendicular Slope Formula!</h3>
+                <p>If Line 1 has slope m, then a perpendicular line has slope -1/m.</p>
+                <div style="margin-top:15px; font-size:.9em;">Examples: 2 &amp; -1/2 • 3/4 &amp; -4/3 • -5 &amp; 1/5</div>
+            </div>
+
+            <div class="interactive-graph">
+                <h3>Perpendicular Line Creator! ⟂</h3>
+                <div class="coordinate-plane"><canvas id="perpendicularCanvas" class="grid-canvas" width="400" height="400"></canvas></div>
+                <div class="graph-controls">
+                    <div class="control-group"><label>Original Slope:</label><input type="number" id="originalSlope" class="control-input" value="2" step="0.5" min="-5" max="5"></div>
+                    <div class="control-group"><label>Line 1 Y-int:</label><input type="number" id="perp1Y" class="control-input" value="1" step="0.5" min="-5" max="5"></div>
+                    <div class="control-group"><label>Line 2 Y-int:</label><input type="number" id="perp2Y" class="control-input" value="2" step="0.5" min="-5" max="5"></div>
+                </div>
+                <div class="graph-controls">
+                    <button class="action-btn" onclick="drawPerpendicularLines()">Draw Perpendicular Lines!</button>
+                    <button class="action-btn" onclick="randomPerpendicular()">Random Perpendicular!</button>
+                    <button class="action-btn" onclick="clearPerpendicularCanvas()">Clear</button>
+                </div>
+                <div id="perpendicularInfo"></div>
+            </div>
+
+            <div class="perpendicular-demo">
+                <h3>Perpendicular Line Analysis! 🔍</h3>
+                <div class="line-comparison">
+                    <div><strong>Line 1:</strong> y = 3x + 1 • <strong>Slope:</strong> 3</div>
+                    <div style="font-size:2em; color:#ff6b6b;">⟂</div>
+                    <div><strong>Line 2:</strong> y = -1/3 x + 4 • <strong>Slope:</strong> -1/3</div>
+                </div>
+                <p style="text-align:center; margin-top:15px; font-weight:bold; color:#27ae60;">✅ 3 × (-1/3) = -1 → PERPENDICULAR!</p>
+            </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide">
+            <h2>Graphing from Tables: Data Detective! 📊</h2>
+
+            <div class="definition-box">
+                <h4>From Numbers to Pictures!</h4>
+                <p>Use point pairs to find slope and y-intercept, then graph.</p>
+            </div>
+
+            <div class="table-input">
+                <h3>Interactive Table to Graph Converter! 🔄</h3>
+                <table class="data-table">
+                    <thead><tr><th>x</th><th>y</th><th>Action</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="number" id="tableX1" value="0"></td>
+                            <td><input type="number" id="tableY1" value="3"></td>
+                            <td rowspan="4" style="vertical-align: middle;">
+                                <button class="action-btn" onclick="graphFromTable()">Graph It!</button><br>
+                                <button class="action-btn" onclick="analyzeTable()">Analyze Data!</button><br>
+                                <button class="action-btn" onclick="clearTableGraph()">Clear</button>
+                            </td>
+                        </tr>
+                        <tr><td><input type="number" id="tableX2" value="1"></td><td><input type="number" id="tableY2" value="5"></td></tr>
+                        <tr><td><input type="number" id="tableX3" value="2"></td><td><input type="number" id="tableY3" value="7"></td></tr>
+                        <tr><td><input type="number" id="tableX4" value="3"></td><td><input type="number" id="tableY4" value="9"></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="interactive-graph">
+                <div class="coordinate-plane"><canvas id="tableCanvas" class="grid-canvas" width="400" height="400"></canvas></div>
+                <div id="tableAnalysis"></div>
+            </div>
+
+            <div class="example-grid">
+                <div class="example-card">
+                    <div class="difficulty-badge easy">EASY</div>
+                    <h4>Perfect Linear Pattern</h4>
+                    <p>y increases by 3 when x increases by 1 → y = 3x + 2</p>
+                </div>
+                <div class="example-card">
+                    <div class="difficulty-badge medium">MEDIUM</div>
+                    <h4>Negative Slope Pattern</h4>
+                    <p>y decreases by 3 per +1 in x → y = -3x + 4</p>
+                </div>
+                <div class="example-card">
+                    <div class="difficulty-badge hard">HARD</div>
+                    <h4>Fractional Slope</h4>
+                    <p>Δy = 3 when Δx = 2 → slope 3/2</p>
+                </div>
+                <div class="example-card">
+                    <div class="difficulty-badge expert">EXPERT</div>
+                    <h4>Mixed Pattern Challenge</h4>
+                    <p>Consistent slope 2 → y = 2x + 3</p>
+                </div>
+            </div>
+
+            <div class="step"><span class="step-number">1</span><strong>Look for patterns</strong> in y as x changes.</div>
+            <div class="step"><span class="step-number">2</span><strong>Calculate slope</strong> using (y₂−y₁)/(x₂−x₁).</div>
+            <div class="step"><span class="step-number">3</span><strong>Find y-intercept</strong> at x=0 or solve for b.</div>
+            <div class="step"><span class="step-number">4</span><strong>Write equation</strong> y = mx + b.</div>
+            <div class="step"><span class="step-number">5</span><strong>Verify</strong> all points satisfy the equation.</div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="slide">
+            <h2>Slope + Y-Intercept: The Dynamic Duo! 🎯</h2>
+
+            <div class="definition-box">
+                <h4>The Perfect Partnership!</h4>
+                <p>With slope (m) and y-intercept (b), you can graph any line: start at (0,b), then move by rise/run.</p>
+            </div>
+
+            <div class="interactive-graph">
+                <h3>Dynamic Graphing Tool! ⚡</h3>
+                <div class="coordinate-plane"><canvas id="dynamicCanvas" class="grid-canvas" width="400" height="400"></canvas></div>
+                <div class="graph-controls">
+                    <div class="control-group"><label>Slope (m):</label><input type="number" id="dynamicSlope" class="control-input" value="2" step="0.25" min="-5" max="5"></div>
+                    <div class="control-group"><label>Y-intercept (b):</label><input type="number" id="dynamicIntercept" class="control-input" value="1" step="0.5" min="-5" max="5"></div>
+                    <div class="control-group"><label>Show Steps:</label><input type="checkbox" id="showSteps" checked></div>
+                </div>
+                <div class="graph-controls">
+                    <button class="action-btn" onclick="graphDynamic()">Graph Line!</button>
+                    <button class="action-btn" onclick="animateGraphing()">Animate Steps!</button>
+                    <button class="action-btn" onclick="clearDynamicCanvas()">Clear</button>
+                </div>
+                <div id="dynamicInfo"></div>
+            </div>
+        </div>
+
+        <!-- Slide 6 -->
+        <div class="slide">
+            <h2>Practice Arena: Slope Master Challenge! 💪</h2>
+
+            <div class="practice-section">
+                <h3>🎯 Test Your Slope Skills!</h3>
+                <p>Each problem checks a different skill.</p>
+
+                <div class="practice-problem">
+                    <h4>Problem 1: Basic Slope Calculation</h4>
+                    <p>Find the slope between (2,3) and (6,11).</p>
+                    <input type="text" class="answer-input" id="answer1" placeholder="slope = ?">
+                    <button class="check-btn" onclick="checkAnswer(1, '2')">Check Answer</button>
+                    <div id="feedback1"></div>
+                </div>
+
+                <div class="practice-problem">
+                    <h4>Problem 2: Parallel Line</h4>
+                    <p>What is the slope of a line parallel to y = -3x + 7?</p>
+                    <input type="text" class="answer-input" id="answer2" placeholder="slope = ?">
+                    <button class="check-btn" onclick="checkAnswer(2, '-3')">Check Answer</button>
+                    <div id="feedback2"></div>
+                </div>
+
+                <div class="practice-problem">
+                    <h4>Problem 3: Perpendicular Line</h4>
+                    <p>What is the slope of a line perpendicular to y = 2/5 x - 1?</p>
+                    <input type="text" class="answer-input" id="answer3" placeholder="slope = ?">
+                    <button class="check-btn" onclick="checkAnswer(3, '-5/2')">Check Answer</button>
+                    <div id="feedback3"></div>
+                </div>
+
+                <div class="practice-problem">
+                    <h4>Problem 4: Table Analysis</h4>
+                    <p>From the table, what is the equation of the line?</p>
+                    <table style="margin:10px auto; border-collapse:collapse;">
+                        <tr style="background:#4ecdc4; color:white;"><th style="padding:8px;">x</th><th style="padding:8px;">y</th></tr>
+                        <tr><td style="padding:8px; border:1px solid #ddd;">0</td><td style="padding:8px; border:1px solid #ddd;">-2</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #ddd;">1</td><td style="padding:8px; border:1px solid #ddd;">1</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #ddd;">2</td><td style="padding:8px; border:1px solid #ddd;">4</td></tr>
+                    </table>
+                    <input type="text" class="answer-input" id="answer4" placeholder="y = mx + b" style="width:200px;">
+                    <button class="check-btn" onclick="checkAnswer(4, 'y = 3x - 2')">Check Answer</button>
+                    <div id="feedback4"></div>
+                </div>
+
+                <div class="practice-problem">
+                    <h4>Problem 5: Challenge Question</h4>
+                    <p>Find the equation of the line perpendicular to y = -1/4 x + 3 through (2,5).</p>
+                    <input type="text" class="answer-input" id="answer5" placeholder="y = mx + b" style="width:200px;">
+                    <button class="check-btn" onclick="checkAnswer(5, 'y = 4x - 3')">Check Answer</button>
+                    <div id="feedback5"></div>
+                </div>
+            </div>
+
+            <div class="fun-fact">
+                <h3>Practice Makes Perfect! 🌟</h3>
+                <p>Slope is everywhere—from hills to savings growth. Keep practicing!</p>
+            </div>
+        </div>
+
+        <!-- Slide 7 -->
+        <div class="slide">
+            <h2>The Ultimate Slope Quiz! 🎓</h2>
+
+            <div class="quiz-container">
+                <h3 style="color:white; text-align:center; margin-bottom:25px;">🏆 Final Boss Battle!</h3>
+
+                <div class="quiz-question">
+                    <h4>Question 1: Slope through (3,7) and (5,13)?</h4>
+                    <label class="quiz-option"><input type="radio" name="q1" value="a"> 2</label>
+                    <label class="quiz-option"><input type="radio" name="q1" value="b"> 3</label>
+                    <label class="quiz-option"><input type="radio" name="q1" value="c"> 6</label>
+                    <label class="quiz-option"><input type="radio" name="q1" value="d"> 1/3</label>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 2: Which line is parallel to y = 4x - 1?</h4>
+                    <label class="quiz-option"><input type="radio" name="q2" value="a"> y = -1/4 x + 3</label>
+                    <label class="quiz-option"><input type="radio" name="q2" value="b"> y = 4x + 7</label>
+                    <label class="quiz-option"><input type="radio" name="q2" value="c"> y = -4x + 2</label>
+                    <label class="quiz-option"><input type="radio" name="q2" value="d"> y = x + 4</label>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 3: Slope of a line perpendicular to y = 3/2 x + 5?</h4>
+                    <label class="quiz-option"><input type="radio" name="q3" value="a"> 3/2</label>
+                    <label class="quiz-option"><input type="radio" name="q3" value="b"> -3/2</label>
+                    <label class="quiz-option"><input type="radio" name="q3" value="c"> 2/3</label>
+                    <label class="quiz-option"><input type="radio" name="q3" value="d"> -2/3</label>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 4: A line has slope 2 and y-intercept -3. Equation?</h4>
+                    <label class="quiz-option"><input type="radio" name="q4" value="a"> y = -3x + 2</label>
+                    <label class="quiz-option"><input type="radio" name="q4" value="b"> y = 2x - 3</label>
+                    <label class="quiz-option"><input type="radio" name="q4" value="c"> y = 2x + 3</label>
+                    <label class="quiz-option"><input type="radio" name="q4" value="d"> y = -2x - 3</label>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 5: Line through (0,4) and (2,10) has slope…</h4>
+                    <label class="quiz-option"><input type="radio" name="q5" value="a"> 2</label>
+                    <label class="quiz-option"><input type="radio" name="q5" value="b"> 3</label>
+                    <label class="quiz-option"><input type="radio" name="q5" value="c"> 4</label>
+                    <label class="quiz-option"><input type="radio" name="q5" value="d"> 6</label>
+                </div>
+
+                <button class="submit-quiz-btn" onclick="submitQuiz()">🎯 Submit Final Quiz!</button>
+                <div id="quizResult" style="display:none;"></div>
+            </div>
+
+            <div class="math-joke"><strong>Congrats!</strong> You’re now a Slope Master. 📚📈</div>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ---------- Slide Navigation & Progress ---------- */
+let currentSlide = 0;
+const totalSlides = 8;
+
+function showSlide(index){
+    const slides = document.querySelectorAll('.slide');
+    const navBtns = document.querySelectorAll('.nav-btn');
+
+    slides.forEach(s => s.classList.remove('active'));
+    navBtns.forEach(b => b.classList.remove('active'));
+
+    slides[index].classList.add('active');
+    navBtns[index].classList.add('active');
+
+    currentSlide = index;
+    updateProgress();
+
+    // Initialize canvases when slide becomes active
+    setTimeout(() => {
+        if (index === 0) initMainCanvas();
+        if (index === 1) initSlopeCanvas();
+        if (index === 2) initParallelCanvas();
+        if (index === 3) initPerpendicularCanvas();
+        if (index === 4) initTableCanvas();
+        if (index === 5) initDynamicCanvas();
+    }, 50);
+}
+
+function updateProgress(){
+    const progress = ((currentSlide + 1) / totalSlides) * 100;
+    document.getElementById('progressBar').style.width = progress + '%';
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', (e)=>{
+    if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) showSlide(currentSlide + 1);
+    if (e.key === 'ArrowLeft' && currentSlide > 0) showSlide(currentSlide - 1);
+});
+
+/* ---------- Drawing Helpers ---------- */
+function drawGrid(ctx, w, h){
+    ctx.clearRect(0,0,w,h);
+    ctx.strokeStyle = '#e0e0e0';
+    ctx.lineWidth = 1;
+
+    for (let i=0;i<=w;i+=20){ ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,h); ctx.stroke(); }
+    for (let i=0;i<=h;i+=20){ ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(w,i); ctx.stroke(); }
+
+    // axes
+    ctx.strokeStyle = '#333'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(0,h/2); ctx.lineTo(w,h/2); ctx.stroke(); // x-axis
+    ctx.beginPath(); ctx.moveTo(w/2,0); ctx.lineTo(w/2,h); ctx.stroke(); // y-axis
+
+    // labels
+    ctx.fillStyle = '#666'; ctx.font = '12px Arial'; ctx.textAlign = 'center';
+    for (let i=-9;i<=9;i++){ if(i!==0){ const x=w/2+i*20; ctx.fillText(i.toString(), x, h/2+15); } }
+    ctx.textAlign = 'right';
+    for (let i=-9;i<=9;i++){ if(i!==0){ const y=h/2 - i*20; ctx.fillText(i.toString(), w/2 - 5, y+4); } }
+    ctx.fillStyle = '#333'; ctx.textAlign = 'right'; ctx.fillText('0', w/2-5, h/2+15);
+}
+
+function plotPoint(ctx, x, y, color = '#ff6b6b', size = 4){
+    const canvasX = 200 + x*20;
+    const canvasY = 200 - y*20;
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.arc(canvasX, canvasY, size, 0, Math.PI*2); ctx.fill();
+}
+
+function drawLine(ctx, slope, yIntercept, color = '#ff6b6b', width = 3){
+    ctx.strokeStyle = color; ctx.lineWidth = width; ctx.beginPath();
+    let first = true;
+    for (let x=-10; x<=10; x+=0.1){
+        const y = slope * x + yIntercept;
+        const cx = 200 + x*20;
+        const cy = 200 - y*20;
+        if (first){ ctx.moveTo(cx,cy); first = false; } else { ctx.lineTo(cx,cy); }
+    }
+    ctx.stroke();
+}
+
+/* ---------- Canvas Initializers ---------- */
+function initCanvasById(id){
+    const canvas = document.getElementById(id);
+    if (!canvas) return null;
+    const ctx = canvas.getContext('2d');
+    drawGrid(ctx, canvas.width, canvas.height);
+    return ctx;
+}
+const initMainCanvas = ()=> initCanvasById('mainCanvas');
+const initSlopeCanvas = ()=> initCanvasById('slopeCanvas');
+const initParallelCanvas = ()=> initCanvasById('parallelCanvas');
+const initPerpendicularCanvas = ()=> initCanvasById('perpendicularCanvas');
+const initTableCanvas = ()=> initCanvasById('tableCanvas');
+const initDynamicCanvas = ()=> initCanvasById('dynamicCanvas');
+
+/* ---------- Slide 0: Calculate Slope between Two Points ---------- */
+function calculateSlope(){
+    const x1 = parseFloat(document.getElementById('x1Input').value);
+    const y1 = parseFloat(document.getElementById('y1Input').value);
+    const x2 = parseFloat(document.getElementById('x2Input').value);
+    const y2 = parseFloat(document.getElementById('y2Input').value);
+
+    const canvas = document.getElementById('mainCanvas');
+    const ctx = canvas.getContext('2d');
+    drawGrid(ctx, canvas.width, canvas.height);
+
+    // plot points
+    plotPoint(ctx, x1, y1, '#4ecdc4', 6);
+    plotPoint(ctx, x2, y2, '#ff6b6b', 6);
+
+    if (x2 !== x1){
+        const slope = (y2 - y1) / (x2 - x1);
+        const b = y1 - slope * x1;
+        drawLine(ctx, slope, b, '#667eea', 2);
+
+        const rise = y2 - y1; const run = x2 - x1;
+        document.getElementById('slopeResult').innerHTML = `
+            <div style="margin-top:15px; padding:15px; background:#f0f8ff; border-radius:8px;">
+                <h4>Slope Calculation:</h4>
+                <p><strong>Point 1:</strong> (${x1}, ${y1}) • <strong>Point 2:</strong> (${x2}, ${y2})</p>
+                <p><strong>Rise:</strong> ${y2} - (${y1}) = ${rise} • <strong>Run:</strong> ${x2} - (${x1}) = ${run}</p>
+                <p><strong>Slope:</strong> ${rise}/${run} = ${slope}</p>
+                <p><strong>Interpretation:</strong> ${slope>0?'Positive (uphill)':slope<0?'Negative (downhill)':'Zero (horizontal)'} </p>
+            </div>`;
+    } else {
+        document.getElementById('slopeResult').innerHTML = `
+            <div style="margin-top:15px; padding:15px; background:#fff3cd; border-radius:8px;">
+                <h4>Undefined Slope!</h4>
+                <p>The line is vertical (x₁ = x₂). Slope = (Δy)/0 = undefined.</p>
+            </div>`;
+    }
+}
+function randomPoints(){
+    document.getElementById('x1Input').value = Math.floor(Math.random()*11) - 5;
+    document.getElementById('y1Input').value = Math.floor(Math.random()*11) - 5;
+    document.getElementById('x2Input').value = Math.floor(Math.random()*11) - 5;
+    document.getElementById('y2Input').value = Math.floor(Math.random()*11) - 5;
+    calculateSlope();
+}
+
+/* ---------- Slide 1: Slope Basics Tools ---------- */
+function drawSlopeLine(){
+    const slope = parseFloat(document.getElementById('slopeInput').value) || 0;
+    const b = parseFloat(document.getElementById('yInterceptInput').value) || 0;
+    const canvas = document.getElementById('slopeCanvas'); const ctx = canvas.getContext('2d');
+    drawGrid(ctx, canvas.width, canvas.height);
+    drawLine(ctx, slope, b, '#ff6b6b', 3);
+    plotPoint(ctx, 0, b, '#4ecdc4', 6);
+
+    document.getElementById('slopeInfo').innerHTML = `
+        <div style="margin-top:15px; padding:10px; background:#f0f8ff; border-radius:8px;">
+            <strong>Equation: y = ${slope}x + ${b}</strong><br>
+            Slope: ${slope} (${slope>0?'upward':slope<0?'downward':'horizontal'}) • Y-intercept: (0, ${b})
+        </div>`;
+}
+
+function showRiseRun(){
+    const slope = parseFloat(document.getElementById('slopeInput').value);
+    const b = parseFloat(document.getElementById('yInterceptInput').value);
+    const canvas = document.getElementById('slopeCanvas'); const ctx = canvas.getContext('2d');
+
+    if (Number.isFinite(slope) && slope !== 0){
+        // derive integer rise/run
+        let rise, run;
+        if (Number.isInteger(slope)){ rise = slope; run = 1; }
+        else {
+            const sStr = slope.toString();
+            const parts = sStr.split('.');
+            const denom = Math.pow(10, (parts[1]||'').length);
+            rise = slope * denom; run = denom;
+            const gcd = (a,b)=> b===0 ? Math.abs(a) : gcd(b, a%b);
+            const g = gcd(rise, run); rise/=g; run/=g;
+        }
+
+        const startX=0, startY=b, endX = startX + run, endY = startY + rise;
+
+        // draw base grid first then line
+        drawGrid(ctx, canvas.width, canvas.height);
+        drawLine(ctx, slope, b, '#ff6b6b', 3);
+        plotPoint(ctx, 0, b, '#4ecdc4', 6);
+
+        // run (horizontal)
+        ctx.strokeStyle='#4ecdc4'; ctx.lineWidth=3;
+        ctx.beginPath();
+        ctx.moveTo(200 + startX*20, 200 - startY*20);
+        ctx.lineTo(200 + endX*20, 200 - startY*20);
+        ctx.stroke();
+
+        // rise (vertical)
+        ctx.strokeStyle='#ff6b6b';
+        ctx.beginPath();
+        ctx.moveTo(200 + endX*20, 200 - startY*20);
+        ctx.lineTo(200 + endX*20, 200 - endY*20);
+        ctx.stroke();
+
+        plotPoint(ctx, endX, endY, '#667eea', 6);
+
+        ctx.fillStyle='#4ecdc4'; ctx.font='bold 14px Arial'; ctx.textAlign='center';
+        ctx.fillText(`Run: ${run}`, 200 + (startX+endX)*10, 200 - startY*20 + 20);
+        ctx.fillStyle='#ff6b6b'; ctx.textAlign='left';
+        ctx.fillText(`Rise: ${rise}`, 200 + endX*20 + 10, 200 - (startY+endY)*10);
+    }
+}
+
+function clearSlopeCanvas(){
+    const canvas = document.getElementById('slopeCanvas'); const ctx = canvas.getContext('2d');
+    drawGrid(ctx, canvas.width, canvas.height);
+    document.getElementById('slopeInfo').innerHTML = '';
+}
+
+/* ---------- Slide 2: Parallel Lines ---------- */
+function drawParallelLines(){
+    const slope = parseFloat(document.getElementById('parallelSlope').value);
+    const y1 = parseFloat(document.getElementById('parallel1Y').value);
+    const y2 = parseFloat(document.getElementById('parallel2Y').value);
+    const canvas = document.getElementById('parallelCanvas'); const ctx = canvas.getContext('2d');
+
+    drawGrid(ctx, canvas.width, canvas.height);
+    drawLine(ctx, slope, y1, '#ff6b6b', 3);
+    drawLine(ctx, slope, y2, '#4ecdc4', 3);
+    plotPoint(ctx, 0, y1, '#ff6b6b', 6);
+    plotPoint(ctx, 0, y2, '#4ecdc4', 6);
+
+    document.getElementById('parallelInfo').innerHTML = `
+        <div style="margin-top:15px; padding:15px; background:#f0f8ff; border-radius:8px;">
+            <h4>Parallel Lines:</h4>
+            <p><span style="color:#ff6b6b;">●</span> y = ${slope}x + ${y1}</p>
+            <p><span style="color:#4ecdc4;">●</span> y = ${slope}x + ${y2}</p>
+            <p><strong>Same slope</strong> ⇒ lines are parallel.</p>
+        </div>`;
+}
+function randomParallel(){
+    const slope = (Math.random()*4 - 2).toFixed(1);
+    const y1 = (Math.random()*6 - 3).toFixed(1);
+    const y2 = (Math.random()*6 - 3).toFixed(1);
+    document.getElementById('parallelSlope').value = slope;
+    document.getElementById('parallel1Y').value = y1;
+    document.getElementById('parallel2Y').value = y2;
+    drawParallelLines();
+}
+function clearParallelCanvas(){
+    const canvas = document.getElementById('parallelCanvas'); const ctx = canvas.getContext('2d');
+    drawGrid(ctx, canvas.width, canvas.height);
+    document.getElementById('parallelInfo').innerHTML = '';
+}
+
+/* ---------- Slide 3: Perpendicular Lines ---------- */
+function drawPerpendicularLines(){
+    const slope1 = parseFloat(document.getElementById('originalSlope').value);
+    const y1 = parseFloat(document.getElementById('perp1Y').value);
+    const y2 = parseFloat(document.getElementById('perp2Y').value);
+    const slope2 = slope1 !== 0 ? -1 / slope1 : undefined;
+
+    const canvas = document.getElementById('perpendicularCanvas'); const ctx = canvas.getContext('2d');
+    drawGrid(ctx, canvas.width, canvas.height);
+
+    drawLine(ctx, slope1, y1, '#ff6b6b', 3);
+    if (slope2 !== undefined) drawLine(ctx, slope2, y2, '#4ecdc4', 3);
+    plotPoint(ctx, 0, y1, '#ff6b6b', 6);
+    plotPoint(ctx, 0, y2, '#4ecdc4', 6);
+
+    const prod = slope2 !== undefined ? (slope1 * slope2) : NaN;
+    document.getElementById('perpendicularInfo').innerHTML = `
+        <div style="margin-top:15px; padding:15px; background:#f0f8ff; border-radius:8px;">
+            <h4>Perpendicular Lines:</h4>
+            <p><span style="color:#ff6b6b;">●</span> y = ${slope1}x + ${y1}</p>
+            <p><span style="color:#4ecdc4;">●</span> y = ${slope2!==undefined?slope2.toFixed(3):'undefined'}x + ${y2}</p>
+            <p><strong>Product of slopes:</strong> ${slope1} × ${slope2!==undefined?slope2.toFixed(3):'—'} = ${slope2!==undefined?prod.toFixed(3):'—'}</p>
+            <p>${slope2!==undefined && Math.abs(prod + 1) < 1e-3 ? '✅ Perpendicular (m₁m₂ = -1)' : 'ℹ️ Adjust to make m₁m₂ = -1'}</p>
+        </div>`;
+}
+function randomPerpendicular(){
+    const options = [1,2,3,0.5,1.5,-1,-2,-0.5];
+    const slope = options[Math.floor(Math.random()*options.length)];
+    const y1 = (Math.random()*4 - 2).toFixed(1);
+    const y2 = (Math.random()*4 - 2).toFixed(1);
+    document.getElementById('originalSlope').value = slope;
+    document.getElementById('perp1Y').value = y1;
+    document.getElementById('perp2Y').value = y2;
+    drawPerpendicularLines();
+}
+function clearPerpendicularCanvas(){
+    const canvas = document.getElementById('perpendicularCanvas'); const ctx = canvas.getContext('2d');
+    drawGrid(ctx, canvas.width, canvas.height);
+    document.getElementById('perpendicularInfo').innerHTML = '';
+}
+
+/* ---------- Slide 4: Tables ---------- */
+function readTablePoints(){
+    const pts = [];
+    for (let i=1;i<=4;i++){
+        const x = parseFloat(document.getElementById(`tableX${i}`).value);
+        const y = parseFloat(document.getElementById(`tableY${i}`).value);
+        if (!Number.isNaN(x) && !Number.isNaN(y)) pts.push({x,y});
+    }
+    return pts;
+}
+function analyzeTable(){
+    const points = readTablePoints();
+    if (points.length < 2){
+        document.getElementById('tableAnalysis').innerHTML = '<div style="margin-top:15px;">Enter at least two points.</div>';
+        return;
+    }
+    const slope = (points[1].y - points[0].y) / (points[1].x - points[0].x);
+    const b = points[0].y - slope * points[0].x;
+
+    let isLinear = true;
+    for (let i=2;i<points.length;i++){
+        const expected = slope * points[i].x + b;
+        if (Math.abs(expected - points[i].y) > 1e-3){ isLinear = false; break; }
+    }
+
+    document.getElementById('tableAnalysis').innerHTML = `
+        <div style="margin-top:15px; padding:15px; background:#f0f8ff; border-radius:8px;">
+            <h4>Table Analysis:</h4>
+            <p><strong>Slope:</strong> ${slope}</p>
+            <p><strong>Y-intercept:</strong> ${b}</p>
+            <p><strong>Equation:</strong> y = ${slope}x + ${b}</p>
+            <p><strong>Linear?</strong> ${isLinear ? 'Yes ✅' : 'No ❌'}</p>
+        </div>`;
+}
+function graphFromTable(){
+    const points = readTablePoints();
+    const canvas = document.getElementById('tableCanvas'); const ctx = canvas.getContext('2d');
+    drawGrid(ctx, canvas.width, canvas.height);
+
+    // plot entered points
+    points.forEach(p => plotPoint(ctx, p.x, p.y, '#ff6b6b', 6));
+
+    if (points.length >= 2){
+        const slope = (points[1].y - points[0].y) / (points[1].x - points[0].x);
+        const b = points[0].y - slope * points[0].x;
+        drawLine(ctx, slope, b, '#4ecdc4', 2);
+        analyzeTable(); // also show analysis
+    }
+}
+function clearTableGraph(){
+    const canvas = document.getElementById('tableCanvas'); const ctx = canvas.getContext('2d');
+    drawGrid(ctx, canvas.width, canvas.height);
+    document.getElementById('tableAnalysis').innerHTML = '';
+}
+
+/* ---------- Slide 5: Dynamic Graphing ---------- */
+function graphDynamic(){
+    const slope = parseFloat(document.getElementById('dynamicSlope').value);
+    const b = parseFloat(document.getElementById('dynamicIntercept').value);
+    const showSteps = document.getElementById('showSteps').checked;
+
+    const canvas = document.getElementById('dynamicCanvas'); const ctx = canvas.getContext('2d');
+    drawGrid(ctx, canvas.width, canvas.height);
+
+    drawLine(ctx, slope, b, '#ff6b6b', 3);
+    plotPoint(ctx, 0, b, '#4ecdc4', 8);
+
+    if (showSteps && slope !== 0){
+        let rise, run;
+        if (Math.abs(slope) >= 1){ run = slope>0 ? 1 : -1; rise = slope * run; }
+        else { rise = slope>0 ? 1 : -1; run = rise / slope; }
+
+        const endX = run, endY = b + rise;
+
+        ctx.strokeStyle='#667eea'; ctx.lineWidth=2; ctx.setLineDash([5,5]);
+        // run
+        ctx.beginPath(); ctx.moveTo(200 + 0*20, 200 - b*20); ctx.lineTo(200 + endX*20, 200 - b*20); ctx.stroke();
+        // rise
+        ctx.beginPath(); ctx.moveTo(200 + endX*20, 200 - b*20); ctx.lineTo(200 + endX*20, 200 - endY*20); ctx.stroke();
+        ctx.setLineDash([]);
+
+        plotPoint(ctx, endX, endY, '#667eea', 6);
+
+        ctx.fillStyle='#667eea'; ctx.font='bold 12px Arial'; ctx.textAlign='center';
+        ctx.fillText(`Run: ${run}`, 200 + (endX)*10, 200 - b*20 + 20);
+        ctx.textAlign='left'; ctx.fillText(`Rise: ${rise}`, 200 + endX*20 + 5, 200 - (b + endY)*10);
+    }
+
+    document.getElementById('dynamicInfo').innerHTML = `
+        <div style="margin-top:15px; padding:15px; background:#f0f8ff; border-radius:8px;">
+            <h4>Line Analysis:</h4>
+            <p><strong>Equation:</strong> y = ${slope}x + ${b}</p>
+            <p><strong>Slope:</strong> ${slope} (${slope>0?'positive':slope<0?'negative':'zero'})</p>
+            <p><strong>Y-intercept:</strong> (0, ${b})</p>
+        </div>`;
+}
+
+function animateGraphing(){
+    const slope = parseFloat(document.getElementById('dynamicSlope').value);
+    const b = parseFloat(document.getElementById('dynamicIntercept').value);
+    const canvas = document.getElementById('dynamicCanvas'); const ctx = canvas.getContext('2d');
+
+    drawGrid(ctx, canvas.width, canvas.height);
+
+    let step = 0;
+    const steps = [
+        ()=>{ plotPoint(ctx, 0, b, '#4ecdc4', 8);
+              document.getElementById('dynamicInfo').innerHTML =
+              `<div style="padding:15px; background:#fff3cd; border-radius:8px;">
+                 <h4>Step 1: Plot Y-intercept</h4><p>Start at (0, ${b}).</p></div>`; },
+        ()=>{ if (slope !== 0){
+                let rise = 1, run = 1;
+                if (Number.isInteger(slope)){ rise = slope; run = 1; }
+                else { rise = slope>0 ? 1 : -1; run = rise / slope; }
+                plotPoint(ctx, run, b + rise, '#ff6b6b', 6);
+                document.getElementById('dynamicInfo').innerHTML =
+                `<div style="padding:15px; background:#d1ecf1; border-radius:8px;">
+                   <h4>Step 2: Use Slope</h4>
+                   <p>Rise: ${rise}, Run: ${run} → New point: (${run}, ${b + rise})</p></div>`;
+              }},
+        ()=>{ drawLine(ctx, slope, b, '#ff6b6b', 3);
+              document.getElementById('dynamicInfo').innerHTML =
+              `<div style="padding:15px; background:#d4edda; border-radius:8px;">
+                 <h4>Step 3: Draw the Line</h4>
+                 <p><strong>Final equation:</strong> y = ${slope}x + ${b}</p></div>`; }
+    ];
+    (function run(){ if (step < steps.length){ steps[step++](); setTimeout(run, 1200); } })();
+}
+
+function clearDynamicCanvas(){
+    const canvas = document.getElementById('dynamicCanvas'); const ctx = canvas.getContext('2d');
+    drawGrid(ctx, canvas.width, canvas.height);
+    document.getElementById('dynamicInfo').innerHTML = '';
+}
+
+/* ---------- Slide 6: Practice Checking ---------- */
+function checkAnswer(n, correct){
+    const user = (document.getElementById(`answer${n}`).value || '').trim().toLowerCase().replace(/\s/g,'').replace(/\*/g,'');
+    const expected = correct.toLowerCase().replace(/\s/g,'').replace(/\*/g,'');
+    const fb = document.getElementById(`feedback${n}`);
+    let ok = false;
+
+    if (n === 3){ ok = (user === expected || user === '-2.5' || user === '-2½'); }
+    else if (n === 4 || n === 5){ ok = (user === expected || user.includes('3x-2') || user.includes('4x-3')); }
+    else { ok = (user === expected); }
+
+    if (ok){
+        fb.innerHTML = `<div class="feedback correct">🎉 Excellent! You're mastering slope concepts!</div>`;
+    } else {
+        const hints = {
+            1: 'Use (y₂−y₁)/(x₂−x₁) = (11−3)/(6−2).',
+            2: 'Parallel lines have the same slope.',
+            3: 'Perpendicular slope = −1/(original slope) = −1/(2/5) = −5/2.',
+            4: 'When x increases by 1, y increases by 3; y-intercept is −2.',
+            5: 'Perpendicular to −1/4 ⇒ slope 4. Use point-slope with (2,5).'
+        };
+        fb.innerHTML = `<div class="feedback incorrect">🤔 Not quite. ${hints[n]}<br>The answer is: ${correct}</div>`;
+    }
+}
+
+/* ---------- Slide 7: Quiz ---------- */
+function submitQuiz(){
+    const answers = { q1:'b', q2:'b', q3:'d', q4:'b', q5:'b' };
+    let score = 0, total = Object.keys(answers).length;
+
+    for (const [q, ans] of Object.entries(answers)){
+        const selected = document.querySelector(`input[name="${q}"]:checked`);
+        const options = document.querySelectorAll(`input[name="${q}"]`);
+        options.forEach(o => o.parentElement.classList.remove('correct','incorrect'));
+
+        if (selected){
+            if (selected.value === ans){ score++; selected.parentElement.classList.add('correct'); }
+            else {
+                selected.parentElement.classList.add('incorrect');
+                document.querySelector(`input[name="${q}"][value="${ans}"]`).parentElement.classList.add('correct');
+            }
+        }
+    }
+
+    const pct = Math.round(score/total*100);
+    let msg='', emoji='';
+    if (pct>=90){ msg='SLOPE MASTER!'; emoji='🏆👑'; }
+    else if (pct>=80){ msg='EXCELLENT!'; emoji='🎉⭐'; }
+    else if (pct>=70){ msg='GOOD JOB!'; emoji='👍😊'; }
+    else if (pct>=60){ msg='NOT BAD!'; emoji='📚💪'; }
+    else { msg='KEEP LEARNING!'; emoji='🤔📖'; }
+
+    const result = document.getElementById('quizResult');
+    result.innerHTML = `
+        <div class="quiz-result">
+            <h3>🎯 Quiz Results ${emoji}</h3>
+            <p style="font-size:2.5em; margin:20px 0;">${score}/${total} (${pct}%)</p>
+            <p style="font-size:1.2em;"><strong>${msg}</strong></p>
+            <p style="margin-top:15px;">Slope is the language of change—master it to model any linear relationship! 📈</p>
+        </div>`;
+    result.style.display = 'block';
+
+    // lock quiz
+    document.querySelectorAll('input[type="radio"]').forEach(i=> i.disabled = true);
+    const btn = document.querySelector('.submit-quiz-btn'); btn.disabled = true; btn.style.opacity = .5; btn.textContent = '✅ Quiz Completed!';
+}
+
+/* ---------- Init on Load ---------- */
+window.addEventListener('DOMContentLoaded', ()=>{
+    initMainCanvas();
+    updateProgress();
+});
+</script>
+</body>
+</html>
