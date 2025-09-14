@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Line Legends: Equations Unleashed</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(135deg,#5ee7df 0%,#b490ca 100%);
+    min-height:100vh;padding:20px;line-height:1.6;color:#222
+  }
+  .container{max-width:1400px;margin:0 auto;background:#fff;border-radius:20px;box-shadow:0 18px 60px rgba(0,0,0,.25);overflow:hidden}
+  .header{
+    background:linear-gradient(135deg,#ff7eb3 0%,#65d6ce 50%,#758bfd 100%);
+    color:#fff;padding:34px;text-align:center;position:relative;overflow:hidden
+  }
+  .header::before{
+    content:"";position:absolute;inset:-60% -60% auto auto;width:220%;height:220%;
+    background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 40"><g fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1.5"><path d="M0,20 Q20,0 40,20 T80,20 T120,20"/><path d="M0,30 Q20,10 40,30 T80,30 T120,30"/></g></svg>') repeat;
+    animation:floaty 16s ease-in-out infinite
+  }
+  @keyframes floaty{0%,100%{transform:translateX(0)}50%{transform:translateX(-60px)}}
+  .header h1{font-size:2.7rem;text-shadow:2px 2px 6px rgba(0,0,0,.25);position:relative;z-index:1}
+  .header p{opacity:.95;margin-top:6px;position:relative;z-index:1}
+  .navigation{display:flex;justify-content:center;gap:8px;padding:18px;background:#f7f7fb;flex-wrap:wrap}
+  .nav-btn{
+    padding:10px 14px;border:3px solid #ff7eb3;background:#fff;color:#ff7eb3;border-radius:999px;
+    font-weight:700;font-size:13px;cursor:pointer;transition:.25s
+  }
+  .nav-btn:hover{transform:translateY(-3px);background:#ff7eb3;color:#fff;box-shadow:0 10px 24px rgba(255,126,179,.35)}
+  .nav-btn.active{background:#ff7eb3;color:#fff;transform:scale(1.04)}
+  .content{padding:36px}
+  .progress-bar{height:6px;background:#e9ecef;border-radius:3px;overflow:hidden;margin-bottom:26px}
+  .progress-fill{height:100%;background:linear-gradient(90deg,#ff7eb3,#65d6ce);width:12.5%;transition:width .5s ease}
+  .slide{display:none;animation:fadeIn .4s ease}
+  .slide.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  h2{color:#ff7eb3;text-align:center;font-size:2.2rem;margin-bottom:20px;position:relative}
+  h2::after{content:"";display:block;width:110px;height:4px;border-radius:2px;margin:12px auto 0;
+    background:linear-gradient(90deg,#ff7eb3,#65d6ce)}
+  h3{color:#6f42c1;margin:20px 0 12px;font-size:1.45rem}
+  .box{
+    border-radius:14px;border:2px solid #ececf3;padding:20px;margin:18px 0;background:#fafbff
+  }
+  .info{border-left:6px solid #65d6ce}
+  .warn{border-left:6px solid #ffc107;background:#fff9e6}
+  .ok{border-left:6px solid #28a745;background:#f3fff6}
+  .bad{border-left:6px solid #dc3545;background:#fff5f6}
+  .grid{display:grid;gap:18px}
+  .grid.auto-fit{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .card{background:#fff;border:2px solid #ececf3;border-radius:14px;padding:18px;position:relative;overflow:hidden;transition:.25s}
+  .card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,.08);border-color:#ff7eb3}
+  .card::before{content:"";position:absolute;top:0;left:0;height:4px;width:100%;background:linear-gradient(90deg,#ff7eb3,#65d6ce)}
+  .badge{position:absolute;top:12px;right:12px;font-size:.7rem;font-weight:800;color:#fff;border-radius:999px;padding:4px 9px}
+  .easy{background:#27ae60}.medium{background:#f39c12}.hard{background:#e74c3c}.expert{background:#8e44ad}
+  .plane{width:420px;max-width:100%;height:420px;margin:12px auto;background:#fff;border:2px solid #e5e7ef;border-radius:12px;box-shadow:0 8px 18px rgba(0,0,0,.06);display:flex;align-items:center;justify-content:center}
+  canvas{border-radius:10px}
+  .controls{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:10px}
+  .cg{display:flex;flex-direction:column;gap:4px;align-items:center}
+  .inp{
+    width:90px;max-width:100%;padding:8px 10px;border:2px solid #e2e6ef;border-radius:999px;text-align:center;font-size:14px
+  }
+  .inp:focus{outline:none;border-color:#ff7eb3;box-shadow:0 0 0 3px rgba(255,126,179,.15)}
+  .btn{
+    border:none;background:linear-gradient(135deg,#758bfd,#65d6ce);color:#fff;font-weight:800;
+    padding:12px 22px;border-radius:999px;cursor:pointer;transition:.25s
+  }
+  .btn:hover{transform:scale(1.05);box-shadow:0 10px 22px rgba(101,214,206,.35)}
+  .btn:active{transform:scale(.97)}
+  .pill{border-radius:999px;padding:2px 10px;background:#f1f3f9;border:1px solid #e6e9f3;font-weight:700;font-size:.8rem}
+  .joke{background:#fff5ff;border-left:6px solid #ff7eb3;padding:16px;border-radius:12px;margin-top:14px;font-style:italic}
+  .quiz-container{background:linear-gradient(135deg,#a29bfe 0%,#6c5ce7 100%);padding:24px;border-radius:16px;color:#fff}
+  .q-card{background:#fff;border-radius:14px;padding:18px;margin:14px 0;color:#222;border:2px solid #ececf3;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+  .opt{display:block;margin:10px 0;padding:12px 14px;border:2px solid #e9ecf4;border-radius:10px;cursor:pointer;background:#f7f8fc;transition:.2s}
+  .opt:hover{transform:translateX(4px);background:#eef1fb}
+  .opt.correct{background:#28a745;color:#fff;border-color:#28a745}
+  .opt.incorrect{background:#dc3545;color:#fff;border-color:#dc3545}
+  .result{background:#fff;border-radius:14px;padding:18px;margin-top:16px;color:#222}
+  .steps .step{background:#fff;border-left:5px solid #65d6ce;border-radius:10px;padding:12px;margin:8px 0}
+  .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;background:#f4f6fb;border:1px solid #e6e8f2;border-radius:8px;padding:2px 6px}
+  @media (max-width:760px){.content{padding:22px}}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+        <h1>MAT115 Khalid Kassou</h1>
+      <h1>📏 Line Legends: Equations Unleashed</h1>
+      <p>Slope-Intercept, Point-Slope, Vertical/Horizontal, & Parallel/Perpendicular… with jokes. 😎</p>
+    </div>
+
+    <div class="navigation" id="nav">
+      <button class="nav-btn active" onclick="showSlide(0)">🏠 Home</button>
+      <button class="nav-btn" onclick="showSlide(1)">🎯 Slope-Intercept</button>
+      <button class="nav-btn" onclick="showSlide(2)">🧭 Point-Slope</button>
+      <button class="nav-btn" onclick="showSlide(3)">⬆️⬅️ V/H Lines</button>
+      <button class="nav-btn" onclick="showSlide(4)">🔁 Convert & 2-Points</button>
+      <button class="nav-btn" onclick="showSlide(5)">↗️ Parallel</button>
+      <button class="nav-btn" onclick="showSlide(6)">⟂ Perpendicular</button>
+      <button class="nav-btn" onclick="showSlide(7)">💪 Practice</button>
+      <button class="nav-btn" onclick="showSlide(8)">🎓 Mini-Quiz</button>
+    </div>
+
+    <div class="content">
+      <div class="progress-bar"><div class="progress-fill" id="progressBar" style="width:11.1%"></div></div>
+
+      <!-- 0: Home -->
+      <section class="slide active" data-init="initHome">
+        <h2>Welcome, Future Line Legend! 🏝️</h2>
+        <div class="box info">
+          <h3>Roadmap</h3>
+          <ul style="margin-left:18px">
+            <li>Slope-Intercept form: <span class="pill">y = mx + b</span></li>
+            <li>Point-Slope form: <span class="pill">y − y₁ = m(x − x₁)</span></li>
+            <li>Vertical & Horizontal lines: <span class="pill">x = a</span>, <span class="pill">y = b</span></li>
+            <li>Parallel & Perpendicular rules on slopes</li>
+            <li>Interactive tools • Examples (easy → expert) • Practice • Quiz</li>
+          </ul>
+        </div>
+
+        <div class="box">
+          <h3>Warm-Up: Sketch Any Line</h3>
+          <div class="plane"><canvas id="homeCanvas" width="400" height="400"></canvas></div>
+          <div class="controls">
+            <div class="cg"><label>m (slope)</label><input id="homeSlope" class="inp" type="number" value="1" step="0.5" min="-6" max="6"></div>
+            <div class="cg"><label>b (intercept)</label><input id="homeB" class="inp" type="number" value="0" step="0.5" min="-8" max="8"></div>
+            <button class="btn" onclick="homeDraw()">Draw</button>
+            <button class="btn" onclick="homeRandom()">Randomize</button>
+            <button class="btn" onclick="clearCanvas('homeCanvas')">Clear</button>
+          </div>
+          <div id="homeInfo" class="box ok" style="display:none"></div>
+        </div>
+
+        <div class="joke">Joke: Lines never get lost—they always know their <em>direction</em> thanks to slope! 😅</div>
+      </section>
+
+      <!-- 1: Slope-Intercept -->
+      <section class="slide" data-init="initSI">
+        <h2>Slope-Intercept Form: y = mx + b</h2>
+        <div class="box info">
+          <p><strong>m</strong> = slope (rise/run), <strong>b</strong> = y-intercept (where line crosses y-axis).</p>
+        </div>
+        <div class="plane"><canvas id="siCanvas" width="400" height="400"></canvas></div>
+        <div class="controls">
+          <div class="cg"><label>m</label><input id="siM" class="inp" type="number" value="2" step="0.25" min="-6" max="6"></div>
+          <div class="cg"><label>b</label><input id="siB" class="inp" type="number" value="1" step="0.5" min="-8" max="8"></div>
+          <button class="btn" onclick="siDraw()">Draw</button>
+          <button class="btn" onclick="siSteps()">Show Rise/Run</button>
+          <button class="btn" onclick="clearCanvas('siCanvas');document.getElementById('siOut').innerHTML=''">Clear</button>
+        </div>
+        <div id="siOut" class="box"></div>
+
+        <h3>Examples</h3>
+        <div class="grid auto-fit">
+          <div class="card"><span class="badge easy">EASY</span>
+            <p>y = 2x + 3 → Start at (0,3), up 2, right 1.</p>
+          </div>
+          <div class="card"><span class="badge medium">MEDIUM</span>
+            <p>y = −3x + 1 → Start (0,1), down 3, right 1.</p>
+          </div>
+          <div class="card"><span class="badge hard">HARD</span>
+            <p>y = (2/3)x − 4 → Start (0,−4), up 2, right 3.</p>
+          </div>
+          <div class="card"><span class="badge expert">EXPERT</span>
+            <p>y = −5/4 x + 7/2 → Fractions? Convert to steps: down 5, right 4.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2: Point-Slope -->
+      <section class="slide" data-init="initPS">
+        <h2>Point-Slope Form: y − y₁ = m(x − x₁)</h2>
+        <div class="box info">
+          <p>Great when you know <strong>slope m</strong> and a <strong>point (x₁,y₁)</strong> on the line.</p>
+        </div>
+        <div class="plane"><canvas id="psCanvas" width="400" height="400"></canvas></div>
+        <div class="controls">
+          <div class="cg"><label>m</label><input id="psM" class="inp" type="number" value="1.5" step="0.5" min="-6" max="6"></div>
+          <div class="cg"><label>x₁</label><input id="psX" class="inp" type="number" value="1" step="1" min="-8" max="8"></div>
+          <div class="cg"><label>y₁</label><input id="psY" class="inp" type="number" value="2" step="1" min="-8" max="8"></div>
+          <button class="btn" onclick="psDraw()">Draw</button>
+          <button class="btn" onclick="psConvert()">Convert → y = mx + b</button>
+          <button class="btn" onclick="clearCanvas('psCanvas');document.getElementById('psOut').innerHTML=''">Clear</button>
+        </div>
+        <div id="psOut" class="box"></div>
+
+        <h3>Examples</h3>
+        <div class="grid auto-fit">
+          <div class="card"><span class="badge easy">EASY</span>
+            <p>Through (0,3), m=2 → y − 3 = 2(x − 0) ⇒ y = 2x + 3</p>
+          </div>
+          <div class="card"><span class="badge medium">MEDIUM</span>
+            <p>Through (−2,5), m=−1 → y − 5 = −1(x + 2) ⇒ y = −x + 3</p>
+          </div>
+          <div class="card"><span class="badge hard">HARD</span>
+            <p>Through (4, −1), m=3/2 → y + 1 = (3/2)(x − 4) ⇒ y = (3/2)x − 7</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3: Vertical & Horizontal -->
+      <section class="slide" data-init="initVH">
+        <h2>Vertical & Horizontal Lines</h2>
+        <div class="box warn">
+          <p><strong>Vertical:</strong> x = a (slope undefined) • <strong>Horizontal:</strong> y = b (slope 0)</p>
+        </div>
+
+        <div class="plane"><canvas id="vhCanvas" width="400" height="400"></canvas></div>
+        <div class="controls">
+          <div class="cg"><label>Type</label>
+            <select class="inp" id="vhType">
+              <option value="v">Vertical (x=a)</option>
+              <option value="h">Horizontal (y=b)</option>
+            </select>
+          </div>
+          <div class="cg"><label>a or b</label><input id="vhVal" class="inp" type="number" value="2" step="1" min="-9" max="9"></div>
+          <button class="btn" onclick="vhDraw()">Draw</button>
+          <button class="btn" onclick="clearCanvas('vhCanvas');document.getElementById('vhOut').innerHTML=''">Clear</button>
+        </div>
+        <div id="vhOut" class="box"></div>
+
+        <h3>Examples</h3>
+        <div class="grid auto-fit">
+          <div class="card"><span class="badge easy">EASY</span>
+            <p>y = 4 → horizontal line through (0,4)</p>
+          </div>
+          <div class="card"><span class="badge medium">MEDIUM</span>
+            <p>x = −3 → vertical line through (−3,0)</p>
+          </div>
+          <div class="card"><span class="badge hard">HARD</span>
+            <p>Parallel to y = 5? Any y = c. Perpendicular? Any x = a.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4: Convert & 2-Points -->
+      <section class="slide" data-init="initConv">
+        <h2>Converting Forms & Two-Point Lines</h2>
+
+        <div class="box">
+          <h3>From Two Points → Equation</h3>
+          <div class="plane"><canvas id="tpCanvas" width="400" height="400"></canvas></div>
+          <div class="controls">
+            <div class="cg"><label>x₁</label><input id="tpX1" class="inp" type="number" value="-3"></div>
+            <div class="cg"><label>y₁</label><input id="tpY1" class="inp" type="number" value="1"></div>
+            <div class="cg"><label>x₂</label><input id="tpX2" class="inp" type="number" value="5"></div>
+            <div class="cg"><label>y₂</label><input id="tpY2" class="inp" type="number" value="7"></div>
+            <button class="btn" onclick="tpBuild()">Build Line</button>
+            <button class="btn" onclick="tpRandom()">Random Points</button>
+            <button class="btn" onclick="clearCanvas('tpCanvas');document.getElementById('tpOut').innerHTML=''">Clear</button>
+          </div>
+          <div id="tpOut" class="box"></div>
+        </div>
+
+        <div class="box">
+          <h3>Convert Point-Slope ↔ Slope-Intercept</h3>
+          <div class="controls">
+            <div class="cg"><label>m</label><input id="cvM" class="inp" type="number" value="2"></div>
+            <div class="cg"><label>x₁</label><input id="cvX" class="inp" type="number" value="1"></div>
+            <div class="cg"><label>y₁</label><input id="cvY" class="inp" type="number" value="3"></div>
+            <button class="btn" onclick="cvConvert()">Convert</button>
+          </div>
+          <div id="cvOut" class="box"></div>
+        </div>
+      </section>
+
+      <!-- 5: Parallel -->
+      <section class="slide" data-init="initPar">
+        <h2>Parallel Lines ↗️</h2>
+        <div class="box info">
+          <p>Lines are <strong>parallel</strong> if they have the <strong>same slope</strong> (different intercepts).</p>
+        </div>
+        <div class="plane"><canvas id="parCanvas" width="400" height="400"></canvas></div>
+        <div class="controls">
+          <div class="cg"><label>Given: y = m x + b</label><span class="pill">m₁</span></div>
+          <div class="cg"><label>m₁</label><input id="parM1" class="inp" type="number" value="1.5" step="0.5"></div>
+          <div class="cg"><label>b₁</label><input id="parB1" class="inp" type="number" value="-1" step="0.5"></div>
+          <div class="cg"><label>Through point (x₀,y₀)</label><span class="pill">for parallel line</span></div>
+          <div class="cg"><label>x₀</label><input id="parX0" class="inp" type="number" value="2"></div>
+          <div class="cg"><label>y₀</label><input id="parY0" class="inp" type="number" value="3"></div>
+          <button class="btn" onclick="parDraw()">Draw Parallel</button>
+          <button class="btn" onclick="parRandom()">Randomize</button>
+          <button class="btn" onclick="clearCanvas('parCanvas');document.getElementById('parOut').innerHTML=''">Clear</button>
+        </div>
+        <div id="parOut" class="box"></div>
+      </section>
+
+      <!-- 6: Perpendicular -->
+      <section class="slide" data-init="initPerp">
+        <h2>Perpendicular Lines ⟂</h2>
+        <div class="box info">
+          <p>Lines are <strong>perpendicular</strong> if slopes are <strong>negative reciprocals</strong>: m₂ = −1/m₁ (and m₁·m₂ = −1).</p>
+        </div>
+        <div class="plane"><canvas id="perpCanvas" width="400" height="400"></canvas></div>
+        <div class="controls">
+          <div class="cg"><label>Given: y = m x + b</label><span class="pill">m₁</span></div>
+          <div class="cg"><label>m₁</label><input id="perpM1" class="inp" type="number" value="2"></div>
+          <div class="cg"><label>b₁</label><input id="perpB1" class="inp" type="number" value="1"></div>
+          <div class="cg"><label>Through point (x₀,y₀)</label><span class="pill">for perpendicular</span></div>
+          <div class="cg"><label>x₀</label><input id="perpX0" class="inp" type="number" value="-2"></div>
+          <div class="cg"><label>y₀</label><input id="perpY0" class="inp" type="number" value="3"></div>
+          <button class="btn" onclick="perpDraw()">Draw Perpendicular</button>
+          <button class="btn" onclick="perpRandom()">Randomize</button>
+          <button class="btn" onclick="clearCanvas('perpCanvas');document.getElementById('perpOut').innerHTML=''">Clear</button>
+        </div>
+        <div id="perpOut" class="box"></div>
+      </section>
+
+      <!-- 7: Practice -->
+      <section class="slide" data-init="initPrac">
+        <h2>Practice Arena 💪</h2>
+
+        <div class="box ok">
+          <p>Type your answer exactly (we accept common variations like spaces or equivalent fractions/decimals in some cases).</p>
+        </div>
+
+        <div class="grid auto-fit">
+          <div class="card">
+            <span class="badge easy">EASY</span>
+            <h3>1) Slope-Intercept</h3>
+            <p>Give the equation for slope 3 and y-intercept −2.</p>
+            <input id="p1" class="inp" style="width:200px" placeholder="y = ...">
+            <button class="btn" onclick="checkEq(1,'y=3x-2')">Check</button>
+            <div id="pf1" class="box"></div>
+          </div>
+
+          <div class="card">
+            <span class="badge medium">MEDIUM</span>
+            <h3>2) Point-Slope → Slope-Intercept</h3>
+            <p>Convert: y − 5 = −2(x + 1)</p>
+            <input id="p2" class="inp" style="width:220px" placeholder="y = ...">
+            <button class="btn" onclick="checkEq(2,'y=-2x+3')">Check</button>
+            <div id="pf2" class="box"></div>
+          </div>
+
+          <div class="card">
+            <span class="badge medium">MEDIUM</span>
+            <h3>3) Through 2 Points</h3>
+            <p>Find equation through (1,4) and (3,10).</p>
+            <input id="p3" class="inp" style="width:220px" placeholder="y = ...">
+            <button class="btn" onclick="checkEq(3,'y=3x+1')">Check</button>
+            <div id="pf3" class="box"></div>
+          </div>
+
+          <div class="card">
+            <span class="badge hard">HARD</span>
+            <h3>4) Perpendicular</h3>
+            <p>Line L: y = (1/2)x + 6. Find equation of line perpendicular to L through (−2,3).</p>
+            <input id="p4" class="inp" style="width:220px" placeholder="y = ...">
+            <button class="btn" onclick="checkEq(4,'y=-2x-1')">Check</button>
+            <div id="pf4" class="box"></div>
+          </div>
+
+          <div class="card">
+            <span class="badge expert">EXPERT</span>
+            <h3>5) Parallel</h3>
+            <p>Line L: y = −3x + 4. Equation of line parallel to L through (2, −5).</p>
+            <input id="p5" class="inp" style="width:220px" placeholder="y = ...">
+            <button class="btn" onclick="checkEq(5,'y=-3x+1')">Check</button>
+            <div id="pf5" class="box"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8: Mini-Quiz -->
+      <section class="slide" data-init="initQuiz">
+        <h2>Mini-Quiz 🎓</h2>
+        <div class="quiz-container">
+          <div class="q-card">
+            <h3>Q1) Which is slope-intercept form?</h3>
+            <label class="opt"><input type="radio" name="q1" value="a"> x = 4</label>
+            <label class="opt"><input type="radio" name="q1" value="b"> y − y₁ = m(x − x₁)</label>
+            <label class="opt"><input type="radio" name="q1" value="c"> y = mx + b</label>
+            <label class="opt"><input type="radio" name="q1" value="d"> 3x + 2y = 6</label>
+          </div>
+
+          <div class="q-card">
+            <h3>Q2) Slope of a line perpendicular to slope 3/4 is…</h3>
+            <label class="opt"><input type="radio" name="q2" value="a"> 4/3</label>
+            <label class="opt"><input type="radio" name="q2" value="b"> −4/3</label>
+            <label class="opt"><input type="radio" name="q2" value="c"> −3/4</label>
+            <label class="opt"><input type="radio" name="q2" value="d"> 3/4</label>
+          </div>
+
+          <div class="q-card">
+            <h3>Q3) The equation y = 0 is…</h3>
+            <label class="opt"><input type="radio" name="q3" value="a"> Vertical</label>
+            <label class="opt"><input type="radio" name="q3" value="b"> Horizontal</label>
+            <label class="opt"><input type="radio" name="q3" value="c"> Undefined</label>
+            <label class="opt"><input type="radio" name="q3" value="d"> Diagonal</label>
+          </div>
+
+          <div class="q-card">
+            <h3>Q4) Find slope-intercept form of line through (−1,2) with slope −5.</h3>
+            <label class="opt"><input type="radio" name="q4" value="a"> y = −5x + 3</label>
+            <label class="opt"><input type="radio" name="q4" value="b"> y = −5x − 3</label>
+            <label class="opt"><input type="radio" name="q4" value="c"> y = 5x + 7</label>
+            <label class="opt"><input type="radio" name="q4" value="d"> y = −5x + 7</label>
+          </div>
+
+          <div class="q-card">
+            <h3>Q5) Lines y = 2x + 5 and y = 2x − 1 are…</h3>
+            <label class="opt"><input type="radio" name="q5" value="a"> Parallel</label>
+            <label class="opt"><input type="radio" name="q5" value="b"> Perpendicular</label>
+            <label class="opt"><input type="radio" name="q5" value="c"> The same line</label>
+            <label class="opt"><input type="radio" name="q5" value="d"> Neither</label>
+          </div>
+
+          <button class="btn" onclick="gradeQuiz()">Submit Quiz</button>
+          <div id="quizResult" class="result" style="display:none"></div>
+        </div>
+
+        <div class="joke">Bonus pun: Lines in parallel relationships never meet… but they still keep things running! 😄</div>
+      </section>
+
+    </div>
+  </div>
+
+<script>
+/* ====== Core Drawing Utilities ====== */
+function grid(ctx,w,h){
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle='#e6e8f2'; ctx.lineWidth=1;
+  for(let x=0;x<=w;x+=20){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
+  for(let y=0;y<=h;y+=20){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
+
+  ctx.strokeStyle='#333'; ctx.lineWidth=2;
+  // axes
+  ctx.beginPath(); ctx.moveTo(0,h/2); ctx.lineTo(w,h/2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(w/2,0); ctx.lineTo(w/2,h); ctx.stroke();
+  // ticks & numbers
+  ctx.fillStyle='#666'; ctx.font='12px ui-sans-serif, system-ui';
+  ctx.textAlign='center';
+  for(let i=-9;i<=9;i++){
+    if(i!==0){ const xx=w/2+i*20; ctx.fillText(i,xx,h/2+15); }
+  }
+  ctx.textAlign='right';
+  for(let i=-9;i<=9;i++){
+    if(i!==0){ const yy=h/2 - i*20; ctx.fillText(i,w/2-6,yy+4); }
+  }
+  ctx.fillStyle='#333'; ctx.textAlign='right'; ctx.fillText('0', w/2-6, h/2+15);
+}
+function toCanvasX(x){return 200 + x*20}
+function toCanvasY(y){return 200 - y*20}
+function plot(ctx,x,y,color='#ff7eb3',r=4){ctx.fillStyle=color;ctx.beginPath();ctx.arc(toCanvasX(x),toCanvasY(y),r,0,Math.PI*2);ctx.fill()}
+function drawLine(ctx,m,b,color='#65d6ce',lw=3){
+  ctx.strokeStyle=color;ctx.lineWidth=lw;ctx.beginPath();
+  let first=true;
+  for(let x=-12;x<=12;x+=0.1){const y=m*x+b; const cx=toCanvasX(x), cy=toCanvasY(y); if(first){ctx.moveTo(cx,cy); first=false;} else ctx.lineTo(cx,cy);}
+  ctx.stroke();
+}
+function drawVertical(ctx,a,color='#758bfd',lw=3){
+  ctx.strokeStyle=color;ctx.lineWidth=lw;ctx.beginPath();
+  const cx=toCanvasX(a); ctx.moveTo(cx,0); ctx.lineTo(cx,400); ctx.stroke();
+}
+
+/* ====== Slides Navigation ====== */
+let currentSlide=0; const totalSlides=9;
+function showSlide(i){
+  const slides=[...document.querySelectorAll('.slide')];
+  const nav=[...document.querySelectorAll('.nav-btn')];
+  slides.forEach(s=>s.classList.remove('active')); nav.forEach(b=>b.classList.remove('active'));
+  slides[i].classList.add('active'); nav[i].classList.add('active'); currentSlide=i;
+  document.getElementById('progressBar').style.width=((i+1)/totalSlides*100)+'%';
+  // init canvas for slide if needed
+  const initFn = slides[i].dataset.init;
+  if (initFn && typeof window[initFn]==='function') setTimeout(window[initFn],50);
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight' && currentSlide<totalSlides-1) showSlide(currentSlide+1);
+  if(e.key==='ArrowLeft' && currentSlide>0) showSlide(currentSlide-1);
+});
+
+/* ====== Home ====== */
+function initHome(){
+  const c=document.getElementById('homeCanvas'); const ctx=c.getContext('2d'); grid(ctx,c.width,c.height);
+}
+function clearCanvas(id){
+  const c=document.getElementById(id); const ctx=c.getContext('2d'); grid(ctx,c.width,c.height);
+}
+function homeDraw(){
+  const m=parseFloat(document.getElementById('homeSlope').value);
+  const b=parseFloat(document.getElementById('homeB').value);
+  const c=document.getElementById('homeCanvas'); const ctx=c.getContext('2d'); grid(ctx,c.width,c.height);
+  drawLine(ctx,m,b,'#ff7eb3',3); plot(ctx,0,b,'#333',5);
+  document.getElementById('homeInfo').style.display='block';
+  document.getElementById('homeInfo').innerHTML = `<strong>Equation:</strong> y = ${m}x + ${b} <br><strong>Slope:</strong> ${m}, <strong>y-int:</strong> (0, ${b})`;
+}
+function homeRandom(){
+  document.getElementById('homeSlope').value=(Math.round((Math.random()*6-3)*2)/2).toString();
+  document.getElementById('homeB').value=(Math.round((Math.random()*8-4)*2)/2).toString();
+  homeDraw();
+}
+
+/* ====== Slope-Intercept ====== */
+function initSI(){
+  const c=document.getElementById('siCanvas'); grid(c.getContext('2d'),c.width,c.height);
+}
+function siDraw(){
+  const m=parseFloat(document.getElementById('siM').value);
+  const b=parseFloat(document.getElementById('siB').value);
+  const c=document.getElementById('siCanvas'); const ctx=c.getContext('2d'); grid(ctx,c.width,c.height);
+  drawLine(ctx,m,b,'#65d6ce',3); plot(ctx,0,b,'#ff7eb3',7);
+  document.getElementById('siOut').innerHTML=`<strong>y = ${m}x + ${b}</strong><br>Slope: ${m} (${m>0?'upward':'downward/flat'}), Intercept: (0, ${b})`;
+}
+function siSteps(){
+  siDraw();
+  const m=parseFloat(document.getElementById('siM').value);
+  const b=parseFloat(document.getElementById('siB').value);
+  const c=document.getElementById('siCanvas'); const ctx=c.getContext('2d');
+  if(m===0) return;
+  let rise,run;
+  if(Number.isInteger(m)){rise=m;run=1;} else { // fraction
+    const s = m.toString(); const dec = (s.split('.')[1]||'').length; const den = Math.pow(10,dec);
+    rise = m*den; run = den;
+    const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a); const g=gcd(Math.round(rise),Math.round(run));
+    rise/=g; run/=g;
+  }
+  // draw slope box from intercept
+  ctx.strokeStyle='#758bfd'; ctx.setLineDash([6,6]); ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(toCanvasX(0), toCanvasY(b)); ctx.lineTo(toCanvasX(run), toCanvasY(b)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(toCanvasX(run), toCanvasY(b)); ctx.lineTo(toCanvasX(run), toCanvasY(b+rise)); ctx.stroke();
+  ctx.setLineDash([]);
+  plot(ctx,run,b+rise,'#758bfd',6);
+  document.getElementById('siOut').innerHTML += `<div class="box" style="margin-top:10px">Rise/Run: <strong>${rise}/${run}</strong> → new point (${run}, ${b+rise})</div>`;
+}
+
+/* ====== Point-Slope ====== */
+function initPS(){
+  const c=document.getElementById('psCanvas'); grid(c.getContext('2d'),c.width,c.height);
+}
+function psDraw(){
+  const m=parseFloat(document.getElementById('psM').value);
+  const x1=parseFloat(document.getElementById('psX').value);
+  const y1=parseFloat(document.getElementById('psY').value);
+  const c=document.getElementById('psCanvas'); const ctx=c.getContext('2d'); grid(ctx,c.width,c.height);
+  // slope-intercept equivalent
+  const b = y1 - m*x1;
+  drawLine(ctx,m,b,'#65d6ce',3); plot(ctx,x1,y1,'#ff7eb3',7);
+  document.getElementById('psOut').innerHTML=`Point-Slope: <strong>y − ${y1} = ${m}(x − ${x1})</strong><br>Equivalent: <strong>y = ${m}x + ${b}</strong>`;
+}
+function psConvert(){
+  const m=parseFloat(document.getElementById('psM').value);
+  const x1=parseFloat(document.getElementById('psX').value);
+  const y1=parseFloat(document.getElementById('psY').value);
+  const b=y1 - m*x1;
+  document.getElementById('psOut').innerHTML=`Converted: <strong>y = ${m}x + ${b}</strong> (from y − ${y1} = ${m}(x − ${x1}))`;
+}
+
+/* ====== Vertical / Horizontal ====== */
+function initVH(){
+  const c=document.getElementById('vhCanvas'); grid(c.getContext('2d'),c.width,c.height);
+}
+function vhDraw(){
+  const type=document.getElementById('vhType').value;
+  const val=parseFloat(document.getElementById('vhVal').value);
+  const c=document.getElementById('vhCanvas'); const ctx=c.getContext('2d'); grid(ctx,c.width,c.height);
+  if(type==='v'){ drawVertical(ctx,val,'#758bfd',3); document.getElementById('vhOut').innerHTML=`<strong>x = ${val}</strong> (vertical, slope undefined)`; }
+  else { drawLine(ctx,0,val,'#65d6ce',3); document.getElementById('vhOut').innerHTML=`<strong>y = ${val}</strong> (horizontal, slope 0)`; }
+}
+
+/* ====== Convert & Two-Points ====== */
+function initConv(){
+  const c=document.getElementById('tpCanvas'); grid(c.getContext('2d'),c.width,c.height);
+}
+function tpBuild(){
+  const x1=parseFloat(document.getElementById('tpX1').value);
+  const y1=parseFloat(document.getElementById('tpY1').value);
+  const x2=parseFloat(document.getElementById('tpX2').value);
+  const y2=parseFloat(document.getElementById('tpY2').value);
+  const c=document.getElementById('tpCanvas'); const ctx=c.getContext('2d'); grid(ctx,c.width,c.height);
+  plot(ctx,x1,y1,'#ff7eb3',7); plot(ctx,x2,y2,'#758bfd',7);
+  if(x1===x2){
+    drawVertical(ctx,x1,'#65d6ce',3);
+    document.getElementById('tpOut').innerHTML=`Vertical line: <strong>x = ${x1}</strong>`;
+    return;
+  }
+  const m=(y2-y1)/(x2-x1); const b = y1 - m*x1;
+  drawLine(ctx,m,b,'#65d6ce',3);
+  document.getElementById('tpOut').innerHTML=
+    `Slope: <strong>m = (${y2} − ${y1})/(${x2} − ${x1}) = ${m}</strong><br>`+
+    `Point-Slope: <strong>y − ${y1} = ${m}(x − ${x1})</strong><br>`+
+    `Slope-Intercept: <strong>y = ${m}x + ${b}</strong>`;
+}
+function tpRandom(){
+  const rand=()=>Math.floor(Math.random()*9)-4;
+  let a=rand(), b=rand(), c=rand(), d=rand();
+  while(a===c){ c=rand(); }
+  document.getElementById('tpX1').value=a; document.getElementById('tpY1').value=b;
+  document.getElementById('tpX2').value=c; document.getElementById('tpY2').value=d;
+  tpBuild();
+}
+function cvConvert(){
+  const m=parseFloat(document.getElementById('cvM').value);
+  const x1=parseFloat(document.getElementById('cvX').value);
+  const y1=parseFloat(document.getElementById('cvY').value);
+  const b=y1 - m*x1;
+  document.getElementById('cvOut').innerHTML =
+    `Point-Slope: <strong>y − ${y1} = ${m}(x − ${x1})</strong><br>`+
+    `Slope-Intercept: <strong>y = ${m}x + ${b}</strong>`;
+}
+
+/* ====== Parallel ====== */
+function initPar(){
+  const c=document.getElementById('parCanvas'); grid(c.getContext('2d'),c.width,c.height);
+}
+function parDraw(){
+  const m1=parseFloat(document.getElementById('parM1').value);
+  const b1=parseFloat(document.getElementById('parB1').value);
+  const x0=parseFloat(document.getElementById('parX0').value);
+  const y0=parseFloat(document.getElementById('parY0').value);
+  const c=document.getElementById('parCanvas'); const ctx=c.getContext('2d'); grid(ctx,c.width,c.height);
+  // base line
+  drawLine(ctx,m1,b1,'#ff7eb3',3);
+  // parallel: same slope m1, use point to find b2
+  const b2 = y0 - m1*x0;
+  drawLine(ctx,m1,b2,'#65d6ce',3);
+  plot(ctx,x0,y0,'#333',6);
+  document.getElementById('parOut').innerHTML =
+    `Given: y = ${m1}x + ${b1}. Parallel through (${x0},${y0}) has same slope m=${m1}.<br>`+
+    `Find b₂ from y₀ = m x₀ + b₂ ⇒ b₂ = ${y0} − (${m1})(${x0}) = <strong>${b2}</strong>.<br>`+
+    `<strong>Parallel line:</strong> y = ${m1}x + ${b2}`;
+}
+function parRandom(){
+  const randF=()=> (Math.round((Math.random()*6-3)*2)/2);
+  const randI=()=> Math.floor(Math.random()*7)-3;
+  document.getElementById('parM1').value=randF();
+  document.getElementById('parB1').value=randF();
+  document.getElementById('parX0').value=randI();
+  document.getElementById('parY0').value=randI();
+  parDraw();
+}
+
+/* ====== Perpendicular ====== */
+function initPerp(){
+  const c=document.getElementById('perpCanvas'); grid(c.getContext('2d'),c.width,c.height);
+}
+function perpDraw(){
+  const m1=parseFloat(document.getElementById('perpM1').value);
+  const b1=parseFloat(document.getElementById('perpB1').value);
+  const x0=parseFloat(document.getElementById('perpX0').value);
+  const y0=parseFloat(document.getElementById('perpY0').value);
+  const c=document.getElementById('perpCanvas'); const ctx=c.getContext('2d'); grid(ctx,c.width,c.height);
+
+  drawLine(ctx,m1,b1,'#ff7eb3',3);
+
+  let m2;
+  if(m1===0){ m2 = Infinity; } else { m2 = -1/m1; }
+
+  if(!Number.isFinite(m2)){
+    // perpendicular is vertical
+    drawVertical(ctx,x0,'#65d6ce',3); plot(ctx,x0,y0,'#333',6);
+    document.getElementById('perpOut').innerHTML =
+      `m₁ = 0 ⇒ perpendicular slope is undefined (vertical).<br>`+
+      `<strong>Equation:</strong> x = ${x0}`;
+    return;
+  }
+  const b2 = y0 - m2*x0;
+  drawLine(ctx,m2,b2,'#65d6ce',3); plot(ctx,x0,y0,'#333',6);
+
+  document.getElementById('perpOut').innerHTML =
+    `m₂ = −1/m₁ = −1/${m1} = <strong>${m2}</strong>.<br>`+
+    `Using point (${x0},${y0}): b₂ = ${y0} − (${m2})(${x0}) = <strong>${b2}</strong>.<br>`+
+    `<strong>Perpendicular line:</strong> y = ${m2}x + ${b2} (check m₁·m₂ = ${(m1*m2).toFixed(2)})`;
+}
+function perpRandom(){
+  const randF=()=> (Math.round((Math.random()*6-3)*2)/2 || 1);
+  const randI=()=> Math.floor(Math.random()*7)-3;
+  document.getElementById('perpM1').value=randF();
+  document.getElementById('perpB1').value=randF();
+  document.getElementById('perpX0').value=randI();
+  document.getElementById('perpY0').value=randI();
+  perpDraw();
+}
+
+/* ====== Practice Checking ====== */
+function normEq(s){return (s||'').toLowerCase().replace(/\s+/g,'')}
+function sameLinearForm(user, target){
+  // Basic tolerant matcher:
+  // Accept y=mx+b or y=b+mx, allow spaces; also accept decimals where exact match expected.
+  const u=normEq(user).replace(/y=/,'');
+  const t=normEq(target).replace(/y=/,'');
+  if(u===t) return true;
+  // try swap order
+  if(u.includes('x') && t.includes('x')){
+    const reorder = (str)=>{
+      const m = str.match(/([+-]?\d*\.?\d*)x/);
+      const b = str.replace(/([+-]?\d*\.?\d*)x/,'').replace(/^\+/, '');
+      const mx = m ? (m[1]||'1') : '0';
+      const bb = (b===''? '0' : b);
+      return {m:parseFloat(mx), b:parseFloat(bb)};
+    };
+    try{
+      const U=reorder(u), T=reorder(t);
+      return Math.abs(U.m - T.m) < 1e-6 && Math.abs(U.b - T.b) < 1e-6;
+    }catch(e){return false;}
+  }
+  return false;
+}
+function feedback(el, ok, msgOk, hint){
+  el.className = 'box ' + (ok ? 'ok' : 'bad');
+  el.innerHTML = ok ? `✅ ${msgOk}` : `❌ Not quite. ${hint}`;
+}
+function checkEq(n, target){
+  const val = document.getElementById('p'+n).value;
+  const out = document.getElementById('pf'+n);
+  let ok=false, hint='';
+  if(n===1){ ok = sameLinearForm(val,'y=3x-2'); hint='Remember: y=mx+b with m=3 and b=−2.'; }
+  if(n===2){ ok = sameLinearForm(val,'y=-2x+3'); hint='Distribute: y−5=−2x−2 ⇒ y=−2x+3.'; }
+  if(n===3){ ok = sameLinearForm(val,'y=3x+1'); hint='Slope (10−4)/(3−1)=3; use y=mx+b with (1,4).'; }
+  if(n===4){ ok = sameLinearForm(val,'y=-2x-1'); hint='Perp slope to 1/2 is −2; through (−2,3): y=−2x−1.'; }
+  if(n===5){ ok = sameLinearForm(val,'y=-3x+1'); hint='Parallel keeps slope −3; through (2,−5) gives b=1.'; }
+  feedback(out, ok, 'Great job! ✅', hint);
+}
+
+/* ====== Quiz ====== */
+function initQuiz(){ /* no canvas */ }
+function gradeQuiz(){
+  const key={q1:'c', q2:'b', q3:'b', q4:'d', q5:'a'};
+  let score=0, total=Object.keys(key).length;
+  Object.entries(key).forEach(([q,ans])=>{
+    const sel = document.querySelector(`input[name="${q}"]:checked`);
+    const opts = document.querySelectorAll(`input[name="${q}"]`);
+    opts.forEach(o=>o.parentElement.classList.remove('correct','incorrect'));
+    if(sel){
+      if(sel.value===ans){ score++; sel.parentElement.classList.add('correct'); }
+      else {
+        sel.parentElement.classList.add('incorrect');
+        const right = document.querySelector(`input[name="${q}"][value="${ans}"]`);
+        if(right) right.parentElement.classList.add('correct');
+      }
+    }
+  });
+  const pct=Math.round(score/total*100);
+  const res=document.getElementById('quizResult'); res.style.display='block';
+  let msg='KEEP PRACTICING! 🤔📘'; if(pct>=90) msg='LINE LEGEND! 🏆'; else if(pct>=80) msg='EXCELLENT! 🌟'; else if(pct>=70) msg='GOOD! 👍';
+  res.innerHTML = `<h3>Score: ${score}/${total} (${pct}%)</h3><p><strong>${msg}</strong></p><p>Tip: Review slopes and forms if any felt tricky.</p>`;
+}
+
+/* ====== Boot ====== */
+window.addEventListener('DOMContentLoaded', ()=>{
+  initHome();
+  document.getElementById('progressBar').style.width=((currentSlide+1)/totalSlides*100)+'%';
+});
+</script>
+</body>
+</html>
