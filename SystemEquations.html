@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Equations: The Epic Adventure! 🎭</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            color: #4a4a4a;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .example-box {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .funny-note {
+            background: linear-gradient(45deg, #ffeaa7, #fab1a0);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-style: italic;
+            text-align: center;
+            border: 2px dashed #e17055;
+        }
+
+        .graph-container {
+            width: 100%;
+            height: 400px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            background: white;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .exercise-container {
+            background: #f1f3f4;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .quiz-container {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .answer-btn {
+            background: #74b9ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .answer-btn:hover {
+            background: #0984e3;
+            transform: scale(1.05);
+        }
+
+        .correct {
+            background: #00b894 !important;
+        }
+
+        .incorrect {
+            background: #e17055 !important;
+        }
+
+        .step-by-step {
+            background: #fdcb6e;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #e17055;
+        }
+
+        .difficulty-tag {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .easy { background: #00b894; color: white; }
+        .medium { background: #fdcb6e; color: #2d3436; }
+        .hard { background: #e17055; color: white; }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 2em;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .bounce {
+            animation: bounce 1s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎭 Linear Equations: The Epic Adventure! 🎭</h1>
+            <p>Master the art of solving systems of linear equations in two variables!</p>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn active" onclick="showSection(0)">🏠 Intro</button>
+            <button class="nav-btn" onclick="showSection(1)">📊 Graphical</button>
+            <button class="nav-btn" onclick="showSection(2)">🔢 Algebraic</button>
+            <button class="nav-btn" onclick="showSection(3)">📝 Word Problems</button>
+            <button class="nav-btn" onclick="showSection(4)">💪 Practice</button>
+            <button class="nav-btn" onclick="showSection(5)">🏆 Quiz</button>
+        </div>
+
+        <!-- Section 0: Introduction -->
+        <div class="section active" id="section-0">
+            <h2>🌟 Welcome to the World of Linear Equations! 🌟</h2>
+            
+            <div class="definition-box">
+                <h3>📚 What is a System of Linear Equations?</h3>
+                <p><strong>Definition:</strong> A system of linear equations is a collection of two or more linear equations that share the same variables. We're looking for values that satisfy ALL equations simultaneously!</p>
+                <p><strong>In our case:</strong> We have two equations with two variables (usually x and y).</p>
+            </div>
+
+            <div class="funny-note">
+                🤔 Think of it like dating: You need someone who meets ALL your criteria at once! 
+                No settling for "close enough" in math! 💕
+            </div>
+
+            <h3>🎯 Types of Solutions:</h3>
+            <div class="example-box">
+                <ul>
+                    <li><strong>🎯 One Solution (Intersecting lines):</strong> The lines cross at exactly one point</li>
+                    <li><strong>♾️ Infinite Solutions (Same line):</strong> The equations represent the same line</li>
+                    <li><strong>❌ No Solution (Parallel lines):</strong> The lines never meet</li>
+                </ul>
+            </div>
+
+            <div class="funny-note">
+                It's like looking for parking: Sometimes you find the perfect spot (one solution), 
+                sometimes the whole street is free (infinite solutions), 
+                and sometimes... well, you're walking! 🚶‍♂️
+            </div>
+        </div>
+
+        <!-- Section 1: Graphical Method -->
+        <div class="section" id="section-1">
+            <h2>📊 The Graphical Method: See It to Believe It!</h2>
+            
+            <div class="definition-box">
+                <h3>🔍 Graphical Method</h3>
+                <p>Plot both equations on the same coordinate plane and find where they intersect!</p>
+                <p><strong>Steps:</strong></p>
+                <ol>
+                    <li>Rewrite each equation in slope-intercept form (y = mx + b)</li>
+                    <li>Graph both lines</li>
+                    <li>Find the intersection point(s)</li>
+                    <li>The intersection is your solution!</li>
+                </ol>
+            </div>
+
+            <div class="graph-container">
+                <canvas id="graphCanvas" class="canvas" width="800" height="400"></canvas>
+            </div>
+            
+            <div style="display: flex; gap: 10px; justify-content: center; margin: 10px 0;">
+                <button class="answer-btn" onclick="showExample('intersecting')">Intersecting Lines</button>
+                <button class="answer-btn" onclick="showExample('parallel')">Parallel Lines</button>
+                <button class="answer-btn" onclick="showExample('coincident')">Same Line</button>
+            </div>
+
+            <h3>📝 Examples:</h3>
+            
+            <div class="example-box">
+                <div class="difficulty-tag easy">EASY</div>
+                <h4>Example 1: One Solution</h4>
+                <p><strong>System:</strong> y = x + 1 and y = -x + 3</p>
+                <div class="step-by-step">
+                    <strong>Step 1:</strong> Already in slope-intercept form! ✨<br>
+                    <strong>Step 2:</strong> Graph both lines<br>
+                    <strong>Step 3:</strong> Find intersection: (1, 2)<br>
+                    <strong>Step 4:</strong> Check: 2 = 1 + 1 ✓ and 2 = -1 + 3 ✓
+                </div>
+            </div>
+
+            <div class="example-box">
+                <div class="difficulty-tag medium">MEDIUM</div>
+                <h4>Example 2: No Solution</h4>
+                <p><strong>System:</strong> 2x + y = 5 and 2x + y = 3</p>
+                <div class="step-by-step">
+                    <strong>Step 1:</strong> Rewrite: y = -2x + 5 and y = -2x + 3<br>
+                    <strong>Step 2:</strong> Same slope (-2), different y-intercepts<br>
+                    <strong>Step 3:</strong> Parallel lines = No intersection = No solution! 😵
+                </div>
+            </div>
+
+            <div class="funny-note">
+                🎨 Graphing is like being an artist, but with math! 
+                Except instead of "happy little trees," we have "happy little intersections!" 🌳
+            </div>
+        </div>
+
+        <!-- Section 2: Algebraic Methods -->
+        <div class="section" id="section-2">
+            <h2>🔢 Algebraic Methods: When Graphing Gets Too Messy!</h2>
+            
+            <div class="definition-box">
+                <h3>⚔️ Two Mighty Methods:</h3>
+                <p><strong>1. Substitution Method:</strong> Solve one equation for one variable, then substitute!</p>
+                <p><strong>2. Elimination Method:</strong> Add or subtract equations to eliminate a variable!</p>
+            </div>
+
+            <h3>🔄 Substitution Method</h3>
+            <div class="example-box">
+                <div class="difficulty-tag easy">EASY</div>
+                <h4>Example 1: Substitution</h4>
+                <p><strong>System:</strong> y = 2x + 1 and x + y = 4</p>
+                <div class="step-by-step">
+                    <strong>Step 1:</strong> First equation gives us y = 2x + 1<br>
+                    <strong>Step 2:</strong> Substitute into second: x + (2x + 1) = 4<br>
+                    <strong>Step 3:</strong> Simplify: 3x + 1 = 4, so x = 1<br>
+                    <strong>Step 4:</strong> Back-substitute: y = 2(1) + 1 = 3<br>
+                    <strong>Solution:</strong> (1, 3) 🎉
+                </div>
+            </div>
+
+            <div class="funny-note">
+                🕵️ Substitution is like being a detective: 
+                "I'll take this clue and use it to solve the whole mystery!" 🔍
+            </div>
+
+            <h3>➕➖ Elimination Method</h3>
+            <div class="example-box">
+                <div class="difficulty-tag medium">MEDIUM</div>
+                <h4>Example 2: Elimination</h4>
+                <p><strong>System:</strong> 2x + 3y = 7 and 3x - 3y = 8</p>
+                <div class="step-by-step">
+                    <strong>Step 1:</strong> Notice y coefficients are opposites (3 and -3)<br>
+                    <strong>Step 2:</strong> Add equations: (2x + 3y) + (3x - 3y) = 7 + 8<br>
+                    <strong>Step 3:</strong> Simplify: 5x = 15, so x = 3<br>
+                    <strong>Step 4:</strong> Substitute back: 2(3) + 3y = 7, so y = 1/3<br>
+                    <strong>Solution:</strong> (3, 1/3) 🎯
+                </div>
+            </div>
+
+            <div class="example-box">
+                <div class="difficulty-tag hard">HARD</div>
+                <h4>Example 3: Elimination with Multiplication</h4>
+                <p><strong>System:</strong> 2x + 5y = 16 and 3x + 2y = 7</p>
+                <div class="step-by-step">
+                    <strong>Step 1:</strong> Multiply first equation by 3: 6x + 15y = 48<br>
+                    <strong>Step 2:</strong> Multiply second equation by -2: -6x - 4y = -14<br>
+                    <strong>Step 3:</strong> Add: 11y = 34, so y = 34/11<br>
+                    <strong>Step 4:</strong> Back-substitute to find x = -6/11<br>
+                    <strong>Solution:</strong> (-6/11, 34/11) 🧠
+                </div>
+            </div>
+
+            <div class="funny-note">
+                🥊 Elimination is like boxing: Sometimes you need to set up your opponent 
+                (multiply equations) before delivering the knockout punch! 👊
+            </div>
+        </div>
+
+        <!-- Section 3: Word Problems -->
+        <div class="section" id="section-3">
+            <h2>📝 Word Problems: Real Life Meets Math!</h2>
+            
+            <div class="definition-box">
+                <h3>🗣️ Translating English to Math</h3>
+                <p><strong>Key Strategy:</strong> Define variables, identify relationships, set up equations!</p>
+                <p><strong>Common phrases:</strong></p>
+                <ul>
+                    <li>"is" or "equals" → =</li>
+                    <li>"more than" → +</li>
+                    <li>"less than" → -</li>
+                    <li>"times" or "of" → ×</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <div class="difficulty-tag easy">EASY</div>
+                <h4>Example 1: Age Problem</h4>
+                <p><strong>Problem:</strong> Sarah is 3 years older than Tom. The sum of their ages is 27. How old are they?</p>
+                <div class="step-by-step">
+                    <strong>Variables:</strong> Let T = Tom's age, S = Sarah's age<br>
+                    <strong>Equations:</strong> S = T + 3 and S + T = 27<br>
+                    <strong>Substitute:</strong> (T + 3) + T = 27<br>
+                    <strong>Solve:</strong> 2T + 3 = 27, so T = 12<br>
+                    <strong>Answer:</strong> Tom is 12, Sarah is 15! 👶👧
+                </div>
+            </div>
+
+            <div class="example-box">
+                <div class="difficulty-tag medium">MEDIUM</div>
+                <h4>Example 2: Money Problem</h4>
+                <p><strong>Problem:</strong> A collection of 20 coins (dimes and quarters) is worth $3.05. How many of each coin?</p>
+                <div class="step-by-step">
+                    <strong>Variables:</strong> Let d = dimes, q = quarters<br>
+                    <strong>Equations:</strong> d + q = 20 and 0.10d + 0.25q = 3.05<br>
+                    <strong>From first:</strong> d = 20 - q<br>
+                    <strong>Substitute:</strong> 0.10(20 - q) + 0.25q = 3.05<br>
+                    <strong>Solve:</strong> 2 - 0.10q + 0.25q = 3.05, so q = 7<br>
+                    <strong>Answer:</strong> 13 dimes, 7 quarters! 💰
+                </div>
+            </div>
+
+            <div class="example-box">
+                <div class="difficulty-tag hard">HARD</div>
+                <h4>Example 3: Mixture Problem</h4>
+                <p><strong>Problem:</strong> A chemist needs 100ml of 30% acid solution. She has 20% and 50% solutions. How much of each?</p>
+                <div class="step-by-step">
+                    <strong>Variables:</strong> Let x = ml of 20% solution, y = ml of 50% solution<br>
+                    <strong>Volume equation:</strong> x + y = 100<br>
+                    <strong>Acid equation:</strong> 0.20x + 0.50y = 0.30(100) = 30<br>
+                    <strong>From first:</strong> x = 100 - y<br>
+                    <strong>Substitute:</strong> 0.20(100 - y) + 0.50y = 30<br>
+                    <strong>Solve:</strong> 20 - 0.20y + 0.50y = 30, so y = 33.33ml<br>
+                    <strong>Answer:</strong> 66.67ml of 20%, 33.33ml of 50%! 🧪
+                </div>
+            </div>
+
+            <div class="funny-note">
+                🎭 Word problems are like riddles wrapped in math problems! 
+                The real challenge is translating the drama into equations! 🎬
+            </div>
+        </div>
+
+        <!-- Section 4: Practice -->
+        <div class="section" id="section-4">
+            <h2>💪 Practice Makes Perfect!</h2>
+            
+            <div class="exercise-container">
+                <h3>🏋️ Exercise 1: Graphical Method</h3>
+                <p>Solve graphically: y = 2x - 1 and y = -x + 5</p>
+                <button class="answer-btn" onclick="showSolution('ex1')">Show Solution</button>
+                <div id="ex1-solution" style="display: none;">
+                    <div class="step-by-step">
+                        <strong>Solution:</strong> Set equations equal: 2x - 1 = -x + 5<br>
+                        3x = 6, so x = 2<br>
+                        y = 2(2) - 1 = 3<br>
+                        <strong>Answer:</strong> (2, 3) ✨
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-container">
+                <h3>🔄 Exercise 2: Substitution</h3>
+                <p>Solve: x + 2y = 8 and 3x - y = 5</p>
+                <button class="answer-btn" onclick="showSolution('ex2')">Show Solution</button>
+                <div id="ex2-solution" style="display: none;">
+                    <div class="step-by-step">
+                        <strong>From first equation:</strong> x = 8 - 2y<br>
+                        <strong>Substitute:</strong> 3(8 - 2y) - y = 5<br>
+                        24 - 6y - y = 5<br>
+                        -7y = -19, so y = 19/7<br>
+                        x = 8 - 2(19/7) = 18/7<br>
+                        <strong>Answer:</strong> (18/7, 19/7) 🎯
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-container">
+                <h3>➕ Exercise 3: Elimination</h3>
+                <p>Solve: 4x + 3y = 25 and 2x - 5y = -9</p>
+                <button class="answer-btn" onclick="showSolution('ex3')">Show Solution</button>
+                <div id="ex3-solution" style="display: none;">
+                    <div class="step-by-step">
+                        <strong>Multiply second by -2:</strong> -4x + 10y = 18<br>
+                        <strong>Add to first:</strong> 13y = 43, so y = 43/13<br>
+                        <strong>Back-substitute:</strong> 4x + 3(43/13) = 25<br>
+                        4x = 25 - 129/13 = 196/13<br>
+                        x = 49/13<br>
+                        <strong>Answer:</strong> (49/13, 43/13) 🏆
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-container">
+                <h3>📝 Exercise 4: Word Problem</h3>
+                <p>Two numbers have a sum of 15 and a difference of 3. Find the numbers.</p>
+                <button class="answer-btn" onclick="showSolution('ex4')">Show Solution</button>
+                <div id="ex4-solution" style="display: none;">
+                    <div class="step-by-step">
+                        <strong>Variables:</strong> Let x = larger number, y = smaller number<br>
+                        <strong>Equations:</strong> x + y = 15 and x - y = 3<br>
+                        <strong>Add equations:</strong> 2x = 18, so x = 9<br>
+                        <strong>Substitute:</strong> 9 + y = 15, so y = 6<br>
+                        <strong>Answer:</strong> The numbers are 9 and 6! 🔢
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: Quiz -->
+        <div class="section" id="section-5">
+            <h2>🏆 Final Quiz: Test Your Mastery!</h2>
+            
+            <div class="quiz-container">
+                <div class="score-display">Score: <span id="score">0</span>/5</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress" style="width: 0%"></div>
+                </div>
+
+                <div class="question" id="q1">
+                    <h4>Question 1: What type of solution do parallel lines have?</h4>
+                    <button class="answer-btn" onclick="checkAnswer(1, 'a')">A) One solution</button>
+                    <button class="answer-btn" onclick="checkAnswer(1, 'b')">B) No solution</button>
+                    <button class="answer-btn" onclick="checkAnswer(1, 'c')">C) Infinite solutions</button>
+                    <div id="feedback1" class="feedback"></div>
+                </div>
+
+                <div class="question" id="q2" style="display: none;">
+                    <h4>Question 2: Solve: y = x + 2 and y = 3x - 4</h4>
+                    <button class="answer-btn" onclick="checkAnswer(2, 'a')">A) (3, 5)</button>
+                    <button class="answer-btn" onclick="checkAnswer(2, 'b')">B) (2, 4)</button>
+                    <button class="answer-btn" onclick="checkAnswer(2, 'c')">C) (1, 3)</button>
+                    <div id="feedback2" class="feedback"></div>
+                </div>
+
+                <div class="question" id="q3" style="display: none;">
+                    <h4>Question 3: Which method eliminates a variable by adding/subtracting equations?</h4>
+                    <button class="answer-btn" onclick="checkAnswer(3, 'a')">A) Substitution</button>
+                    <button class="answer-btn" onclick="checkAnswer(3, 'b')">B) Elimination</button>
+                    <button class="answer-btn" onclick="checkAnswer(3, 'c')">C) Graphical</button>
+                    <div id="feedback3" class="feedback"></div>
+                </div>
+
+                <div class="question" id="q4" style="display: none;">
+                    <h4>Question 4: Two angles are supplementary (sum to 180°). One is 30° more than the other. Find the larger angle.</h4>
+                    <button class="answer-btn" onclick="checkAnswer(4, 'a')">A) 105°</button>
+                    <button class="answer-btn" onclick="checkAnswer(4, 'b')">B) 90°</button>
+                    <button class="answer-btn" onclick="checkAnswer(4, 'c')">C) 120°</button>
+                    <div id="feedback4" class="feedback"></div>
+                </div>
+
+                <div class="question" id="q5" style="display: none;">
+                    <h4>Question 5: Solve: 2x + y = 10 and x - y = 2</h4>
+                    <button class="answer-btn" onclick="checkAnswer(5, 'a')">A) (4, 2)</button>
+                    <button class="answer-btn" onclick="checkAnswer(5, 'b')">B) (3, 4)</button>
+                    <button class="answer-btn" onclick="checkAnswer(5, 'c')">C) (5, 0)</button>
+                    <div id="feedback5" class="feedback"></div>
+                </div>
+
+                <div id="final-result" style="display: none; text-align: center; margin-top: 30px;">
+                    <h3 id="final-message"></h3>
+                    <button class="answer-btn" onclick="restartQuiz()">Take Quiz Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 0;
+        let quizScore = 0;
+        let currentQuestion = 1;
+        const answers = ['b', 'a', 'b', 'a', 'a']; // Correct answers
+
+        function showSection(sectionNum) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(`section-${sectionNum}`).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-btn').forEach((btn, index) => {
+                btn.classList.toggle('active', index === sectionNum);
+            });
+            
+            currentSection = sectionNum;
+            
+            // Initialize graph if on graphical section
+            if (sectionNum === 1) {
+                setTimeout(() => initGraph(), 100);
+            }
+        }
+
+        function initGraph() {
+            const canvas = document.getElementById('graphCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            drawGrid(ctx);
+            showExample('intersecting');
+        }
+
+        function drawGrid(ctx) {
+            ctx.clearRect(0, 0, 800, 400);
+            
+            // Set up coordinate system
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            
+            // Draw grid lines
+            for (let i = 0; i <= 40; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * 20, 0);
+                ctx.lineTo(i * 20, 400);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(0, i * 10);
+                ctx.lineTo(800, i * 10);
+                ctx.stroke();
+            }
+            
+            // Draw axes
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            
+            // X-axis
+            ctx.beginPath();
+            ctx.moveTo(0, 200);
+            ctx.lineTo(800, 200);
+            ctx.stroke();
+            
+            // Y-axis
+            ctx.beginPath();
+            ctx.moveTo(400, 0);
+            ctx.lineTo(400, 400);
+            ctx.stroke();
+        }
+
+        function showExample(type) {
+            const canvas = document.getElementById('graphCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            drawGrid(ctx);
+            
+            ctx.lineWidth = 3;
+            
+            if (type === 'intersecting') {
+                // y = x + 1 (blue)
+                ctx.strokeStyle = '#667eea';
+                ctx.beginPath();
+                ctx.moveTo(0, 220);  // (-20, -19)
+                ctx.lineTo(800, 220 + 800); // This would go off screen
+                ctx.lineTo(600, 400); // Adjust to fit
+                ctx.moveTo(200, 200 - 200); // This would go off screen
+                ctx.lineTo(200, 0); // Adjust to fit
+                ctx.moveTo(0, 200 + 200); // (-20, 21) -> (0, 201)
+                ctx.lineTo(400, 200); // (0, 1) -> (400, 200)
+                ctx.stroke();
+                
+                // y = -x + 3 (red)
+                ctx.strokeStyle = '#e17055';
+                ctx.beginPath();
+                ctx.moveTo(0, 200 - 60); // (-20, 23) -> (0, 140)
+                ctx.lineTo(800, 200 + 160); // (20, -17) -> (800, 360)
+                ctx.stroke();
+                
+                // Intersection point
+                ctx.fillStyle = '#00b894';
+                ctx.beginPath();
+                ctx.arc(420, 180, 8, 0, 2 * Math.PI);
+                ctx.fill();
+                
+            } else if (type === 'parallel') {
+                // Parallel lines
+                ctx.strokeStyle = '#667eea';
+                ctx.beginPath();
+                ctx.moveTo(0, 100);
+                ctx.lineTo(800, 300);
+                ctx.stroke();
+                
+                ctx.strokeStyle = '#e17055';
+                ctx.beginPath();
+                ctx.moveTo(0, 150);
+                ctx.lineTo(800, 350);
+                ctx.stroke();
+                
+            } else if (type === 'coincident') {
+                // Same line
+                ctx.strokeStyle = '#667eea';
+                ctx.lineWidth = 6;
+                ctx.beginPath();
+                ctx.moveTo(0, 100);
+                ctx.lineTo(800, 300);
+                ctx.stroke();
+            }
+        }
+
+        function showSolution(exerciseId) {
+            const solution = document.getElementById(exerciseId + '-solution');
+            solution.style.display = solution.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function checkAnswer(questionNum, selectedAnswer) {
+            const correct = answers[questionNum - 1];
+            const buttons = document.querySelectorAll(`#q${questionNum} .answer-btn`);
+            const feedback = document.getElementById(`feedback${questionNum}`);
+            
+            // Disable all buttons for this question
+            buttons.forEach(btn => btn.disabled = true);
+            
+            if (selectedAnswer === correct) {
+                quizScore++;
+                buttons.forEach(btn => {
+                    if (btn.textContent.startsWith(correct.toUpperCase())) {
+                        btn.classList.add('correct');
+                    }
+                });
+                feedback.innerHTML = '<div style="color: #00b894; font-weight: bold;">✅ Correct! Well done!</div>';
+            } else {
+                buttons.forEach(btn => {
+                    if (btn.textContent.startsWith(selectedAnswer.toUpperCase())) {
+                        btn.classList.add('incorrect');
+                    }
+                    if (btn.textContent.startsWith(correct.toUpperCase())) {
+                        btn.classList.add('correct');
+                    }
+                });
+                feedback.innerHTML = '<div style="color: #e17055; font-weight: bold;">❌ Not quite right. The correct answer is highlighted.</div>';
+            }
+            
+            // Update score and progress
+            document.getElementById('score').textContent = quizScore;
+            document.getElementById('progress').style.width = (questionNum / 5 * 100) + '%';
+            
+            // Show next question or results
+            setTimeout(() => {
+                if (questionNum < 5) {
+                    document.getElementById(`q${questionNum}`).style.display = 'none';
+                    document.getElementById(`q${questionNum + 1}`).style.display = 'block';
+                    currentQuestion++;
+                } else {
+                    showFinalResults();
+                }
+            }, 2000);
+        }
+
+        function showFinalResults() {
+            document.getElementById('q5').style.display = 'none';
+            document.getElementById('final-result').style.display = 'block';
+            
+            const finalMessage = document.getElementById('final-message');
+            const percentage = (quizScore / 5) * 100;
+            
+            if (percentage >= 90) {
+                finalMessage.innerHTML = '🏆 Outstanding! You\'re a linear equations master! 🎉';
+                finalMessage.style.color = '#00b894';
+            } else if (percentage >= 70) {
+                finalMessage.innerHTML = '👍 Great job! You\'ve got a solid understanding! 💪';
+                finalMessage.style.color = '#667eea';
+            } else if (percentage >= 50) {
+                finalMessage.innerHTML = '📚 Good effort! Review the material and try again! 🔄';
+                finalMessage.style.color = '#fdcb6e';
+            } else {
+                finalMessage.innerHTML = '🤔 Keep practicing! You\'ll get there! 💪';
+                finalMessage.style.color = '#e17055';
+            }
+            
+            finalMessage.classList.add('bounce');
+        }
+
+        function restartQuiz() {
+            quizScore = 0;
+            currentQuestion = 1;
+            
+            // Reset all questions
+            for (let i = 1; i <= 5; i++) {
+                const question = document.getElementById(`q${i}`);
+                const buttons = question.querySelectorAll('.answer-btn');
+                const feedback = document.getElementById(`feedback${i}`);
+                
+                question.style.display = i === 1 ? 'block' : 'none';
+                buttons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.classList.remove('correct', 'incorrect');
+                });
+                feedback.innerHTML = '';
+            }
+            
+            document.getElementById('final-result').style.display = 'none';
+            document.getElementById('score').textContent = '0';
+            document.getElementById('progress').style.width = '0%';
+        }
+
+        // Initialize the presentation
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection(0);
+        });
+    </script>
+</body>
+</html>
