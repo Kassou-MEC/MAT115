@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Interactive Presentation: Functions, Relations & Linear Modeling</title>
+<style>
+  :root{
+    --bg1:#667eea; --bg2:#764ba2; --ink:#1f2937; --muted:#6b7280; --card:#ffffff;
+    --accent:#10b981; --warn:#f59e0b; --danger:#ef4444; --shadow:0 10px 25px rgba(0,0,0,.12);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color:var(--ink);}
+  body{background:linear-gradient(135deg,var(--bg1),var(--bg2)); overflow-x:hidden}
+  .container{max-width:1200px;margin:0 auto;padding:18px}
+  .hero{color:#fff;text-align:center;margin:10px 0 18px}
+  .hero h1{margin:8px 0;font-size:clamp(26px,4vw,44px)}
+  .hero p{margin:0;font-size:clamp(14px,2.2vw,18px);opacity:.95}
+  .grid{display:grid;grid-template-columns:280px 1fr;gap:18px}
+  @media (max-width: 900px){.grid{grid-template-columns:1fr}}
+
+  .sidebar{background:rgba(255,255,255,.92);border-radius:18px;box-shadow:var(--shadow);padding:14px;position:sticky;top:10px;max-height:88vh;overflow:auto}
+  .sidebar h3{margin:6px 10px;color:var(--muted);font-weight:600;letter-spacing:.3px}
+  .nav button{width:100%;text-align:left;background:#f8fafc;border:1px solid #e5e7eb;margin:6px 0;padding:10px 12px;border-radius:12px;cursor:pointer;transition:.2s}
+  .nav button.active{background:var(--ink);color:white}
+  .nav button:hover{transform:translateY(-1px)}
+
+  .card{background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:18px}
+  .section{display:none}
+  .section.active{display:block;animation:fade .3s ease}
+  @keyframes fade{from{opacity:.2;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .pill{display:inline-block;padding:5px 10px;border-radius:999px;background:#eef2ff;color:#4338ca;font-weight:600;font-size:12px;margin:2px 6px 2px 0}
+  .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+  .k{background:#f1f5f9;border-left:4px solid var(--accent);padding:12px;border-radius:12px}
+  .k h4{margin:6px 0}
+  .muted{color:var(--muted)}
+  .btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 14px;cursor:pointer;box-shadow:var(--shadow)}
+  .btn.secondary{background:#0ea5e9}
+  .btn.warn{background:var(--warn)}
+  .btn.ghost{background:#f8fafc;color:var(--ink);border:1px solid #e5e7eb}
+  .inline-input{padding:8px;border-radius:10px;border:1px solid #e5e7eb;width:100%}
+  .result{background:#f9fafb;border:1px dashed #e5e7eb;padding:12px;border-radius:12px;margin-top:10px;white-space:pre-wrap}
+  .tag{font-family:ui-monospace, SFMono-Regular, Menlo, monospace;background:#f3f4f6;padding:2px 8px;border-radius:8px}
+  .table{width:100%;border-collapse:collapse;overflow:hidden;border-radius:14px}
+  .table th,.table td{border-bottom:1px solid #e5e7eb;padding:10px;text-align:left}
+  .table th{background:#f8fafc}
+
+  .quiz{border:1px solid #e5e7eb;border-radius:14px;padding:12px;margin:8px 0}
+  .quiz h4{margin:6px 0}
+  .quiz .opt{display:block;margin:6px 0;padding:8px 10px;border-radius:10px;border:1px solid #e5e7eb;cursor:pointer}
+  .quiz .opt.correct{background:#ecfdf5;border-color:#10b981}
+  .quiz .opt.wrong{background:#fef2f2;border-color:#ef4444}
+  .score{font-weight:700}
+
+  canvas{width:100%;height:320px;border-radius:12px;border:1px solid #e5e7eb;background:#fff}
+  .footer{color:#fff;opacity:.9;text-align:center;margin:18px 0}
+  .small{font-size:12px}
+  .flex{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <h1>Functions & Relations • Interactive Lecture</h1>
+      <p>Definitions • Graphs • Difference Quotient • Average Rate of Change • Linear Modeling • Supply & Demand</p>
+      <div class="flex" style="justify-content:center;margin-top:10px">
+        <button class="btn ghost" onclick="downloadThis()">Download this page (.html)</button>
+        <span class="pill">Single file • HTML+CSS+JS</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <aside class="sidebar">
+        <h3>Contents</h3>
+        <div class="nav" id="nav"></div>
+      </aside>
+
+      <main id="content">
+        <!-- 1. Relations & Functions -->
+        <section class="card section" data-title="1. Relations vs. Functions">
+          <h2>Relations &rarr; Functions</h2>
+          <p>A <b>relation</b> is any set of ordered pairs <span class="tag">(x, y)</span>. A <b>function</b> is a relation in which each input <span class="tag">x</span> is associated with <i>exactly one</i> output <span class="tag">y</span>.</p>
+          <div class="row">
+            <div class="k"><h4>Vertical Line Test</h4>
+              <p>A graph represents a function iff no vertical line intersects it more than once.</p>
+              <div>
+                <label>Dataset (comma-separated pairs like <span class="tag">(1,2),(1,5),(3,4)</span>):</label>
+                <input id="vltData" class="inline-input" value="(1,2),(2,3),(3,3),(4,5)" />
+                <button class="btn" onclick="runVLT()">Run Vertical Line Test</button>
+                <div id="vltOut" class="result"></div>
+              </div>
+            </div>
+            <div class="k"><h4>Tabular Functions</h4>
+              <table class="table">
+                <thead><tr><th>x</th><th>f(x)=2x-1</th><th>g(x)=x²</th></tr></thead>
+                <tbody id="tabBody"></tbody>
+              </table>
+              <div class="flex" style="margin-top:8px">
+                <input id="tabFrom" type="number" class="inline-input" style="max-width:120px" value="-3"/>
+                <input id="tabTo" type="number" class="inline-input" style="max-width:120px" value="3"/>
+                <button class="btn secondary" onclick="buildTable()">Build Table</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="k" style="margin-top:10px"><h4>Counterexamples</h4>
+            <p>Which of the following <i>is not</i> a function? Click to reveal.</p>
+            <ul>
+              <li><button class="btn ghost" onclick="reveal(this,'A: y=\n±\nsqrt(x) \u2014 Not a function because one x gives two y values.')">A) y = ±√x</button></li>
+              <li><button class="btn ghost" onclick="reveal(this,'B: y = x^3 + 1 \u2014 Function (one y per x).')">B) y = x³ + 1</button></li>
+              <li><button class="btn ghost" onclick="reveal(this,'C: Circle x^2 + y^2 = 9 \u2014 Not a function (fails VLT).')">C) x² + y² = 9</button></li>
+            </ul>
+            <div class="result small" id="revealBox"></div>
+          </div>
+        </section>
+
+        <!-- 2. Notation, Domain, Range, Restrictions -->
+        <section class="card section" data-title="2. Notation, Domain & Range">
+          <h2>Function Notation, Domain & Range</h2>
+          <p>We write <span class="tag">y = f(x)</span> to emphasize y depends on x. The <b>domain</b> is all allowed inputs; the <b>range</b> is all outputs produced by those inputs.</p>
+
+          <div class="row">
+            <div class="k">
+              <h4>Domain Restrictions</h4>
+              <ul>
+                <li>Denominator ≠ 0</li>
+                <li>Even roots: radicand ≥ 0</li>
+                <li>Logarithms: argument &gt; 0</li>
+              </ul>
+              <p class="muted small">Tip: Solve inequalities on the input to find the domain, then map to outputs for the range.</p>
+            </div>
+            <div class="k">
+              <h4>Identify the Domain</h4>
+              <label>Enter a function of x (e.g., <span class="tag">(x-3)/(x+1)</span> or <span class="tag">sqrt(5-x)</span>):</label>
+              <input id="domExpr" class="inline-input" value="(x-3)/(x+1)" />
+              <button class="btn" onclick="domainHelper()">Analyze Domain</button>
+              <div id="domOut" class="result"></div>
+            </div>
+          </div>
+
+          <div class="k" style="margin-top:10px">
+            <h4>Practice (show solutions)</h4>
+            <ol>
+              <li>Find the domain of <span class="tag">f(x)=\frac{2x+1}{x-4}</span>.
+                <details><summary>Answer</summary><div>All real x except <b>x ≠ 4</b>.</div></details>
+              </li>
+              <li>Find the domain of <span class="tag">g(x)=\sqrt{9- x^2}</span>.
+                <details><summary>Answer</summary><div>-3 ≤ x ≤ 3.</div></details>
+              </li>
+              <li>Find the range of <span class="tag">h(x)=x^2+2</span>.
+                <details><summary>Answer</summary><div>y ≥ 2.</div></details>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- 3. Difference Quotient & Average Rate of Change -->
+        <section class="card section" data-title="3. Difference Quotient & A.RoC">
+          <h2>Difference Quotient & Average Rate of Change</h2>
+          <p>The <b>difference quotient</b> for f is <span class="tag">\frac{f(x+h)-f(x)}{h}</span> (h ≠ 0).
+          The <b>average rate of change</b> on [a,b] is <span class="tag">\frac{f(b)-f(a)}{b-a}</span>.</p>
+
+          <div class="row">
+            <div class="k">
+              <h4>Difference Quotient Calculator</h4>
+              <label>f(x) = </label>
+              <input id="dqExpr" class="inline-input" value="x*x + 3*x + 2" />
+              <div class="flex">
+                <label>x = <input id="dqX" type="number" class="inline-input" style="max-width:120px" value="1"></label>
+                <label>h = <input id="dqH" type="number" class="inline-input" style="max-width:120px" value="0.001" step="0.001"></label>
+              </div>
+              <div class="flex">
+                <button class="btn" onclick="calcDQ()">Compute</button>
+                <button class="btn ghost" onclick="explainDQ()">Show steps idea</button>
+              </div>
+              <div id="dqOut" class="result"></div>
+            </div>
+            <div class="k">
+              <h4>Average Rate of Change (A.RoC)</h4>
+              <label>f(x) = </label>
+              <input id="arocExpr" class="inline-input" value="2*x - 1" />
+              <div class="flex">
+                <label>a = <input id="arocA" type="number" class="inline-input" style="max-width:120px" value="0"></label>
+                <label>b = <input id="arocB" type="number" class="inline-input" style="max-width:120px" value="5"></label>
+              </div>
+              <button class="btn" onclick="calcAROC()">Compute A.RoC</button>
+              <div id="arocOut" class="result"></div>
+            </div>
+          </div>
+
+          <div class="k" style="margin-top:10px">
+            <h4>Practice</h4>
+            <ol>
+              <li>For <span class="tag">f(x)=x^2</span>, compute the difference quotient symbolically.
+                <details><summary>Answer</summary><div>\(\frac{(x+h)^2-x^2}{h}=\frac{2xh+h^2}{h}=2x+h\).</div></details>
+              </li>
+              <li>For <span class="tag">f(x)=3x-7</span> on [1,4], average rate = ?
+                <details><summary>Answer</summary><div>\(\frac{f(4)-f(1)}{3}=\frac{(12-7)-(3-7)}{3}=\frac{5-(-4)}{3}=3\).</div></details>
+              </li>
+              <li>For <span class="tag">f(x)=1/x</span> on [1,2], average rate = ?
+                <details><summary>Answer</summary><div>\(\frac{1/2-1}{1}= -1/2\).</div></details>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- 4. Linear Modeling -->
+        <section class="card section" data-title="4. Linear Modeling & Proportions">
+          <h2>Linear Modeling: Proportions & Beyond</h2>
+          <p>A <b>linear model</b> has form <span class="tag">y = mx + b</span>. If a situation shows a constant rate of change, a linear model fits well. Pure proportionality has <span class="tag">b=0</span> so <span class="tag">y=kx</span>.</p>
+
+          <div class="row">
+            <div class="k">
+              <h4>Find the Line Through Two Points</h4>
+              <div class="flex">
+                <label>P₁(<input id="p1x" type="number" class="inline-input" value="-2" style="max-width:90px">, <input id="p1y" type="number" class="inline-input" value="3" style="max-width:90px">)</label>
+                <label>P₂(<input id="p2x" type="number" class="inline-input" value="4" style="max-width:90px">, <input id="p2y" type="number" class="inline-input" value="-1" style="max-width:90px">)</label>
+              </div>
+              <button class="btn" onclick="lineThroughPoints()">Compute m & b</button>
+              <div id="lineOut" class="result"></div>
+              <canvas id="lineCanvas"></canvas>
+            </div>
+
+            <div class="k">
+              <h4>Supply & Demand: Equilibrium</h4>
+              <p>Let supply be S(q) and demand be D(q). The equilibrium quantity and price satisfy S(q)=D(q).</p>
+              <label>Supply S(q)=</label>
+              <input id="supExpr" class="inline-input" value="0.5*q + 2" />
+              <label>Demand D(q)=</label>
+              <input id="demExpr" class="inline-input" value="-0.25*q + 10" />
+              <button class="btn" onclick="equilibrium()">Solve Equilibrium</button>
+              <div id="eqOut" class="result"></div>
+              <canvas id="econCanvas"></canvas>
+            </div>
+          </div>
+
+          <div class="k" style="margin-top:10px">
+            <h4>Applications & Practice</h4>
+            <ol>
+              <li>Proportionality: A recipe uses 3 cups flour for 2 cups sugar. Model flour vs. sugar.
+                <details><summary>Answer</summary><div>Flour = (3/2)·Sugar → linear with b=0.</div></details>
+              </li>
+              <li>Linear Growth: A tank drains at 4 L/min; initially 200 L. Model after t minutes.
+                <details><summary>Answer</summary><div>V(t)=200-4t (valid until empty).</div></details>
+              </li>
+              <li>Break-even: Cost C(x)=1200+5x; price p=15 per unit. Find break-even x.
+                <details><summary>Answer</summary><div>Revenue R=15x ⇒ 15x=1200+5x ⇒ x=120.</div></details>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- 5. Mixed Exercises (Easy → Hard) -->
+        <section class="card section" data-title="5. Exercises (Easy → Hard)">
+          <h2>Practice: Easy → Hard</h2>
+          <ol>
+            <li>(Easy) Determine if relation {(1,2),(2,3),(2,5)} is a function.
+              <details><summary>Answer</summary><div>No. x=2 maps to two different y values (fails function rule).</div></details>
+            </li>
+            <li>(Easy) Evaluate f(x)=2x²-3x+1 at x=-2.
+              <details><summary>Answer</summary><div>f(-2)=2(4)+6+1=15.</div></details>
+            </li>
+            <li>(Medium) Find domain of r(x)=\frac{\sqrt{x-1}}{x-3}.
+              <details><summary>Answer</summary><div>x≥1 and x≠3.</div></details>
+            </li>
+            <li>(Medium) A.RoC of f(x)=x² on [2,6].
+              <details><summary>Answer</summary><div>(36-4)/(6-2)=32/4=8.</div></details>
+            </li>
+            <li>(Hard) For f(x)=\frac{1}{x}, compute difference quotient and simplify.
+              <details><summary>Answer</summary><div>\(\frac{\frac{1}{x+h}-\frac{1}{x}}{h}=\frac{\frac{x-(x+h)}{x(x+h)}}{h}=\frac{-h}{hx(x+h)}=-\frac{1}{x(x+h)}\).</div></details>
+            </li>
+            <li>(Hard) Data fit: Points (1,4),(3,8) are approximately linear. Find model and predict y at x=10.
+              <details><summary>Answer</summary><div>m=(8-4)/(3-1)=2, b from 4=2·1+b ⇒ b=2 ⇒ y=2x+2 ⇒ y(10)=22.</div></details>
+            </li>
+          </ol>
+        </section>
+
+        <!-- 6. Quiz -->
+        <section class="card section" data-title="6. Multiple-Choice Quiz">
+          <h2>Unit Quiz</h2>
+          <div id="quizHolder"></div>
+          <div class="flex" style="margin-top:10px">
+            <button class="btn" onclick="gradeQuiz()">Grade Quiz</button>
+            <button class="btn ghost" onclick="resetQuiz()">Reset</button>
+            <span class="pill" id="quizScore">Score: 0 / 0</span>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <div class="footer small">Built for interactive learning • Works offline • Save as HTML to reuse.</div>
+  </div>
+
+<script>
+// ---------- Navigation ----------
+const sections=[...document.querySelectorAll('.section')];
+const nav=document.getElementById('nav');
+sections.forEach((s,i)=>{
+  const b=document.createElement('button');
+  b.textContent=s.dataset.title||`Section ${i+1}`;
+  b.onclick=()=>show(i);
+  nav.appendChild(b);
+});
+function show(i){
+  sections.forEach((s,j)=>{s.classList.toggle('active',i===j)});
+  [...nav.children].forEach((b,j)=>b.classList.toggle('active',i===j));
+  localStorage.setItem('fn-rel-last',i);
+}
+show(+localStorage.getItem('fn-rel-last')||0);
+
+// ---------- Helpers ----------
+function reveal(btn,msg){document.getElementById('revealBox').textContent=msg;}
+function buildTable(){
+  const from=+document.getElementById('tabFrom').value;
+  const to=+document.getElementById('tabTo').value;
+  const body=document.getElementById('tabBody');
+  body.innerHTML='';
+  for(let x=from;x<=to;x++){
+    const f=2*x-1; const g=x*x;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${x}</td><td>${f}</td><td>${g}</td>`; body.appendChild(tr);
+  }
+}
+buildTable();
+
+function runVLT(){
+  const raw=document.getElementById('vltData').value.trim();
+  const pairs=[...raw.matchAll(/\((-?\d*\.?\d+)\s*,\s*(-?\d*\.?\d+)\)/g)].map(m=>({x:+m[1],y:+m[2]}));
+  if(!pairs.length){document.getElementById('vltOut').textContent='No valid pairs found.';return}
+  const map={}; let fail=null;
+  for(const p of pairs){
+    if(!(p.x in map)) map[p.x]=new Set([p.y]); else {map[p.x].add(p.y); if(map[p.x].size>1){fail=p.x;break;}}
+  }
+  document.getElementById('vltOut').textContent = fail===null ? 'Passes the vertical line test ✔️ (each x has a single y).' : `Fails VLT at x=${fail}: more than one y for the same x.`;
+}
+
+// ---------- Domain Analyzer (basic heuristics) ----------
+function domainHelper(){
+  const expr=document.getElementById('domExpr').value;
+  const issues=[];
+  // denominator != 0
+  const denMatches=[...expr.matchAll(/\/(\s*\([^()]*\)|\s*[^()+\-*/]+)/g)].map(m=>m[1].trim());
+  denMatches.forEach(d=>issues.push({type:'denom',detail:d}))
+  // even roots: radicand >= 0 (heuristic for sqrt only)
+  const roots=[...expr.matchAll(/sqrt\s*\(([^()]+)\)/g)].map(m=>m[1]);
+  roots.forEach(r=>issues.push({type:'sqrt',detail:r}))
+  // logs: argument > 0
+  const logs=[...expr.matchAll(/log\s*\(([^()]+)\)/g)].map(m=>m[1]);
+  logs.forEach(a=>issues.push({type:'log',detail:a}))
+  let out='Detected potential restrictions (analyze these):\n';
+  if(!issues.length) out+='None found. Likely all real numbers.';
+  issues.forEach(obj=>{
+    if(obj.type==='denom') out+=`• Denominator ${obj.detail} ≠ 0\n`;
+    if(obj.type==='sqrt') out+=`• Inside sqrt: ${obj.detail} ≥ 0\n`;
+    if(obj.type==='log') out+=`• Log argument: ${obj.detail} > 0\n`;
+  })
+  document.getElementById('domOut').textContent=out;
+}
+
+// ---------- Safe Expression Evaluator ----------
+function mkFunc(expr){
+  const safe=expr.replace(/\^/g,'**');
+  if(!/^[-+*/() 0-9xqh\.]*[a-z]*|.*$/){}
+  // very permissive but filter dangerous tokens
+  if(/(;|new |constructor|while|for\s*\(|function|=>|\{|\}|\[|\]|eval|XMLHttpRequest|fetch)/i.test(safe)) throw Error('Unsafe expression');
+  return new Function('x','h','with(Math){ return '+safe+' }');
+}
+
+// ---------- Difference Quotient ----------
+function calcDQ(){
+  const expr=document.getElementById('dqExpr').value;
+  const x=+document.getElementById('dqX').value;
+  const h=+document.getElementById('dqH').value;
+  try{
+    const f=mkFunc(expr);
+    const fx=f(x,0), fxh=f(x+h,h);
+    const dq=(fxh-fx)/h;
+    document.getElementById('dqOut').textContent=`f(${x})=${fx}\nf(${x}+${h})=${fxh}\nDifference Quotient ≈ ${(dq).toFixed(6)}`;
+  }catch(e){document.getElementById('dqOut').textContent='Error: '+e.message}
+}
+function explainDQ(){
+  document.getElementById('dqOut').textContent = `Steps idea:\n1) Compute f(x+h) and f(x).\n2) Subtract: f(x+h)-f(x).\n3) Divide by h (h≠0).\n4) As h→0 this approaches the derivative if f is differentiable.`;
+}
+
+// ---------- A.RoC ----------
+function calcAROC(){
+  const expr=document.getElementById('arocExpr').value;
+  const a=+document.getElementById('arocA').value;
+  const b=+document.getElementById('arocB').value;
+  try{
+    const f=mkFunc(expr);
+    const fa=f(a,0), fb=f(b,0);
+    const roc=(fb-fa)/(b-a);
+    document.getElementById('arocOut').textContent=`f(${a})=${fa}\nf(${b})=${fb}\nAverage rate on [${a},${b}] = ${roc}`;
+  }catch(e){document.getElementById('arocOut').textContent='Error: '+e.message}
+}
+
+// ---------- Line Through Two Points + Plot ----------
+function lineThroughPoints(){
+  const x1=+document.getElementById('p1x').value,
+        y1=+document.getElementById('p1y').value,
+        x2=+document.getElementById('p2x').value,
+        y2=+document.getElementById('p2y').value;
+  if(x1===x2){document.getElementById('lineOut').textContent='Vertical line: x = '+x1+' (not a function in y=f(x) form).'; drawLineCanvas(x1,y1,x2,y2,null,null,true);return}
+  const m=(y2-y1)/(x2-x1);
+  const b=y1 - m*x1;
+  document.getElementById('lineOut').textContent=`Slope m=${m}, intercept b=${b}. Model: y=${m.toFixed(3)}x + ${b.toFixed(3)}`;
+  drawLineCanvas(x1,y1,x2,y2,m,b,false);
+}
+function drawLineCanvas(x1,y1,x2,y2,m,b,isVertical){
+  const cnv=document.getElementById('lineCanvas'); const ctx=cnv.getContext('2d');
+  cnv.width = cnv.clientWidth; cnv.height = 320;
+  // pick bounds around points
+  const xs=[x1,x2], ys=[y1,y2];
+  let minX=Math.min(...xs)-2, maxX=Math.max(...xs)+2, minY=Math.min(...ys)-2, maxY=Math.max(...ys)+2;
+  const pad=40; const W=cnv.width, H=cnv.height;
+  const X = v => pad + (v-minX)/(maxX-minX)*(W-2*pad);
+  const Y = v => H-pad - (v-minY)/(maxY-minY)*(H-2*pad);
+  ctx.clearRect(0,0,W,H);
+  // grid
+  ctx.strokeStyle='#e5e7eb';
+  for(let i=0;i<6;i++){
+    const x=pad+i*(W-2*pad)/5; const y=pad+i*(H-2*pad)/5;
+    ctx.beginPath();ctx.moveTo(x,pad);ctx.lineTo(x,H-pad);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();
+  }
+  // axes
+  ctx.strokeStyle='#9ca3af'; ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pad,H-pad);ctx.lineTo(W-pad,H-pad);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(pad,pad);ctx.lineTo(pad,H-pad);ctx.stroke();
+  // line
+  ctx.strokeStyle='#2563eb'; ctx.lineWidth=2.2; ctx.beginPath();
+  if(isVertical){
+    const xv=X(x1); ctx.moveTo(xv,pad); ctx.lineTo(xv,H-pad);
+  }else{
+    const xA=minX, xB=maxX; const yA=m*xA+b, yB=m*xB+b;
+    ctx.moveTo(X(xA),Y(yA)); ctx.lineTo(X(xB),Y(yB));
+  }
+  ctx.stroke();
+  // points
+  ctx.fillStyle='#10b981';
+  [[x1,y1],[x2,y2]].forEach(([x,y])=>{ctx.beginPath();ctx.arc(X(x),Y(y),5,0,Math.PI*2);ctx.fill()})
+}
+
+// ---------- Supply & Demand ----------
+function equilibrium(){
+  const se=document.getElementById('supExpr').value;
+  const de=document.getElementById('demExpr').value;
+  // Solve a*q+b = c*q + d  → (a-c)q = d-b
+  // Try to parse linear: a*q + b
+  function parseLinear(expr){
+    // accept forms like 0.5*q + 2 or -0.25*q+10
+    const m = expr.replace(/\s+/g,'').match(/^([+-]?\d*\.?\d*)\*?q([+-]?\d*\.?\d+)?$/i);
+    if(!m) return null;
+    const a = m[1]===''||m[1]==='+' ? 1 : (m[1]==='-' ? -1 : parseFloat(m[1]));
+    const b = m[2] ? parseFloat(m[2]) : 0;
+    return {a,b}
+  }
+  const S=parseLinear(se), D=parseLinear(de);
+  const out=document.getElementById('eqOut');
+  if(!S||!D){out.textContent='Please enter linear forms like a*q + b'; return}
+  const A=S.a-D.a, B=D.b-S.b; // A*q = B
+  if(Math.abs(A)<1e-9){out.textContent='Parallel (no or infinite solutions).'; drawEcon(S,D,null,null); return}
+  const q=B/A; const p=S.a*q+S.b;
+  out.textContent=`Equilibrium quantity q*=${q.toFixed(3)}, price p*=${p.toFixed(3)}`;
+  drawEcon(S,D,q,p);
+}
+function drawEcon(S,D,q,p){
+  const cnv=document.getElementById('econCanvas'); const ctx=cnv.getContext('2d');
+  cnv.width = cnv.clientWidth; cnv.height = 320;
+  const pad=40; const W=cnv.width, H=cnv.height;
+  // choose domain for q
+  const qmax = q? Math.max(10, q*1.6) : 10;
+  const pmax = Math.max(S.a*qmax+S.b, D.a*0+D.b, 10);
+  const X = v => pad + v/qmax*(W-2*pad);
+  const Y = v => H-pad - v/pmax*(H-2*pad);
+  ctx.clearRect(0,0,W,H);
+  // grid
+  ctx.strokeStyle='#e5e7eb';
+  for(let i=0;i<6;i++){
+    const x=pad+i*(W-2*pad)/5; const y=pad+i*(H-2*pad)/5;
+    ctx.beginPath();ctx.moveTo(x,pad);ctx.lineTo(x,H-pad);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();
+  }
+  // axes
+  ctx.strokeStyle='#9ca3af'; ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pad,H-pad);ctx.lineTo(W-pad,H-pad);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(pad,pad);ctx.lineTo(pad,H-pad);ctx.stroke();
+  // supply
+  ctx.strokeStyle='#10b981'; ctx.lineWidth=2.2; ctx.beginPath();
+  ctx.moveTo(X(0),Y(S.b)); ctx.lineTo(X(qmax),Y(S.a*qmax+S.b)); ctx.stroke();
+  // demand
+  ctx.strokeStyle='#ef4444'; ctx.lineWidth=2.2; ctx.beginPath();
+  ctx.moveTo(X(0),Y(D.b)); ctx.lineTo(X(qmax),Y(D.a*qmax+D.b)); ctx.stroke();
+  // intersection
+  if(q!=null && p!=null){
+    ctx.fillStyle='#111827'; ctx.beginPath(); ctx.arc(X(q),Y(p),5,0,Math.PI*2); ctx.fill();
+  }
+}
+
+// ---------- Quiz ----------
+const quiz=[
+  {q:'Which statement is true?', opts:['Every relation is a function.','Every function is a relation.','No function is a relation.','A relation must pass the horizontal line test.'], ans:1},
+  {q:'Vertical line test checks…', opts:['one-to-one','onto','function status','increasing behavior'], ans:2},
+  {q:'Domain of f(x)=1/(x-5) is…', opts:['x≠5','x>5','x≥5','all real'], ans:0},
+  {q:'Average rate of change of f on [a,b] equals…', opts:['f(b)-f(a)','(f(b)-f(a))/(b-a)','f\'(c)','area under f'], ans:1},
+  {q:'A proportional model has form…', opts:['y=mx+b','y=kx','y=ax^2+bx+c','y=log x'], ans:1},
+  {q:'Supply & demand equilibrium is where…', opts:['S(q)=0','D(q)=0','S(q)=D(q)','price is max'], ans:2}
+];
+function renderQuiz(){
+  const hold=document.getElementById('quizHolder'); hold.innerHTML='';
+  quiz.forEach((item,i)=>{
+    const box=document.createElement('div'); box.className='quiz';
+    box.innerHTML=`<h4>${i+1}. ${item.q}</h4>`;
+    item.opts.forEach((o,j)=>{
+      const id=`q${i}_o${j}`;
+      const lab=document.createElement('label'); lab.className='opt'; lab.textContent=o; lab.htmlFor=id;
+      const inp=document.createElement('input'); inp.type='radio'; inp.name=`q${i}`; inp.id=id; inp.value=j; inp.style.display='none';
+      inp.addEventListener('change',()=>{[...box.querySelectorAll('.opt')].forEach(el=>el.classList.remove('correct','wrong'))});
+      lab.addEventListener('click',()=>{
+        [...box.querySelectorAll('.opt')].forEach(el=>el.classList.remove('correct','wrong'));
+        lab.classList.add('correct'); // temporary highlight; grading later
+      });
+      box.appendChild(inp); box.appendChild(lab);
+    });
+    hold.appendChild(box);
+  });
+  document.getElementById('quizScore').textContent=`Score: 0 / ${quiz.length}`;
+}
+function gradeQuiz(){
+  let score=0;
+  const boxes=[...document.querySelectorAll('#quizHolder .quiz')];
+  boxes.forEach((box,i)=>{
+    const chosen=[...box.querySelectorAll('input[type=radio]')].find(r=>r.checked);
+    const opts=[...box.querySelectorAll('.opt')];
+    opts.forEach((o,idx)=>{o.classList.remove('correct','wrong'); if(idx===quiz[i].ans) o.classList.add('correct')});
+    if(chosen && +chosen.value===quiz[i].ans) score++;
+  });
+  document.getElementById('quizScore').textContent=`Score: ${score} / ${quiz.length}`;
+}
+function resetQuiz(){ renderQuiz(); }
+renderQuiz();
+
+// ---------- Download the page ----------
+function downloadThis(){
+  const src='<!DOCTYPE html>'+document.documentElement.outerHTML;
+  const blob=new Blob([src],{type:'text/html'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Functions-Relations-LinearModeling.html'; a.click(); URL.revokeObjectURL(a.href);
+}
+</script>
+</body>
+</html>
