@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functions and Relations - Interactive Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn.active {
+            background: #764ba2;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .definition {
+            background: #f0f4ff;
+            padding: 20px;
+            border-left: 5px solid #667eea;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .definition strong {
+            color: #667eea;
+            font-size: 1.1em;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .keyword { color: #c678dd; }
+        .string { color: #98c379; }
+        .comment { color: #5c6370; font-style: italic; }
+        .number { color: #d19a66; }
+        .function { color: #61afef; }
+
+        .example {
+            background: #fff9e6;
+            padding: 20px;
+            border-left: 5px solid #ffc107;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .graph-container {
+            background: white;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            border: 1px solid #dee2e6;
+        }
+
+        .exercise {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 5px solid #4caf50;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .exercise-btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .exercise-btn:hover {
+            background: #45a049;
+        }
+
+        .answer {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            border: 2px solid #4caf50;
+        }
+
+        .quiz-container {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .quiz-question {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .quiz-options {
+            margin-top: 15px;
+        }
+
+        .quiz-option {
+            display: block;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+
+        .quiz-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .quiz-option.correct {
+            background: #4caf50;
+            color: white;
+            border-color: #4caf50;
+        }
+
+        .quiz-option.incorrect {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        .submit-quiz {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .submit-quiz:hover {
+            background: #764ba2;
+        }
+
+        .quiz-result {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        .interactive-demo {
+            background: #fff;
+            padding: 20px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        input[type="number"], input[type="text"] {
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            margin: 5px;
+            font-size: 14px;
+        }
+
+        .calc-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .calc-btn:hover {
+            background: #764ba2;
+        }
+
+        .result-display {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f0f4ff;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Functions and Relations</h1>
+            <p>An Interactive Mathematical Presentation</p>
+        </div>
+
+        <div class="nav">
+            <button class="nav-btn active" data-section="intro">Introduction</button>
+            <button class="nav-btn" data-section="definitions">Definitions</button>
+            <button class="nav-btn" data-section="notation">Notation & Domain</button>
+            <button class="nav-btn" data-section="difference">Difference Quotient</button>
+            <button class="nav-btn" data-section="linear">Linear Modeling</button>
+            <button class="nav-btn" data-section="exercises">Exercises</button>
+            <button class="nav-btn" data-section="quiz">Quiz</button>
+        </div>
+
+        <div class="content">
+            <!-- Introduction Section -->
+            <div id="intro" class="section active">
+                <h2>Introduction to Functions and Relations</h2>
+                <p style="font-size: 1.1em; line-height: 1.8; margin: 20px 0;">
+                    Functions are fundamental building blocks of mathematics, describing relationships between quantities. 
+                    In this presentation, we'll explore functions from multiple perspectives: their definitions, 
+                    representations, and real-world applications.
+                </p>
+
+                <h3>What You'll Learn</h3>
+                <ul style="font-size: 1.1em; line-height: 2; margin-left: 40px;">
+                    <li>Understanding relations and functions</li>
+                    <li>Different representations: tables, graphs, and equations</li>
+                    <li>Function notation and domain/range concepts</li>
+                    <li>Rate of change and difference quotients</li>
+                    <li>Linear modeling and real-world applications</li>
+                </ul>
+            </div>
+
+            <!-- Definitions Section -->
+            <div id="definitions" class="section">
+                <h2>Functions and Relations: Definitions</h2>
+
+                <div class="definition">
+                    <strong>Relation:</strong> A relation is a set of ordered pairs (x, y). It represents any connection between two sets of values.
+                </div>
+
+                <div class="definition">
+                    <strong>Function:</strong> A function is a special type of relation where each input (x-value) corresponds to exactly one output (y-value). 
+                    For every x in the domain, there exists exactly one y in the range.
+                </div>
+
+                <h3>Tabular Functions</h3>
+                <p>Functions can be represented in table form:</p>
+                
+                <div class="example">
+                    <strong>Example: Function</strong>
+                    <table>
+                        <tr>
+                            <th>x</th>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <th>y</th>
+                            <td>2</td>
+                            <td>4</td>
+                            <td>6</td>
+                            <td>8</td>
+                        </tr>
+                    </table>
+                    <p>This IS a function because each x-value maps to exactly one y-value.</p>
+                </div>
+
+                <div class="example">
+                    <strong>Counterexample: Not a Function</strong>
+                    <table>
+                        <tr>
+                            <th>x</th>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <th>y</th>
+                            <td>5</td>
+                            <td>7</td>
+                            <td>9</td>
+                            <td>11</td>
+                        </tr>
+                    </table>
+                    <p>This is NOT a function because x = 2 maps to both y = 7 and y = 9.</p>
+                </div>
+
+                <h3>Graphs and the Vertical Line Test</h3>
+                
+                <div class="definition">
+                    <strong>Vertical Line Test:</strong> A graph represents a function if and only if no vertical line intersects the graph at more than one point.
+                </div>
+
+                <div class="graph-container">
+                    <h4>Interactive Vertical Line Test</h4>
+                    <canvas id="graphCanvas" width="600" height="400"></canvas>
+                    <div style="margin-top: 15px;">
+                        <button class="calc-btn" onclick="drawFunction()">Show Function (passes test)</button>
+                        <button class="calc-btn" onclick="drawNonFunction()">Show Non-Function (fails test)</button>
+                        <button class="calc-btn" onclick="toggleVerticalLine()">Toggle Vertical Line</button>
+                    </div>
+                </div>
+
+                <h3>Counterexamples</h3>
+                <div class="example">
+                    <strong>Common Counterexamples (Not Functions):</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Circle:</strong> x² + y² = 25 (fails vertical line test)</li>
+                        <li><strong>Sideways Parabola:</strong> x = y² (fails vertical line test)</li>
+                        <li><strong>Multiple Mapping:</strong> {(1,2), (1,3), (2,4)} (one input maps to multiple outputs)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Notation and Domain Section -->
+            <div id="notation" class="section">
+                <h2>Function Notation, Domain, and Range</h2>
+
+                <div class="definition">
+                    <strong>Function Notation:</strong> Instead of writing y = 2x + 3, we write f(x) = 2x + 3
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>f is the name of the function</li>
+                        <li>x is the input variable</li>
+                        <li>f(x) is the output value (read as "f of x")</li>
+                    </ul>
+                </div>
+
+                <div class="definition">
+                    <strong>Domain:</strong> The set of all possible input values (x-values) for which the function is defined.
+                </div>
+
+                <div class="definition">
+                    <strong>Range:</strong> The set of all possible output values (y-values) that the function can produce.
+                </div>
+
+                <h3>Restricted Values</h3>
+                <p>Some functions have restricted domains due to mathematical constraints:</p>
+
+                <div class="example">
+                    <strong>Common Restrictions:</strong>
+                    <ol style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li><strong>Division by Zero:</strong> f(x) = 1/(x-3) → x ≠ 3 (domain: all real numbers except 3)</li>
+                        <li><strong>Square Root of Negative:</strong> f(x) = √(x-2) → x ≥ 2 (domain: x ≥ 2)</li>
+                        <li><strong>Logarithms:</strong> f(x) = ln(x) → x > 0 (domain: all positive real numbers)</li>
+                    </ol>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>Domain Calculator</h3>
+                    <p>Enter a function to analyze its domain:</p>
+                    <select id="funcType" style="padding: 10px; margin: 10px 0;">
+                        <option value="rational">Rational: 1/(x-a)</option>
+                        <option value="sqrt">Square Root: √(x-a)</option>
+                        <option value="log">Logarithm: ln(x-a)</option>
+                    </select>
+                    <br>
+                    <label>Value of a: </label>
+                    <input type="number" id="domainValue" value="0">
+                    <button class="calc-btn" onclick="analyzeDomain()">Analyze Domain</button>
+                    <div id="domainResult" class="result-display" style="display: none;"></div>
+                </div>
+
+                <h3>Example Problems</h3>
+                <div class="example">
+                    <strong>Example 1:</strong> Given f(x) = 2x² - 5x + 1, find f(3).
+                    <p style="margin-top: 10px;">
+                        <strong>Solution:</strong><br>
+                        f(3) = 2(3)² - 5(3) + 1<br>
+                        f(3) = 2(9) - 15 + 1<br>
+                        f(3) = 18 - 15 + 1<br>
+                        f(3) = 4
+                    </p>
+                </div>
+
+                <div class="example">
+                    <strong>Example 2:</strong> Find the domain of g(x) = √(4x - 8).
+                    <p style="margin-top: 10px;">
+                        <strong>Solution:</strong><br>
+                        For square root to be defined: 4x - 8 ≥ 0<br>
+                        4x ≥ 8<br>
+                        x ≥ 2<br>
+                        <strong>Domain:</strong> [2, ∞) or {x | x ≥ 2}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Difference Quotient Section -->
+            <div id="difference" class="section">
+                <h2>Difference Quotient and Average Rate of Change</h2>
+
+                <div class="definition">
+                    <strong>Difference Quotient:</strong> For a function f(x), the difference quotient is:<br>
+                    <span style="font-size: 1.3em; display: block; margin: 15px 0; text-align: center;">
+                        [f(x + h) - f(x)] / h
+                    </span>
+                    This measures the average rate of change of the function over a small interval h.
+                </div>
+
+                <div class="definition">
+                    <strong>Average Rate of Change:</strong> The average rate of change of f(x) from x = a to x = b is:<br>
+                    <span style="font-size: 1.3em; display: block; margin: 15px 0; text-align: center;">
+                        [f(b) - f(a)] / (b - a)
+                    </span>
+                    This represents the slope of the secant line connecting two points on the function.
+                </div>
+
+                <h3>Examples</h3>
+                <div class="example">
+                    <strong>Example 1:</strong> Find the difference quotient for f(x) = x².
+                    <p style="margin-top: 10px; line-height: 2;">
+                        <strong>Solution:</strong><br>
+                        f(x + h) = (x + h)²<br>
+                        f(x + h) = x² + 2xh + h²<br>
+                        <br>
+                        Difference quotient = [f(x + h) - f(x)] / h<br>
+                        = [(x² + 2xh + h²) - x²] / h<br>
+                        = [2xh + h²] / h<br>
+                        = h(2x + h) / h<br>
+                        = 2x + h
+                    </p>
+                </div>
+
+                <div class="example">
+                    <strong>Example 2:</strong> Find the average rate of change of f(x) = x² + 3 from x = 1 to x = 4.
+                    <p style="margin-top: 10px; line-height: 2;">
+                        <strong>Solution:</strong><br>
+                        f(1) = (1)² + 3 = 4<br>
+                        f(4) = (4)² + 3 = 19<br>
+                        <br>
+                        Average Rate of Change = [f(4) - f(1)] / (4 - 1)<br>
+                        = (19 - 4) / 3<br>
+                        = 15 / 3<br>
+                        = 5
+                    </p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>Average Rate of Change Calculator</h3>
+                    <p>For f(x) = ax² + bx + c</p>
+                    <label>a: </label><input type="number" id="roc_a" value="1">
+                    <label>b: </label><input type="number" id="roc_b" value="0">
+                    <label>c: </label><input type="number" id="roc_c" value="0">
+                    <br>
+                    <label>x₁: </label><input type="number" id="roc_x1" value="0">
+                    <label>x₂: </label><input type="number" id="roc_x2" value="2">
+                    <br>
+                    <button class="calc-btn" onclick="calculateROC()">Calculate Rate of Change</button>
+                    <div id="rocResult" class="result-display" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Linear Modeling Section -->
+            <div id="linear" class="section">
+                <h2>Linear Modeling</h2>
+
+                <div class="definition">
+                    <strong>Linear Function:</strong> A function of the form f(x) = mx + b, where:
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>m is the slope (rate of change)</li>
+                        <li>b is the y-intercept (initial value)</li>
+                    </ul>
+                </div>
+
+                <h3>Proportions and Linear Growth</h3>
+                <p>Linear functions model situations with constant rates of change:</p>
+
+                <div class="example">
+                    <strong>Example: Linear Growth</strong><br>
+                    A plant grows 2 cm per week. If it starts at 5 cm tall, its height h after w weeks is:<br>
+                    <span style="font-size: 1.2em; display: block; margin: 10px 0;">
+                        h(w) = 2w + 5
+                    </span>
+                    <p>After 10 weeks: h(10) = 2(10) + 5 = 25 cm</p>
+                </div>
+
+                <h3>Supply and Demand Problems</h3>
+                
+                <div class="definition">
+                    <strong>Supply Function:</strong> Shows quantity suppliers are willing to produce at different prices (typically increasing).<br>
+                    <strong>Demand Function:</strong> Shows quantity consumers are willing to buy at different prices (typically decreasing).<br>
+                    <strong>Equilibrium:</strong> The point where supply equals demand.
+                </div>
+
+                <div class="example">
+                    <strong>Example: Market Equilibrium</strong>
+                    <p style="margin-top: 10px; line-height: 2;">
+                        Supply: S(p) = 2p + 10 (quantity supplied at price p)<br>
+                        Demand: D(p) = -3p + 60 (quantity demanded at price p)<br>
+                        <br>
+                        Find equilibrium by setting S(p) = D(p):<br>
+                        2p + 10 = -3p + 60<br>
+                        5p = 50<br>
+                        p = 10<br>
+                        <br>
+                        At p = $10: S(10) = 2(10) + 10 = 30 units<br>
+                        Equilibrium: Price = $10, Quantity = 30 units
+                    </p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>Supply and Demand Calculator</h3>
+                    <p>Supply: S(p) = ap + b</p>
+                    <label>a: </label><input type="number" id="supply_a" value="2">
+                    <label>b: </label><input type="number" id="supply_b" value="10">
+                    <p>Demand: D(p) = cp + d</p>
+                    <label>c: </label><input type="number" id="demand_c" value="-3">
+                    <label>d: </label><input type="number" id="demand_d" value="60">
+                    <br>
+                    <button class="calc-btn" onclick="calculateEquilibrium()">Find Equilibrium</button>
+                    <div id="equilibriumResult" class="result-display" style="display: none;"></div>
+                    <canvas id="supplyDemandCanvas" width="600" height="400" style="margin-top: 20px; display: none;"></canvas>
+                </div>
+            </div>
+
+            <!-- Java Examples Section -->
+            <div id="java" class="section">
+
+                <h3>1. Function Class Implementation</h3>
+                <div class="code-block">
+<span class="comment">// Base class for mathematical functions</span>
+<span class="keyword">public abstract class</span> <span class="function">Function</span> {
+    <span class="comment">// Abstract method to evaluate the function at x</span>
+    <span class="keyword">public abstract double</span> <span class="function">evaluate</span>(<span class="keyword">double</span> x);
+    
+    <span class="comment">// Calculate difference quotient: [f(x+h) - f(x)] / h</span>
+    <span class="keyword">public double</span> <span class="function">differenceQuotient</span>(<span class="keyword">double</span> x, <span class="keyword">double</span> h) {
+        <span class="keyword">return</span> (evaluate(x + h) - evaluate(x)) / h;
+    }
+    
+    <span class="comment">// Calculate average rate of change from a to b</span>
+    <span class="keyword">public double</span> <span class="function">averageRateOfChange</span>(<span class="keyword">double</span> a, <span class="keyword">double</span> b) {
+        <span class="keyword">return</span> (evaluate(b) - evaluate(a)) / (b - a);
+    }
+    
+    <span class="comment">// Check if function is defined at x (can be overridden)</span>
+    <span class="keyword">public boolean</span> <span class="function">isDefinedAt</span>(<span class="keyword">double</span> x) {
+        <span class="keyword">return true</span>;
+    }
+}
+</div>
+
+                <h3>2. Linear Function Implementation</h3>
+                <div class="code-block">
+<span class="comment">// Represents linear functions f(x) = mx + b</span>
+<span class="keyword">public class</span> <span class="function">LinearFunction</span> <span class="keyword">extends</span> Function {
+    <span class="keyword">private double</span> m; <span class="comment">// slope</span>
+    <span class="keyword">private double</span> b; <span class="comment">// y-intercept</span>
+    
+    <span class="keyword">public</span> <span class="function">LinearFunction</span>(<span class="keyword">double</span> slope, <span class="keyword">double</span> intercept) {
+        <span class="keyword">this</span>.m = slope;
+        <span class="keyword">this</span>.b = intercept;
+    }
+    
+    <span class="comment">// Evaluate f(x) = mx + b</span>
+    @Override
+    <span class="keyword">public double</span> <span class="function">evaluate</span>(<span class="keyword">double</span> x) {
+        <span class="keyword">return</span> m * x + b;
+    }
+    
+    <span class="comment">// Get slope</span>
+    <span class="keyword">public double</span> <span class="function">getSlope</span>() {
+        <span class="keyword">return</span> m;
+    }
+    
+    <span class="comment">// Get y-intercept</span>
+    <span class="keyword">public double</span> <span class="function">getIntercept</span>() {
+        <span class="keyword">return</span> b;
+    }
+    
+    @Override
+    <span class="keyword">public</span> String <span class="function">toString</span>() {
+        <span class="keyword">return</span> String.format(<span class="string">"f(x) = %.2fx + %.2f"</span>, m, b);
+    }
+}
+</div>
+
+                <h3>3. Quadratic Function Implementation</h3>
+                <div class="code-block">
+<span class="comment">// Represents quadratic functions f(x) = ax² + bx + c</span>
+<span class="keyword">public class</span> <span class="function">QuadraticFunction</span> <span class="keyword">extends</span> Function {
+    <span class="keyword">private double</span> a, b, c;
+    
+    <span class="keyword">public</span> <span class="function">QuadraticFunction</span>(<span class="keyword">double</span> a, <span class="keyword">double</span> b, <span class="keyword">double</span> c) {
+        <span class="keyword">this</span>.a = a;
+        <span class="keyword">this</span>.b = b;
+        <span class="keyword">this</span>.c = c;
+    }
+    
+    @Override
+    <span class="keyword">public double</span> <span class="function">evaluate</span>(<span class="keyword">double</span> x) {
+        <span class="keyword">return</span> a * x * x + b * x + c;
+    }
+    
+    <span class="comment">// Find the vertex of the parabola</span>
+    <span class="keyword">public double</span> <span class="function">vertexX</span>() {
+        <span class="keyword">return</span> -b / (<span class="number">2</span> * a);
+    }
+    
+    <span class="comment">// Calculate discriminant (b² - 4ac)</span>
+    <span class="keyword">public double</span> <span class="function">discriminant</span>() {
+        <span class="keyword">return</span> b * b - <span class="number">4</span> * a * c;
+    }
+    
+    @Override
+    <span class="keyword">public</span> String <span class="function">toString</span>() {
+        <span class="keyword">return</span> String.format(<span class="string">"f(x) = %.2fx² + %.2fx + %.2f"</span>, a, b, c);
+    }
+}
+</div>
+
+                <h3>4. Rational Function with Domain Restrictions</h3>
+                <div class="code-block">
+<span class="comment">// Represents rational functions f(x) = 1 / (x - a)</span>
+<span class="keyword">public class</span> <span class="function">RationalFunction</span> <span class="keyword">extends</span> Function {
+    <span class="keyword">private double</span> a; <span class="comment">// vertical asymptote at x = a</span>
+    
+    <span class="keyword">public</span> <span class="function">RationalFunction</span>(<span class="keyword">double</span> restrictedValue) {
+        <span class="keyword">this</span>.a = restrictedValue;
+    }
+    
+    @Override
+    <span class="keyword">public double</span> <span class="function">evaluate</span>(<span class="keyword">double</span> x) {
+        <span class="keyword">if</span> (!isDefinedAt(x)) {
+            <span class="keyword">throw new</span> ArithmeticException(
+                <span class="string">"Function undefined at x = "</span> + x);
+        }
+        <span class="keyword">return</span> <span class="number">1.0</span> / (x - a);
+    }
+    
+    @Override
+    <span class="keyword">public boolean</span> <span class="function">isDefinedAt</span>(<span class="keyword">double</span> x) {
+        <span class="comment">// Function undefined when denominator is zero</span>
+        <span class="keyword">return</span> Math.abs(x - a) > <span class="number">1e-10</span>;
+    }
+    
+    <span class="keyword">public double</span> <span class="function">getAsymptote</span>() {
+        <span class="keyword">return</span> a;
+    }
+    
+    @Override
+    <span class="keyword">public</span> String <span class="function">toString</span>() {
+        <span class="keyword">return</span> String.format(<span class="string">"f(x) = 1/(x - %.2f), x ≠ %.2f"</span>, a, a);
+    }
+}
+</div>
+
+                <h3>5. Supply and Demand Market Model</h3>
+                <div class="code-block">
+<span class="comment">// Market model with supply and demand functions</span>
+<span class="keyword">public class</span> <span class="function">Market</span> {
+    <span class="keyword">private</span> LinearFunction supply;
+    <span class="keyword">private</span> LinearFunction demand;
+    
+    <span class="keyword">public</span> <span class="function">Market</span>(LinearFunction supply, LinearFunction demand) {
+        <span class="keyword">this</span>.supply = supply;
+        <span class="keyword">this</span>.demand = demand;
+    }
+    
+    <span class="comment">// Find equilibrium price where supply equals demand</span>
+    <span class="keyword">public double</span> <span class="function">findEquilibriumPrice</span>() {
+        <span class="comment">// S(p) = D(p)</span>
+        <span class="comment">// m1*p + b1 = m2*p + b2</span>
+        <span class="comment">// p = (b2 - b1) / (m1 - m2)</span>
+        <span class="keyword">double</span> m1 = supply.getSlope();
+        <span class="keyword">double</span> b1 = supply.getIntercept();
+        <span class="keyword">double</span> m2 = demand.getSlope();
+        <span class="keyword">double</span> b2 = demand.getIntercept();
+        
+        <span class="keyword">if</span> (Math.abs(m1 - m2) < <span class="number">1e-10</span>) {
+            <span class="keyword">throw new</span> ArithmeticException(
+                <span class="string">"No equilibrium: parallel lines"</span>);
+        }
+        
+        <span class="keyword">return</span> (b2 - b1) / (m1 - m2);
+    }
+    
+    <span class="comment">// Find equilibrium quantity</span>
+    <span class="keyword">public double</span> <span class="function">findEquilibriumQuantity</span>() {
+        <span class="keyword">double</span> price = findEquilibriumPrice();
+        <span class="keyword">return</span> supply.evaluate(price);
+    }
+    
+    <span class="keyword">public void</span> <span class="function">printEquilibrium</span>() {
+        <span class="keyword">double</span> price = findEquilibriumPrice();
+        <span class="keyword">double</span> quantity = findEquilibriumQuantity();
+        System.out.println(<span class="string">"Equilibrium Price: $"</span> + price);
+        System.out.println(<span class="string">"Equilibrium Quantity: "</span> + quantity + <span class="string">" units"</span>);
+    }
+}
+</div>
+
+                <h3>6. Complete Main Application Example</h3>
+                <div class="code-block">
+<span class="comment">// Main application demonstrating all concepts</span>
+<span class="keyword">public class</span> <span class="function">FunctionDemo</span> {
+    <span class="keyword">public static void</span> <span class="function">main</span>(String[] args) {
+        System.out.println(<span class="string">"=== FUNCTIONS AND RELATIONS DEMO ===\n"</span>);
+        
+        <span class="comment">// 1. Linear Function Example</span>
+        System.out.println(<span class="string">"1. LINEAR FUNCTION"</span>);
+        LinearFunction linear = <span class="keyword">new</span> LinearFunction(<span class="number">2</span>, <span class="number">3</span>);
+        System.out.println(linear);
+        System.out.println(<span class="string">"f(5) = "</span> + linear.evaluate(<span class="number">5</span>));
+        System.out.println(<span class="string">"Average rate of change [0,4]: "</span> 
+            + linear.averageRateOfChange(<span class="number">0</span>, <span class="number">4</span>));
+        System.out.println();
+        
+        <span class="comment">// 2. Quadratic Function Example</span>
+        System.out.println(<span class="string">"2. QUADRATIC FUNCTION"</span>);
+        QuadraticFunction quad = <span class="keyword">new</span> QuadraticFunction(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);
+        System.out.println(quad);
+        System.out.println(<span class="string">"f(3) = "</span> + quad.evaluate(<span class="number">3</span>));
+        System.out.println(<span class="string">"Difference quotient at x=2, h=0.1: "</span>
+            + quad.differenceQuotient(<span class="number">2</span>, <span class="number">0.1</span>));
+        System.out.println(<span class="string">"Vertex x-coordinate: "</span> + quad.vertexX());
+        System.out.println();
+        
+        <span class="comment">// 3. Rational Function with Domain Restrictions</span>
+        System.out.println(<span class="string">"3. RATIONAL FUNCTION"</span>);
+        RationalFunction rational = <span class="keyword">new</span> RationalFunction(<span class="number">3</span>);
+        System.out.println(rational);
+        System.out.println(<span class="string">"f(5) = "</span> + rational.evaluate(<span class="number">5</span>));
+        System.out.println(<span class="string">"Is defined at x=3? "</span> 
+            + rational.isDefinedAt(<span class="number">3</span>));
+        System.out.println(<span class="string">"Is defined at x=4? "</span> 
+            + rational.isDefinedAt(<span class="number">4</span>));
+        System.out.println();
+        
+        <span class="comment">// 4. Supply and Demand Market</span>
+        System.out.println(<span class="string">"4. SUPPLY AND DEMAND"</span>);
+        LinearFunction supply = <span class="keyword">new</span> LinearFunction(<span class="number">2</span>, <span class="number">10</span>);
+        LinearFunction demand = <span class="keyword">new</span> LinearFunction(-<span class="number">3</span>, <span class="number">60</span>);
+        Market market = <span class="keyword">new</span> Market(supply, demand);
+        System.out.println(<span class="string">"Supply: "</span> + supply);
+        System.out.println(<span class="string">"Demand: "</span> + demand);
+        market.printEquilibrium();
+        System.out.println();
+        
+        <span class="comment">// 5. Average Rate of Change Comparison</span>
+        System.out.println(<span class="string">"5. RATE OF CHANGE ANALYSIS"</span>);
+        QuadraticFunction growth = <span class="keyword">new</span> QuadraticFunction(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>);
+        System.out.println(growth);
+        System.out.println(<span class="string">"Average rate [0,1]: "</span> 
+            + growth.averageRateOfChange(<span class="number">0</span>, <span class="number">1</span>));
+        System.out.println(<span class="string">"Average rate [1,2]: "</span> 
+            + growth.averageRateOfChange(<span class="number">1</span>, <span class="number">2</span>));
+        System.out.println(<span class="string">"Average rate [2,3]: "</span> 
+            + growth.averageRateOfChange(<span class="number">2</span>, <span class="number">3</span>));
+    }
+}
+</div>
+
+                <div class="example">
+                    <strong>Expected Output:</strong>
+                    <pre style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 10px;">
+=== FUNCTIONS AND RELATIONS DEMO ===
+
+1. LINEAR FUNCTION
+f(x) = 2.00x + 3.00
+f(5) = 13.0
+Average rate of change [0,4]: 2.0
+
+2. QUADRATIC FUNCTION
+f(x) = 1.00x² + 0.00x + 0.00
+f(3) = 9.0
+Difference quotient at x=2, h=0.1: 4.1
+Vertex x-coordinate: 0.0
+
+3. RATIONAL FUNCTION
+f(x) = 1/(x - 3.00), x ≠ 3.00
+f(5) = 0.5
+Is defined at x=3? false
+Is defined at x=4? true
+
+4. SUPPLY AND DEMAND
+Supply: f(x) = 2.00x + 10.00
+Demand: f(x) = -3.00x + 60.00
+Equilibrium Price: $10.0
+Equilibrium Quantity: 30.0 units
+
+5. RATE OF CHANGE ANALYSIS
+f(x) = 1.00x² + 2.00x + 1.00
+Average rate [0,1]: 3.0
+Average rate [1,2]: 5.0
+Average rate [2,3]: 7.0
+                    </pre>
+                </div>
+            </div>
+
+            <!-- Exercises Section -->
+            <div id="exercises" class="section">
+                <h2>Practice Exercises</h2>
+
+                <div class="exercise">
+                    <strong>Exercise 1:</strong> Determine whether the following relation is a function:
+                    {(1, 2), (3, 4), (5, 6), (3, 8)}
+                    <button class="exercise-btn" onclick="toggleAnswer('ex1')">Show Answer</button>
+                    <div id="ex1" class="answer">
+                        <strong>Answer:</strong> NOT a function<br>
+                        <strong>Reason:</strong> The input value 3 maps to two different outputs (4 and 8). 
+                        A function requires each input to have exactly one output.
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <strong>Exercise 2:</strong> Given f(x) = 3x² - 2x + 5, find f(-2).
+                    <button class="exercise-btn" onclick="toggleAnswer('ex2')">Show Answer</button>
+                    <div id="ex2" class="answer">
+                        <strong>Solution:</strong><br>
+                        f(-2) = 3(-2)² - 2(-2) + 5<br>
+                        f(-2) = 3(4) + 4 + 5<br>
+                        f(-2) = 12 + 4 + 5<br>
+                        <strong>f(-2) = 21</strong>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <strong>Exercise 3:</strong> Find the domain of g(x) = 1/(x² - 9).
+                    <button class="exercise-btn" onclick="toggleAnswer('ex3')">Show Answer</button>
+                    <div id="ex3" class="answer">
+                        <strong>Solution:</strong><br>
+                        The function is undefined when the denominator equals zero:<br>
+                        x² - 9 = 0<br>
+                        (x - 3)(x + 3) = 0<br>
+                        x = 3 or x = -3<br>
+                        <br>
+                        <strong>Domain:</strong> All real numbers except x = 3 and x = -3<br>
+                        <strong>Interval notation:</strong> (-∞, -3) ∪ (-3, 3) ∪ (3, ∞)
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <strong>Exercise 4:</strong> Find the difference quotient for f(x) = 2x + 5.
+                    <button class="exercise-btn" onclick="toggleAnswer('ex4')">Show Answer</button>
+                    <div id="ex4" class="answer">
+                        <strong>Solution:</strong><br>
+                        f(x + h) = 2(x + h) + 5 = 2x + 2h + 5<br>
+                        <br>
+                        Difference quotient = [f(x + h) - f(x)] / h<br>
+                        = [(2x + 2h + 5) - (2x + 5)] / h<br>
+                        = [2h] / h<br>
+                        <strong>= 2</strong><br>
+                        <br>
+                        Note: For linear functions, the difference quotient equals the slope!
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <strong>Exercise 5:</strong> Calculate the average rate of change of h(x) = x³ from x = 1 to x = 3.
+                    <button class="exercise-btn" onclick="toggleAnswer('ex5')">Show Answer</button>
+                    <div id="ex5" class="answer">
+                        <strong>Solution:</strong><br>
+                        h(1) = (1)³ = 1<br>
+                        h(3) = (3)³ = 27<br>
+                        <br>
+                        Average Rate of Change = [h(3) - h(1)] / (3 - 1)<br>
+                        = (27 - 1) / 2<br>
+                        = 26 / 2<br>
+                        <strong>= 13</strong>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <strong>Exercise 6:</strong> A company's supply function is S(p) = 3p + 15 and demand function is D(p) = -2p + 65. 
+                    Find the equilibrium price and quantity.
+                    <button class="exercise-btn" onclick="toggleAnswer('ex6')">Show Answer</button>
+                    <div id="ex6" class="answer">
+                        <strong>Solution:</strong><br>
+                        Set S(p) = D(p):<br>
+                        3p + 15 = -2p + 65<br>
+                        5p = 50<br>
+                        p = 10<br>
+                        <br>
+                        Quantity at equilibrium:<br>
+                        S(10) = 3(10) + 15 = 45 units<br>
+                        <br>
+                        <strong>Equilibrium Price: $10</strong><br>
+                        <strong>Equilibrium Quantity: 45 units</strong>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <strong>Exercise 7:</strong> Does the equation x = y² represent a function? Explain using the vertical line test.
+                    <button class="exercise-btn" onclick="toggleAnswer('ex7')">Show Answer</button>
+                    <div id="ex7" class="answer">
+                        <strong>Answer:</strong> NO, this is not a function.<br>
+                        <strong>Explanation:</strong> This is a sideways parabola. If we draw a vertical line at x = 4, 
+                        it intersects the graph at two points: (4, 2) and (4, -2). Since a vertical line intersects 
+                        the graph at more than one point, it fails the vertical line test and is not a function.
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <strong>Exercise 8:</strong> Find the domain of f(x) = √(2x - 6).
+                    <button class="exercise-btn" onclick="toggleAnswer('ex8')">Show Answer</button>
+                    <div id="ex8" class="answer">
+                        <strong>Solution:</strong><br>
+                        For the square root to be defined, the radicand must be non-negative:<br>
+                        2x - 6 ≥ 0<br>
+                        2x ≥ 6<br>
+                        x ≥ 3<br>
+                        <br>
+                        <strong>Domain:</strong> [3, ∞) or {x | x ≥ 3}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div id="quiz" class="section">
+                <h2>Multiple Choice Quiz</h2>
+                <p style="margin-bottom: 20px;">Test your understanding of functions and relations!</p>
+
+                <div class="quiz-container">
+                    <div class="quiz-question">
+                        <strong>Question 1:</strong> Which of the following is NOT a function?
+                        <div class="quiz-options">
+                            <label class="quiz-option">
+                                <input type="radio" name="q1" value="a">
+                                A) {(1,2), (2,3), (3,4)}
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q1" value="b">
+                                B) {(1,2), (2,2), (3,2)}
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q1" value="c">
+                                C) {(1,2), (1,3), (2,4)}
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q1" value="d">
+                                D) y = 2x + 1
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <strong>Question 2:</strong> If f(x) = x² - 3x + 2, what is f(4)?
+                        <div class="quiz-options">
+                            <label class="quiz-option">
+                                <input type="radio" name="q2" value="a">
+                                A) 6
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q2" value="b">
+                                B) 10
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q2" value="c">
+                                C) 14
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q2" value="d">
+                                D) 18
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <strong>Question 3:</strong> What is the domain of f(x) = 1/(x - 5)?
+                        <div class="quiz-options">
+                            <label class="quiz-option">
+                                <input type="radio" name="q3" value="a">
+                                A) All real numbers
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q3" value="b">
+                                B) All real numbers except 5
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q3" value="c">
+                                C) x > 5
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q3" value="d">
+                                D) x ≥ 5
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <strong>Question 4:</strong> The vertical line test determines if:
+                        <div class="quiz-options">
+                            <label class="quiz-option">
+                                <input type="radio" name="q4" value="a">
+                                A) A graph represents a linear function
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q4" value="b">
+                                B) A graph represents a function
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q4" value="c">
+                                C) A function is continuous
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q4" value="d">
+                                D) A function has a maximum value
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <strong>Question 5:</strong> What is the average rate of change of f(x) = 2x from x = 1 to x = 5?
+                        <div class="quiz-options">
+                            <label class="quiz-option">
+                                <input type="radio" name="q5" value="a">
+                                A) 1
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q5" value="b">
+                                B) 2
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q5" value="c">
+                                C) 4
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q5" value="d">
+                                D) 8
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <strong>Question 6:</strong> In a supply and demand model, equilibrium occurs when:
+                        <div class="quiz-options">
+                            <label class="quiz-option">
+                                <input type="radio" name="q6" value="a">
+                                A) Supply is maximum
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q6" value="b">
+                                B) Demand is maximum
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q6" value="c">
+                                C) Supply equals demand
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q6" value="d">
+                                D) Price is zero
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <strong>Question 7:</strong> The difference quotient [f(x+h) - f(x)]/h represents:
+                        <div class="quiz-options">
+                            <label class="quiz-option">
+                                <input type="radio" name="q7" value="a">
+                                A) The y-intercept
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q7" value="b">
+                                B) The average rate of change
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q7" value="c">
+                                C) The domain
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q7" value="d">
+                                D) The range
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <strong>Question 8:</strong> Which function has a restricted domain?
+                        <div class="quiz-options">
+                            <label class="quiz-option">
+                                <input type="radio" name="q8" value="a">
+                                A) f(x) = 3x + 7
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q8" value="b">
+                                B) f(x) = x²
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q8" value="c">
+                                C) f(x) = √(x - 3)
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q8" value="d">
+                                D) f(x) = |x|
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="submit-quiz" onclick="submitQuiz()">Submit Quiz</button>
+                    <div id="quizResult" class="quiz-result" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation system with event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const sectionId = this.getAttribute('data-section');
+                    
+                    // Hide all sections
+                    document.querySelectorAll('.section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Show selected section
+                    document.getElementById(sectionId).classList.add('active');
+                    
+                    // Update button states
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Initialize the graph
+            drawFunction();
+        });
+
+        // Graph Drawing
+        let showVLine = false;
+        let currentGraph = 'function';
+
+        function drawFunction() {
+            currentGraph = 'function';
+            const canvas = document.getElementById('graphCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            drawAxes(ctx, canvas);
+            
+            // Draw a parabola (function)
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            for (let x = -10; x <= 10; x += 0.1) {
+                const y = 0.2 * x * x - 2;
+                const px = canvas.width / 2 + x * 20;
+                const py = canvas.height / 2 - y * 20;
+                if (x === -10) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+            
+            if (showVLine) drawVerticalLine(ctx, canvas);
+        }
+
+        function drawNonFunction() {
+            currentGraph = 'non-function';
+            const canvas = document.getElementById('graphCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            drawAxes(ctx, canvas);
+            
+            // Draw a circle (not a function)
+            ctx.strokeStyle = '#f44336';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            ctx.arc(centerX, centerY, 80, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            if (showVLine) drawVerticalLine(ctx, canvas);
+        }
+
+        function drawAxes(ctx, canvas) {
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 1;
+            
+            // X-axis
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height / 2);
+            ctx.lineTo(canvas.width, canvas.height / 2);
+            ctx.stroke();
+            
+            // Y-axis
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2, 0);
+            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.stroke();
+        }
+
+        function drawVerticalLine(ctx, canvas) {
+            ctx.strokeStyle = '#ffc107';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2 + 60, 0);
+            ctx.lineTo(canvas.width / 2 + 60, canvas.height);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        function toggleVerticalLine() {
+            showVLine = !showVLine;
+            if (currentGraph === 'function') {
+                drawFunction();
+            } else {
+                drawNonFunction();
+            }
+        }
+
+        // Domain Calculator
+        function analyzeDomain() {
+            const funcType = document.getElementById('funcType').value;
+            const a = parseFloat(document.getElementById('domainValue').value);
+            let result = '';
+            
+            switch(funcType) {
+                case 'rational':
+                    result = `Domain: All real numbers except x = ${a}`;
+                    break;
+                case 'sqrt':
+                    result = `Domain: x ≥ ${a}`;
+                    break;
+                case 'log':
+                    result = `Domain: x > ${a}`;
+                    break;
+            }
+            
+            const resultDiv = document.getElementById('domainResult');
+            resultDiv.innerHTML = result;
+            resultDiv.style.display = 'block';
+        }
+
+        // Rate of Change Calculator
+        function calculateROC() {
+            const a = parseFloat(document.getElementById('roc_a').value);
+            const b = parseFloat(document.getElementById('roc_b').value);
+            const c = parseFloat(document.getElementById('roc_c').value);
+            const x1 = parseFloat(document.getElementById('roc_x1').value);
+            const x2 = parseFloat(document.getElementById('roc_x2').value);
+            
+            const f_x1 = a * x1 * x1 + b * x1 + c;
+            const f_x2 = a * x2 * x2 + b * x2 + c;
+            const roc = (f_x2 - f_x1) / (x2 - x1);
+            
+            const resultDiv = document.getElementById('rocResult');
+            resultDiv.innerHTML = `f(${x1}) = ${f_x1.toFixed(2)}, f(${x2}) = ${f_x2.toFixed(2)}<br>Average Rate of Change = ${roc.toFixed(2)}`;
+            resultDiv.style.display = 'block';
+        }
+
+        // Supply and Demand Calculator
+        function calculateEquilibrium() {
+            const supply_a = parseFloat(document.getElementById('supply_a').value);
+            const supply_b = parseFloat(document.getElementById('supply_b').value);
+            const demand_c = parseFloat(document.getElementById('demand_c').value);
+            const demand_d = parseFloat(document.getElementById('demand_d').value);
+            
+            // Solve: supply_a * p + supply_b = demand_c * p + demand_d
+            // => (supply_a - demand_c) * p = demand_d - supply_b
+            // => p = (demand_d - supply_b) / (supply_a - demand_c)
+            const price = (demand_d - supply_b) / (supply_a - demand_c);
+            const quantity = supply_a * price + supply_b;
+            
+            const resultDiv = document.getElementById('equilibriumResult');
+            resultDiv.innerHTML = `Equilibrium Price: $${price.toFixed(2)}<br>Equilibrium Quantity: ${quantity.toFixed(2)} units`;
+            resultDiv.style.display = 'block';
+            
+            // Show graph
+            const canvas = document.getElementById('supplyDemandCanvas');
+            canvas.style.display = 'block';
+            drawSupplyDemandGraph(supply_a, supply_b, demand_c, demand_d, price, quantity);
+        }
+
+        function drawSupplyDemandGraph(supply_a, supply_b, demand_c, demand_d, eq_price, eq_quantity) {
+            const canvas = document.getElementById('supplyDemandCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw axes
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 1;
+            
+            // X-axis (Quantity)
+            ctx.beginPath();
+            ctx.moveTo(50, canvas.height - 50);
+            ctx.lineTo(canvas.width - 50, canvas.height - 50);
+            ctx.stroke();
+            
+            // Y-axis (Price)
+            ctx.beginPath();
+            ctx.moveTo(50, 50);
+            ctx.lineTo(50, canvas.height - 50);
+            ctx.stroke();
+            
+            // Draw supply line (blue)
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let p = 0; p <= 20; p += 0.1) {
+                const q_supply = supply_a * p + supply_b;
+                const px = 50 + (q_supply / 100) * (canvas.width - 100);
+                const py = canvas.height - 50 - (p / 20) * (canvas.height - 100);
+                if (p === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+            
+            // Draw demand line (red)
+            ctx.strokeStyle = '#f44336';
+            ctx.beginPath();
+            for (let p = 0; p <= 20; p += 0.1) {
+                const q_demand = demand_c * p + demand_d;
+                const px = 50 + (q_demand / 100) * (canvas.width - 100);
+                const py = canvas.height - 50 - (p / 20) * (canvas.height - 100);
+                if (p === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+            
+            // Draw equilibrium point
+            ctx.fillStyle = '#4caf50';
+            const eq_x = 50 + (eq_quantity / 100) * (canvas.width - 100);
+            const eq_y = canvas.height - 50 - (eq_price / 20) * (canvas.height - 100);
+            ctx.beginPath();
+            ctx.arc(eq_x, eq_y, 5, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Add labels
+            ctx.fillStyle = '#000';
+            ctx.font = '14px Arial';
+            ctx.fillText('Quantity', canvas.width / 2, canvas.height - 20);
+            ctx.save();
+            ctx.translate(20, canvas.height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('Price', 0, 0);
+            ctx.restore();
+        }
+
+        // Exercise Answers
+        function toggleAnswer(id) {
+            const answer = document.getElementById(id);
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+            } else {
+                answer.style.display = 'block';
+            }
+        }
+
+        // Quiz System
+        function submitQuiz() {
+            const answers = {
+                q1: 'c',
+                q2: 'a',
+                q3: 'b',
+                q4: 'b',
+                q5: 'b',
+                q6: 'c',
+                q7: 'b',
+                q8: 'c'
+            };
+            
+            let score = 0;
+            const totalQuestions = Object.keys(answers).length;
+            
+            // Check each question
+            for (let q in answers) {
+                const selected = document.querySelector(`input[name="${q}"]:checked`);
+                if (selected && selected.value === answers[q]) {
+                    score++;
+                    selected.parentElement.classList.add('correct');
+                } else if (selected) {
+                    selected.parentElement.classList.add('incorrect');
+                }
+            }
+            
+            // Display result
+            const resultDiv = document.getElementById('quizResult');
+            const percentage = (score / totalQuestions * 100).toFixed(0);
+            resultDiv.innerHTML = `
+                <h3>Quiz Results</h3>
+                <p>You scored ${score} out of ${totalQuestions} (${percentage}%)</p>
+                <p>${percentage >= 70 ? 'Great job!' : 'Keep practicing!'}</p>
+            `;
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
