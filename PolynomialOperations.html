@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polynomials Interactive Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .content {
+            padding: 40px;
+            min-height: 500px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .definition {
+            background: #f0f4ff;
+            padding: 20px;
+            border-left: 5px solid #667eea;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .example {
+            background: #fff9e6;
+            padding: 20px;
+            border-left: 5px solid #ffc107;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .formula {
+            background: #f5f5f5;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid #4caf50;
+        }
+
+        .practice-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        .correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .quiz-option {
+            display: block;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: #f0f4ff;
+            border-color: #667eea;
+        }
+
+        .quiz-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .quiz-option.correct-answer {
+            background: #4caf50;
+            color: white;
+            border-color: #4caf50;
+        }
+
+        .quiz-option.wrong-answer {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 20px auto;
+            background: white;
+        }
+
+        td {
+            border: 1px solid #ddd;
+            padding: 10px 15px;
+            text-align: center;
+            min-width: 50px;
+        }
+
+        .step {
+            margin: 15px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .step-number {
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        ul {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📐 MAT115 Prof. Khalid Kassou</h1>
+            <h1>📐 Polynomials Interactive Presentation</h1>
+            <p>Master polynomial operations, special products, and factoring</p>
+        </div>
+
+        <div class="nav">
+            <button class="nav-btn active" onclick="showSection('basics')">Basic Operations</button>
+            <button class="nav-btn" onclick="showSection('special')">Special Products</button>
+            <button class="nav-btn" onclick="showSection('pascal')">Pascal & Binomial</button>
+            <button class="nav-btn" onclick="showSection('division')">Division</button>
+            <button class="nav-btn" onclick="showSection('factoring')">Factoring</button>
+            <button class="nav-btn" onclick="showSection('practice')">Practice</button>
+            <button class="nav-btn" onclick="showSection('quiz')">Quiz</button>
+        </div>
+
+        <div class="content">
+            <!-- Basic Operations Section -->
+            <div id="basics" class="section active">
+                <h2>Basic Operations on Polynomials</h2>
+                
+                <div class="definition">
+                    <h3>Definition: Polynomial</h3>
+                    <p>A polynomial is an algebraic expression consisting of variables and coefficients, combined using addition, subtraction, and multiplication, with non-negative integer exponents.</p>
+                    <div class="formula">P(x) = aₙxⁿ + aₙ₋₁xⁿ⁻¹ + ... + a₁x + a₀</div>
+                    <p><strong>Terms:</strong></p>
+                    <ul>
+                        <li><strong>Coefficient:</strong> The numerical factor (aₙ, aₙ₋₁, etc.)</li>
+                        <li><strong>Degree:</strong> The highest exponent (n)</li>
+                        <li><strong>Leading coefficient:</strong> The coefficient of the highest degree term (aₙ)</li>
+                        <li><strong>Constant term:</strong> The term without a variable (a₀)</li>
+                    </ul>
+                </div>
+
+                <h3>1. Addition of Polynomials</h3>
+                <div class="definition">
+                    <p>To add polynomials, combine like terms (terms with the same variable and exponent).</p>
+                </div>
+
+                <div class="example">
+                    <h4>Example 1: Addition</h4>
+                    <p><strong>Problem:</strong> Add (3x² + 5x - 2) + (2x² - 3x + 7)</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Identify like terms
+                        <div class="formula">
+                            3x² and 2x² (x² terms)<br>
+                            5x and -3x (x terms)<br>
+                            -2 and 7 (constant terms)
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Combine like terms
+                        <div class="formula">
+                            (3x² + 2x²) + (5x - 3x) + (-2 + 7)<br>
+                            = 5x² + 2x + 5
+                        </div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> 5x² + 2x + 5</p>
+                </div>
+
+                <h3>2. Subtraction of Polynomials</h3>
+                <div class="definition">
+                    <p>To subtract polynomials, distribute the negative sign and combine like terms.</p>
+                </div>
+
+                <div class="example">
+                    <h4>Example 2: Subtraction</h4>
+                    <p><strong>Problem:</strong> Subtract (4x³ - 2x² + 6x) - (x³ + 3x² - 4x + 5)</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Distribute the negative sign
+                        <div class="formula">
+                            4x³ - 2x² + 6x - x³ - 3x² + 4x - 5
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Combine like terms
+                        <div class="formula">
+                            (4x³ - x³) + (-2x² - 3x²) + (6x + 4x) + (-5)<br>
+                            = 3x³ - 5x² + 10x - 5
+                        </div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> 3x³ - 5x² + 10x - 5</p>
+                </div>
+
+                <h3>3. Multiplication of Polynomials</h3>
+                <div class="definition">
+                    <p>To multiply polynomials, use the distributive property (FOIL for binomials) and combine like terms.</p>
+                </div>
+
+                <div class="example">
+                    <h4>Example 3: Multiplication</h4>
+                    <p><strong>Problem:</strong> Multiply (2x + 3)(x² - 4x + 5)</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Distribute 2x to each term
+                        <div class="formula">
+                            2x(x²) + 2x(-4x) + 2x(5) = 2x³ - 8x² + 10x
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Distribute 3 to each term
+                        <div class="formula">
+                            3(x²) + 3(-4x) + 3(5) = 3x² - 12x + 15
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 3:</span> Combine all terms
+                        <div class="formula">
+                            2x³ - 8x² + 10x + 3x² - 12x + 15<br>
+                            = 2x³ + (-8x² + 3x²) + (10x - 12x) + 15<br>
+                            = 2x³ - 5x² - 2x + 15
+                        </div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> 2x³ - 5x² - 2x + 15</p>
+                </div>
+            </div>
+
+            <!-- Special Products Section -->
+            <div id="special" class="section">
+                <h2>Special Products</h2>
+                
+                <div class="definition">
+                    <h3>What are Special Products?</h3>
+                    <p>Special products are specific polynomial multiplication patterns that occur frequently and have predictable results. Memorizing these patterns saves time and reduces errors.</p>
+                </div>
+
+                <h3>1. Square of a Binomial</h3>
+                <div class="formula">
+                    (a + b)² = a² + 2ab + b²<br>
+                    (a - b)² = a² - 2ab + b²
+                </div>
+
+                <div class="example">
+                    <h4>Example 4: Square of a Sum</h4>
+                    <p><strong>Problem:</strong> Expand (3x + 4)²</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Identify a = 3x and b = 4
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Apply the formula (a + b)² = a² + 2ab + b²
+                        <div class="formula">
+                            (3x)² + 2(3x)(4) + (4)²<br>
+                            = 9x² + 24x + 16
+                        </div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> 9x² + 24x + 16</p>
+                </div>
+
+                <div class="example">
+                    <h4>Example 5: Square of a Difference</h4>
+                    <p><strong>Problem:</strong> Expand (2x - 5)²</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Identify a = 2x and b = 5
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Apply the formula (a - b)² = a² - 2ab + b²
+                        <div class="formula">
+                            (2x)² - 2(2x)(5) + (5)²<br>
+                            = 4x² - 20x + 25
+                        </div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> 4x² - 20x + 25</p>
+                </div>
+
+                <h3>2. Difference of Squares</h3>
+                <div class="formula">
+                    (a + b)(a - b) = a² - b²
+                </div>
+
+                <div class="example">
+                    <h4>Example 6: Difference of Squares</h4>
+                    <p><strong>Problem:</strong> Multiply (5x + 3)(5x - 3)</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Identify a = 5x and b = 3
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Apply the formula (a + b)(a - b) = a² - b²
+                        <div class="formula">
+                            (5x)² - (3)²<br>
+                            = 25x² - 9
+                        </div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> 25x² - 9</p>
+                </div>
+
+                <h3>3. Cube of a Binomial</h3>
+                <div class="formula">
+                    (a + b)³ = a³ + 3a²b + 3ab² + b³<br>
+                    (a - b)³ = a³ - 3a²b + 3ab² - b³
+                </div>
+
+                <div class="example">
+                    <h4>Example 7: Cube of a Sum</h4>
+                    <p><strong>Problem:</strong> Expand (x + 2)³</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Identify a = x and b = 2
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Apply the formula (a + b)³ = a³ + 3a²b + 3ab² + b³
+                        <div class="formula">
+                            x³ + 3(x²)(2) + 3(x)(2²) + 2³<br>
+                            = x³ + 6x² + 12x + 8
+                        </div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> x³ + 6x² + 12x + 8</p>
+                </div>
+
+                <h3>4. Sum and Difference of Cubes</h3>
+                <div class="formula">
+                    a³ + b³ = (a + b)(a² - ab + b²)<br>
+                    a³ - b³ = (a - b)(a² + ab + b²)
+                </div>
+
+                <div class="example">
+                    <h4>Example 8: Difference of Cubes</h4>
+                    <p><strong>Problem:</strong> Factor x³ - 27</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Recognize as a³ - b³ where a = x, b = 3
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Apply the formula a³ - b³ = (a - b)(a² + ab + b²)
+                        <div class="formula">
+                            (x - 3)(x² + 3x + 9)
+                        </div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> (x - 3)(x² + 3x + 9)</p>
+                </div>
+            </div>
+
+            <!-- Pascal Triangle and Binomial Theorem Section -->
+            <div id="pascal" class="section">
+                <h2>Pascal's Triangle and Binomial Theorem</h2>
+                
+                <div class="definition">
+                    <h3>Pascal's Triangle</h3>
+                    <p>Pascal's Triangle is a triangular array of numbers where each number is the sum of the two numbers directly above it. The triangle provides coefficients for binomial expansions.</p>
+                </div>
+
+                <h3>Pascal's Triangle (First 7 Rows)</h3>
+                <div style="text-align: center; font-family: monospace; line-height: 2; margin: 20px 0;">
+                    <div>1</div>
+                    <div>1  1</div>
+                    <div>1  2  1</div>
+                    <div>1  3  3  1</div>
+                    <div>1  4  6  4  1</div>
+                    <div>1  5  10  10  5  1</div>
+                    <div>1  6  15  20  15  6  1</div>
+                </div>
+
+                <div class="definition">
+                    <h3>Properties of Pascal's Triangle</h3>
+                    <ul>
+                        <li>Each row starts and ends with 1</li>
+                        <li>Each interior number is the sum of the two numbers above it</li>
+                        <li>Row n contains the coefficients for (a + b)ⁿ</li>
+                        <li>The sum of row n equals 2ⁿ</li>
+                        <li>Numbers are symmetric about the center</li>
+                    </ul>
+                </div>
+
+                <div class="definition">
+                    <h3>Binomial Theorem</h3>
+                    <p>The Binomial Theorem provides a formula for expanding powers of binomials:</p>
+                    <div class="formula">
+                        (a + b)ⁿ = Σ C(n,k) × aⁿ⁻ᵏ × bᵏ
+                    </div>
+                    <p>Where C(n,k) = n! / (k!(n-k)!) is the binomial coefficient, also written as ⁿCₖ or (n choose k).</p>
+                    <p><strong>Written out:</strong></p>
+                    <div class="formula">
+                        (a + b)ⁿ = C(n,0)aⁿb⁰ + C(n,1)aⁿ⁻¹b¹ + C(n,2)aⁿ⁻²b² + ... + C(n,n)a⁰bⁿ
+                    </div>
+                </div>
+
+                <div class="example">
+                    <h4>Example 9: Using Pascal's Triangle</h4>
+                    <p><strong>Problem:</strong> Expand (x + y)⁴ using Pascal's Triangle</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Find row 4 of Pascal's Triangle
+                        <div class="formula">1  4  6  4  1</div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Apply coefficients with decreasing powers of x and increasing powers of y
+                        <div class="formula">
+                            1×x⁴y⁰ + 4×x³y¹ + 6×x²y² + 4×x¹y³ + 1×x⁰y⁴
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 3:</span> Simplify
+                        <div class="formula">
+                            x⁴ + 4x³y + 6x²y² + 4xy³ + y⁴
+                        </div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> x⁴ + 4x³y + 6x²y² + 4xy³ + y⁴</p>
+                </div>
+
+                <div class="example">
+                    <h4>Example 10: Binomial Theorem with Numbers</h4>
+                    <p><strong>Problem:</strong> Expand (2x - 3)³</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Identify a = 2x, b = -3, n = 3
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Use Pascal's Triangle row 3: 1  3  3  1
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 3:</span> Apply the formula
+                        <div class="formula">
+                            1(2x)³(-3)⁰ + 3(2x)²(-3)¹ + 3(2x)¹(-3)² + 1(2x)⁰(-3)³<br>
+                            = 1(8x³)(1) + 3(4x²)(-3) + 3(2x)(9) + 1(1)(-27)<br>
+                            = 8x³ - 36x² + 54x - 27
+                        </div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> 8x³ - 36x² + 54x - 27</p>
+                </div>
+
+                <div class="example">
+                    <h4>Example 11: Finding a Specific Term</h4>
+                    <p><strong>Problem:</strong> Find the coefficient of x⁵ in the expansion of (2x + 1)⁷</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> The general term is C(7,k)(2x)⁷⁻ᵏ(1)ᵏ
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> For x⁵ term, we need 7-k = 5, so k = 2
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 3:</span> Calculate C(7,2) = 7!/(2!×5!) = 21
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 4:</span> The term is 21(2x)⁵(1)² = 21×32x⁵ = 672x⁵
+                    </div>
+                    
+                    <p><strong>Answer:</strong> The coefficient is 672</p>
+                </div>
+            </div>
+
+            <!-- Division Section -->
+            <div id="division" class="section">
+                <h2>Polynomial Division and Synthetic Division</h2>
+                
+                <div class="definition">
+                    <h3>Polynomial Long Division</h3>
+                    <p>Polynomial long division is similar to numerical long division. We divide a polynomial (dividend) by another polynomial (divisor) to get a quotient and remainder.</p>
+                    <div class="formula">
+                        Dividend = (Divisor × Quotient) + Remainder
+                    </div>
+                </div>
+
+                <div class="example">
+                    <h4>Example 12: Polynomial Long Division</h4>
+                    <p><strong>Problem:</strong> Divide (2x³ + 5x² - 3x + 7) ÷ (x + 2)</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Divide the leading terms: 2x³ ÷ x = 2x²
+                        <div class="formula">First term of quotient: 2x²</div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Multiply and subtract
+                        <div class="formula">
+                            2x²(x + 2) = 2x³ + 4x²<br>
+                            (2x³ + 5x²) - (2x³ + 4x²) = x²
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 3:</span> Bring down next term: x² - 3x
+                        <div class="formula">x² ÷ x = x</div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 4:</span> Multiply and subtract
+                        <div class="formula">
+                            x(x + 2) = x² + 2x<br>
+                            (x² - 3x) - (x² + 2x) = -5x
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 5:</span> Bring down next term: -5x + 7
+                        <div class="formula">-5x ÷ x = -5</div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 6:</span> Multiply and subtract
+                        <div class="formula">
+                            -5(x + 2) = -5x - 10<br>
+                            (-5x + 7) - (-5x - 10) = 17
+                        </div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> Quotient = 2x² + x - 5, Remainder = 17</p>
+                    <p><strong>Verification:</strong> (x + 2)(2x² + x - 5) + 17 = 2x³ + 5x² - 3x + 7 ✓</p>
+                </div>
+
+                <div class="definition">
+                    <h3>Synthetic Division</h3>
+                    <p>Synthetic division is a shortcut method for dividing polynomials when the divisor is in the form (x - c). It uses only the coefficients.</p>
+                    <p><strong>Steps:</strong></p>
+                    <ol>
+                        <li>Write coefficients of the dividend</li>
+                        <li>Write the value c from (x - c) on the left</li>
+                        <li>Bring down the first coefficient</li>
+                        <li>Multiply by c and add to next coefficient</li>
+                        <li>Repeat until complete</li>
+                        <li>Last number is the remainder</li>
+                    </ol>
+                </div>
+
+                <div class="example">
+                    <h4>Example 13: Synthetic Division</h4>
+                    <p><strong>Problem:</strong> Divide (3x³ - 5x² + 2x - 8) ÷ (x - 2) using synthetic division</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Set up: c = 2, coefficients: 3, -5, 2, -8
+                        <div style="font-family: monospace; margin: 10px 0; text-align: center;">
+                            2 |  3  -5   2  -8<br>
+                              |     6   2   8<br>
+                              ─────────────────<br>
+                                 3   1   4   0
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Bring down 3
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 3:</span> Multiply 3 × 2 = 6, add to -5: -5 + 6 = 1
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 4:</span> Multiply 1 × 2 = 2, add to 2: 2 + 2 = 4
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 5:</span> Multiply 4 × 2 = 8, add to -8: -8 + 8 = 0
+                    </div>
+                    
+                    <p><strong>Answer:</strong> Quotient = 3x² + x + 4, Remainder = 0</p>
+                    <p>This means (x - 2) is a factor of the polynomial.</p>
+                </div>
+
+                <div class="example">
+                    <h4>Example 14: Synthetic Division with Remainder</h4>
+                    <p><strong>Problem:</strong> Divide (x⁴ - 3x² + 5x - 1) ÷ (x + 1)</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Note: x + 1 = x - (-1), so c = -1
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Coefficients: 1, 0, -3, 5, -1 (note the 0 for missing x³ term)
+                        <div style="font-family: monospace; margin: 10px 0; text-align: center;">
+                            -1 |  1   0  -3   5  -1<br>
+                               |    -1   1   2  -7<br>
+                               ──────────────────────<br>
+                                  1  -1  -2   7  -8
+                        </div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> Quotient = x³ - x² - 2x + 7, Remainder = -8</p>
+                </div>
+
+                <div class="definition">
+                    <h3>Remainder Theorem</h3>
+                    <p>When a polynomial P(x) is divided by (x - c), the remainder is P(c).</p>
+                    <p><strong>Factor Theorem:</strong> (x - c) is a factor of P(x) if and only if P(c) = 0.</p>
+                </div>
+            </div>
+
+            <!-- Factoring Section -->
+            <div id="factoring" class="section">
+                <h2>Factoring Polynomials</h2>
+                
+                <div class="definition">
+                    <h3>What is Factoring?</h3>
+                    <p>Factoring is the process of expressing a polynomial as a product of simpler polynomials. It's the reverse of multiplication.</p>
+                </div>
+
+                <h3>1. Greatest Common Factor (GCF)</h3>
+                <div class="definition">
+                    <p>Always look for the greatest common factor first. Factor out the GCF from all terms.</p>
+                </div>
+
+                <div class="example">
+                    <h4>Example 15: Factoring out GCF</h4>
+                    <p><strong>Problem:</strong> Factor 6x³ + 9x² - 15x</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Find GCF of coefficients: GCF(6, 9, 15) = 3
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Find GCF of variables: x (lowest power)
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 3:</span> Factor out 3x
+                        <div class="formula">
+                            3x(2x² + 3x - 5)
+                        </div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> 3x(2x² + 3x - 5)</p>
+                </div>
+
+                <h3>2. Factoring by Grouping</h3>
+                <div class="definition">
+                    <p>Used for polynomials with 4 or more terms. Group terms in pairs and factor out common factors.</p>
+                </div>
+
+                <div class="example">
+                    <h4>Example 16: Factoring by Grouping</h4>
+                    <p><strong>Problem:</strong> Factor x³ + 3x² + 2x + 6</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Group terms
+                        <div class="formula">(x³ + 3x²) + (2x + 6)</div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Factor each group
+                        <div class="formula">x²(x + 3) + 2(x + 3)</div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 3:</span> Factor out common binomial (x + 3)
+                        <div class="formula">(x + 3)(x² + 2)</div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> (x + 3)(x² + 2)</p>
+                </div>
+
+                <h3>3. Factoring Trinomials (x² + bx + c)</h3>
+                <div class="definition">
+                    <p>Find two numbers that multiply to c and add to b.</p>
+                </div>
+
+                <div class="example">
+                    <h4>Example 17: Simple Trinomial</h4>
+                    <p><strong>Problem:</strong> Factor x² + 7x + 12</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Find two numbers that multiply to 12 and add to 7
+                        <div class="formula">3 × 4 = 12 and 3 + 4 = 7 ✓</div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Write as product of binomials
+                        <div class="formula">(x + 3)(x + 4)</div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> (x + 3)(x + 4)</p>
+                </div>
+
+                <h3>4. Factoring ax² + bx + c (a ≠ 1)</h3>
+                <div class="definition">
+                    <p>Find two numbers that multiply to ac and add to b, then split the middle term.</p>
+                </div>
+
+                <div class="example">
+                    <h4>Example 18: Trinomial with Leading Coefficient</h4>
+                    <p><strong>Problem:</strong> Factor 6x² + 13x + 6</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Calculate ac = 6 × 6 = 36
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Find two numbers that multiply to 36 and add to 13
+                        <div class="formula">9 × 4 = 36 and 9 + 4 = 13 ✓</div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 3:</span> Rewrite middle term
+                        <div class="formula">6x² + 9x + 4x + 6</div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 4:</span> Factor by grouping
+                        <div class="formula">
+                            3x(2x + 3) + 2(2x + 3)<br>
+                            = (2x + 3)(3x + 2)
+                        </div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> (2x + 3)(3x + 2)</p>
+                </div>
+
+                <h3>5. Special Factoring Patterns</h3>
+
+                <div class="example">
+                    <h4>Example 19: Difference of Squares</h4>
+                    <p><strong>Problem:</strong> Factor 16x² - 49</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Recognize as a² - b² where a = 4x, b = 7
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Apply formula a² - b² = (a + b)(a - b)
+                        <div class="formula">(4x + 7)(4x - 7)</div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> (4x + 7)(4x - 7)</p>
+                </div>
+
+                <div class="example">
+                    <h4>Example 20: Perfect Square Trinomial</h4>
+                    <p><strong>Problem:</strong> Factor 9x² - 30x + 25</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Check if it's a perfect square: √(9x²) = 3x, √25 = 5
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Verify middle term: 2(3x)(5) = 30x ✓
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 3:</span> Write as (a - b)²
+                        <div class="formula">(3x - 5)²</div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> (3x - 5)²</p>
+                </div>
+
+                <div class="example">
+                    <h4>Example 21: Sum of Cubes</h4>
+                    <p><strong>Problem:</strong> Factor 8x³ + 125</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Recognize as a³ + b³ where a = 2x, b = 5
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Apply formula a³ + b³ = (a + b)(a² - ab + b²)
+                        <div class="formula">
+                            (2x + 5)((2x)² - (2x)(5) + 5²)<br>
+                            = (2x + 5)(4x² - 10x + 25)
+                        </div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> (2x + 5)(4x² - 10x + 25)</p>
+                </div>
+
+                <h3>6. Complete Factoring</h3>
+                <div class="definition">
+                    <p>Always factor completely. After initial factoring, check if factors can be factored further.</p>
+                </div>
+
+                <div class="example">
+                    <h4>Example 22: Complete Factoring</h4>
+                    <p><strong>Problem:</strong> Factor completely: 2x⁴ - 32</p>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 1:</span> Factor out GCF = 2
+                        <div class="formula">2(x⁴ - 16)</div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 2:</span> Recognize x⁴ - 16 as difference of squares
+                        <div class="formula">2(x² + 4)(x² - 4)</div>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">Step 3:</span> Factor x² - 4 further
+                        <div class="formula">2(x² + 4)(x + 2)(x - 2)</div>
+                    </div>
+                    
+                    <p><strong>Answer:</strong> 2(x² + 4)(x + 2)(x - 2)</p>
+                    <p><strong>Note:</strong> x² + 4 cannot be factored over real numbers</p>
+                </div>
+            </div>
+
+            <!-- Practice Section -->
+            <div id="practice" class="section">
+                <h2>Practice Exercises</h2>
+                
+                <div class="practice">
+                    <h3>Exercise 1: Basic Operations</h3>
+                    <p>Add: (4x² - 3x + 7) + (2x² + 5x - 1)</p>
+                    <input type="text" class="practice-input" id="ex1" placeholder="Enter your answer">
+                    <button class="btn" onclick="checkAnswer('ex1', '6x^2+2x+6', 'Exercise 1')">Check Answer</button>
+                    <div id="result-ex1"></div>
+                    <button class="btn" onclick="showSolution('sol1')">Show Solution</button>
+                    <div id="sol1" style="display:none; margin-top:10px; padding:10px; background:#f9f9f9; border-radius:5px;">
+                        <strong>Solution:</strong><br>
+                        Combine like terms:<br>
+                        (4x² + 2x²) + (-3x + 5x) + (7 - 1)<br>
+                        = 6x² + 2x + 6
+                    </div>
+                </div>
+
+                <div class="practice">
+                    <h3>Exercise 2: Special Products</h3>
+                    <p>Expand: (3x - 4)²</p>
+                    <input type="text" class="practice-input" id="ex2" placeholder="Enter your answer">
+                    <button class="btn" onclick="checkAnswer('ex2', '9x^2-24x+16', 'Exercise 2')">Check Answer</button>
+                    <div id="result-ex2"></div>
+                    <button class="btn" onclick="showSolution('sol2')">Show Solution</button>
+                    <div id="sol2" style="display:none; margin-top:10px; padding:10px; background:#f9f9f9; border-radius:5px;">
+                        <strong>Solution:</strong><br>
+                        Use (a - b)² = a² - 2ab + b²<br>
+                        a = 3x, b = 4<br>
+                        (3x)² - 2(3x)(4) + 4²<br>
+                        = 9x² - 24x + 16
+                    </div>
+                </div>
+
+                <div class="practice">
+                    <h3>Exercise 3: Binomial Expansion</h3>
+                    <p>Expand: (x + 2)⁴ (Use Pascal's Triangle)</p>
+                    <input type="text" class="practice-input" id="ex3" placeholder="Enter your answer">
+                    <button class="btn" onclick="checkAnswer('ex3', 'x^4+8x^3+24x^2+32x+16', 'Exercise 3')">Check Answer</button>
+                    <div id="result-ex3"></div>
+                    <button class="btn" onclick="showSolution('sol3')">Show Solution</button>
+                    <div id="sol3" style="display:none; margin-top:10px; padding:10px; background:#f9f9f9; border-radius:5px;">
+                        <strong>Solution:</strong><br>
+                        Row 4 of Pascal's Triangle: 1 4 6 4 1<br>
+                        1(x)⁴(2)⁰ + 4(x)³(2)¹ + 6(x)²(2)² + 4(x)¹(2)³ + 1(x)⁰(2)⁴<br>
+                        = x⁴ + 8x³ + 24x² + 32x + 16
+                    </div>
+                </div>
+
+                <div class="practice">
+                    <h3>Exercise 4: Factoring</h3>
+                    <p>Factor: x² - 9x + 20</p>
+                    <input type="text" class="practice-input" id="ex4" placeholder="Enter your answer (e.g., (x-4)(x-5))">
+                    <button class="btn" onclick="checkAnswer('ex4', '(x-4)(x-5)', 'Exercise 4')">Check Answer</button>
+                    <div id="result-ex4"></div>
+                    <button class="btn" onclick="showSolution('sol4')">Show Solution</button>
+                    <div id="sol4" style="display:none; margin-top:10px; padding:10px; background:#f9f9f9; border-radius:5px;">
+                        <strong>Solution:</strong><br>
+                        Find two numbers that multiply to 20 and add to -9<br>
+                        -4 × -5 = 20 and -4 + (-5) = -9 ✓<br>
+                        = (x - 4)(x - 5)
+                    </div>
+                </div>
+
+                <div class="practice">
+                    <h3>Exercise 5: Difference of Squares</h3>
+                    <p>Factor: 25x² - 64</p>
+                    <input type="text" class="practice-input" id="ex5" placeholder="Enter your answer">
+                    <button class="btn" onclick="checkAnswer('ex5', '(5x+8)(5x-8)', 'Exercise 5')">Check Answer</button>
+                    <div id="result-ex5"></div>
+                    <button class="btn" onclick="showSolution('sol5')">Show Solution</button>
+                    <div id="sol5" style="display:none; margin-top:10px; padding:10px; background:#f9f9f9; border-radius:5px;">
+                        <strong>Solution:</strong><br>
+                        Recognize as a² - b² where a = 5x, b = 8<br>
+                        a² - b² = (a + b)(a - b)<br>
+                        = (5x + 8)(5x - 8)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div id="quiz" class="section">
+                <h2>Multiple Choice Quiz</h2>
+                <p>Test your knowledge! Select the correct answer for each question.</p>
+                
+                <div class="practice">
+                    <h3>Question 1</h3>
+                    <p>What is the degree of the polynomial 5x⁴ - 3x² + 7x - 2?</p>
+                    <div class="quiz-option" onclick="selectQuiz(1, 'A', false)">A) 2</div>
+                    <div class="quiz-option" onclick="selectQuiz(1, 'B', false)">B) 3</div>
+                    <div class="quiz-option" onclick="selectQuiz(1, 'C', true)">C) 4</div>
+                    <div class="quiz-option" onclick="selectQuiz(1, 'D', false)">D) 5</div>
+                    <div id="quiz-result-1"></div>
+                </div>
+
+                <div class="practice">
+                    <h3>Question 2</h3>
+                    <p>Which of the following is the expanded form of (x + 3)²?</p>
+                    <div class="quiz-option" onclick="selectQuiz(2, 'A', false)">A) x² + 9</div>
+                    <div class="quiz-option" onclick="selectQuiz(2, 'B', false)">B) x² + 3x + 9</div>
+                    <div class="quiz-option" onclick="selectQuiz(2, 'C', true)">C) x² + 6x + 9</div>
+                    <div class="quiz-option" onclick="selectQuiz(2, 'D', false)">D) x² + 6x + 3</div>
+                    <div id="quiz-result-2"></div>
+                </div>
+
+                <div class="practice">
+                    <h3>Question 3</h3>
+                    <p>What is the sum of row 5 in Pascal's Triangle?</p>
+                    <div class="quiz-option" onclick="selectQuiz(3, 'A', false)">A) 16</div>
+                    <div class="quiz-option" onclick="selectQuiz(3, 'B', true)">B) 32</div>
+                    <div class="quiz-option" onclick="selectQuiz(3, 'C', false)">C) 64</div>
+                    <div class="quiz-option" onclick="selectQuiz(3, 'D', false)">D) 128</div>
+                    <div id="quiz-result-3"></div>
+                </div>
+
+                <div class="practice">
+                    <h3>Question 4</h3>
+                    <p>Factor: x² - 16</p>
+                    <div class="quiz-option" onclick="selectQuiz(4, 'A', false)">A) (x - 4)²</div>
+                    <div class="quiz-option" onclick="selectQuiz(4, 'B', true)">B) (x + 4)(x - 4)</div>
+                    <div class="quiz-option" onclick="selectQuiz(4, 'C', false)">C) (x + 8)(x - 2)</div>
+                    <div class="quiz-option" onclick="selectQuiz(4, 'D', false)">D) Cannot be factored</div>
+                    <div id="quiz-result-4"></div>
+                </div>
+
+                <div class="practice">
+                    <h3>Question 5</h3>
+                    <p>What is (2x + 5)(2x - 5)?</p>
+                    <div class="quiz-option" onclick="selectQuiz(5, 'A', false)">A) 4x² - 25</div>
+                    <div class="quiz-option" onclick="selectQuiz(5, 'B', false)">B) 4x² + 25</div>
+                    <div class="quiz-option" onclick="selectQuiz(5, 'C', false)">C) 2x² - 25</div>
+                    <div class="quiz-option" onclick="selectQuiz(5, 'D', true)">D) 4x² - 25</div>
+                    <div id="quiz-result-5"></div>
+                </div>
+
+                <div class="practice">
+                    <h3>Question 6</h3>
+                    <p>When dividing (x³ - 2x² + 3x - 5) by (x - 1) using synthetic division, what is the remainder?</p>
+                    <div class="quiz-option" onclick="selectQuiz(6, 'A', false)">A) -5</div>
+                    <div class="quiz-option" onclick="selectQuiz(6, 'B', false)">B) -3</div>
+                    <div class="quiz-option" onclick="selectQuiz(6, 'C', true)">C) -3</div>
+                    <div class="quiz-option" onclick="selectQuiz(6, 'D', false)">D) 0</div>
+                    <div id="quiz-result-6"></div>
+                </div>
+
+                <div class="practice">
+                    <h3>Question 7</h3>
+                    <p>Which formula represents the difference of cubes?</p>
+                    <div class="quiz-option" onclick="selectQuiz(7, 'A', false)">A) a³ - b³ = (a - b)(a² + 2ab + b²)</div>
+                    <div class="quiz-option" onclick="selectQuiz(7, 'B', true)">B) a³ - b³ = (a - b)(a² + ab + b²)</div>
+                    <div class="quiz-option" onclick="selectQuiz(7, 'C', false)">C) a³ - b³ = (a + b)(a² - ab + b²)</div>
+                    <div class="quiz-option" onclick="selectQuiz(7, 'D', false)">D) a³ - b³ = (a - b)³</div>
+                    <div id="quiz-result-7"></div>
+                </div>
+
+                <div class="practice">
+                    <h3>Question 8</h3>
+                    <p>Factor completely: 3x² - 27</p>
+                    <div class="quiz-option" onclick="selectQuiz(8, 'A', false)">A) 3(x - 3)(x - 3)</div>
+                    <div class="quiz-option" onclick="selectQuiz(8, 'B', true)">B) 3(x + 3)(x - 3)</div>
+                    <div class="quiz-option" onclick="selectQuiz(8, 'C', false)">C) (3x + 9)(x - 3)</div>
+                    <div class="quiz-option" onclick="selectQuiz(8, 'D', false)">D) 3(x² - 9)</div>
+                    <div id="quiz-result-8"></div>
+                </div>
+
+                <button class="btn" onclick="calculateScore()">Calculate Final Score</button>
+                <div id="final-score"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let quizAnswers = {};
+        let practiceAttempts = {};
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function checkAnswer(inputId, correctAnswer, exerciseName) {
+            const userAnswer = document.getElementById(inputId).value.trim().toLowerCase();
+            const normalized = userAnswer.replace(/\s+/g, '');
+            const correctNormalized = correctAnswer.toLowerCase().replace(/\s+/g, '');
+            const resultDiv = document.getElementById('result-' + inputId);
+            
+            if (normalized === correctNormalized || 
+                normalized === correctNormalized.replace(/\(/g, '').replace(/\)/g, '') ||
+                normalized.split('').sort().join('') === correctNormalized.split('').sort().join('')) {
+                resultDiv.innerHTML = '<div class="result correct">✓ Correct! Well done!</div>';
+            } else {
+                resultDiv.innerHTML = '<div class="result incorrect">✗ Incorrect. Try again or check the solution.</div>';
+            }
+        }
+
+        function showSolution(solId) {
+            const sol = document.getElementById(solId);
+            sol.style.display = sol.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function selectQuiz(questionNum, option, isCorrect) {
+            const options = document.querySelectorAll(`#quiz .practice:nth-of-type(${questionNum}) .quiz-option`);
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct-answer', 'wrong-answer');
+            });
+            
+            event.target.classList.add('selected');
+            quizAnswers[questionNum] = isCorrect;
+            
+            const resultDiv = document.getElementById(`quiz-result-${questionNum}`);
+            if (isCorrect) {
+                event.target.classList.add('correct-answer');
+                resultDiv.innerHTML = '<div class="result correct">✓ Correct!</div>';
+            } else {
+                event.target.classList.add('wrong-answer');
+                resultDiv.innerHTML = '<div class="result incorrect">✗ Incorrect. Try again!</div>';
+            }
+        }
+
+        function calculateScore() {
+            const total = 8;
+            let correct = 0;
+            for (let key in quizAnswers) {
+                if (quizAnswers[key]) correct++;
+            }
+            const percentage = Math.round((correct / total) * 100);
+            const scoreDiv = document.getElementById('final-score');
+            
+            let message = '';
+            if (percentage >= 90) message = 'Excellent work! 🌟';
+            else if (percentage >= 70) message = 'Good job! 👍';
+            else if (percentage >= 50) message = 'Keep practicing! 📚';
+            else message = 'Review the material and try again. 💪';
+            
+            scoreDiv.innerHTML = `<div class="result" style="background:#667eea; color:white; font-size:1.2em; margin-top:20px;">
+                <strong>Your Score: ${correct}/${total} (${percentage}%)</strong><br>${message}
+            </div>`;
+        }
+    </script>
+</body>
+</html>
