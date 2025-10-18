@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polynomial Division: Long Division & Synthetic Division</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #6b8cbc;
+            --accent: #ff7e5f;
+            --light: #f5f7fa;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin: 20px 0 15px;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 8px;
+        }
+        
+        h3 {
+            color: var(--secondary);
+            margin: 15px 0 10px;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background-color: white;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            margin: 0 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: var(--light);
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .division-container {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .division-step {
+            margin: 15px 0;
+            padding: 10px;
+            border-left: 4px solid var(--secondary);
+            background-color: rgba(107, 140, 188, 0.1);
+        }
+        
+        .division-problem {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin: 15px 0;
+            white-space: pre;
+        }
+        
+        .step-explanation {
+            margin-top: 10px;
+            font-style: italic;
+            color: var(--dark);
+        }
+        
+        .example-controls {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: var(--secondary);
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .practice-section {
+            margin: 30px 0;
+        }
+        
+        .practice-problem {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f4f8;
+            border-radius: 5px;
+        }
+        
+        input[type="text"] {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 0 5px;
+            width: 60px;
+            text-align: center;
+        }
+        
+        .feedback {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .correct {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+        
+        .incorrect {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+        
+        .quiz-section {
+            margin: 30px 0;
+        }
+        
+        .quiz-question {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f4f8;
+            border-radius: 5px;
+        }
+        
+        .quiz-options {
+            margin: 10px 0;
+        }
+        
+        .quiz-option {
+            margin: 8px 0;
+        }
+        
+        .results {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f0f4f8;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--success);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .comparison-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                border-radius: 5px;
+                margin: 5px 0;
+            }
+            
+            .division-problem {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MAT115 Prof. Khalid Kassou</h1>
+            <h1>Polynomial Division</h1>
+            <p>Master Long Division and Synthetic Division with Interactive Examples</p>
+        </header>
+        
+        <div class="nav-tabs">
+            <button class="tab active" data-tab="intro">Introduction</button>
+            <button class="tab" data-tab="long-division">Long Division</button>
+            <button class="tab" data-tab="synthetic-division">Synthetic Division</button>
+            <button class="tab" data-tab="comparison">Comparison</button>
+            <button class="tab" data-tab="practice">Practice</button>
+            <button class="tab" data-tab="quiz">Quiz</button>
+        </div>
+        
+        <div id="intro" class="tab-content active">
+            <h2>Introduction to Polynomial Division</h2>
+            <p>Polynomial division is a method for dividing a polynomial by another polynomial of equal or lower degree. The two main methods are:</p>
+            
+            <ul>
+                <li><strong>Long Division</strong>: A method similar to numerical long division that works for any polynomial division</li>
+                <li><strong>Synthetic Division</strong>: A shortcut method that works only when dividing by a linear polynomial (x - c)</li>
+            </ul>
+            
+            <p>In both methods, we express the result as:</p>
+            <p style="text-align: center; font-size: 1.2rem;"><strong>Dividend = Divisor × Quotient + Remainder</strong></p>
+            
+            <p>This presentation will guide you through both methods with interactive examples, practice problems, and a quiz to test your understanding.</p>
+            
+            <div class="division-container">
+                <h3>Key Terminology</h3>
+                <ul>
+                    <li><strong>Dividend</strong>: The polynomial being divided</li>
+                    <li><strong>Divisor</strong>: The polynomial we're dividing by</li>
+                    <li><strong>Quotient</strong>: The result of the division</li>
+                    <li><strong>Remainder</strong>: What's left after division</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="long-division" class="tab-content">
+            <h2>Long Division of Polynomials</h2>
+            <p>Long division of polynomials follows a process similar to numerical long division. Let's work through examples of increasing difficulty.</p>
+            
+            <div class="example-controls">
+                <button id="prev-long-div">Previous Example</button>
+                <span id="long-div-example-title">Example 1: (x² + 5x + 6) ÷ (x + 2)</span>
+                <button id="next-long-div">Next Example</button>
+            </div>
+            
+            <div class="division-container">
+                <div id="long-division-steps"></div>
+            </div>
+            
+            <h3>Long Division Steps</h3>
+            <ol>
+                <li>Arrange both polynomials in descending order of exponents</li>
+                <li>Divide the first term of the dividend by the first term of the divisor</li>
+                <li>Multiply the entire divisor by this result and subtract from the dividend</li>
+                <li>Bring down the next term and repeat until all terms have been processed</li>
+                <li>The final result is the quotient plus any remainder over the divisor</li>
+            </ol>
+        </div>
+        
+        <div id="synthetic-division" class="tab-content">
+            <h2>Synthetic Division</h2>
+            <p>Synthetic division is a shortcut method that works when dividing by a linear polynomial of the form (x - c). It's more efficient than long division for these cases.</p>
+            
+            <div class="example-controls">
+                <button id="prev-synth-div">Previous Example</button>
+                <span id="synth-div-example-title">Example 1: (x³ - 2x² - 5x + 6) ÷ (x - 3)</span>
+                <button id="next-synth-div">Next Example</button>
+            </div>
+            
+            <div class="division-container">
+                <div id="synthetic-division-steps"></div>
+            </div>
+            
+            <h3>Synthetic Division Steps</h3>
+            <ol>
+                <li>Write the root (c) of the divisor (x - c) to the left</li>
+                <li>Write the coefficients of the dividend to the right</li>
+                <li>Bring down the first coefficient</li>
+                <li>Multiply by the root and add to the next coefficient</li>
+                <li>Repeat until all coefficients are processed</li>
+                <li>The last number is the remainder, the others are coefficients of the quotient</li>
+            </ol>
+        </div>
+        
+        <div id="comparison" class="tab-content">
+            <h2>Comparing Long Division and Synthetic Division</h2>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Long Division</th>
+                        <th>Synthetic Division</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Applicability</td>
+                        <td>Works for any polynomial division</td>
+                        <td>Only works when dividing by (x - c)</td>
+                    </tr>
+                    <tr>
+                        <td>Complexity</td>
+                        <td>More steps, more writing</td>
+                        <td>Fewer steps, less writing</td>
+                    </tr>
+                    <tr>
+                        <td>Visual clarity</td>
+                        <td>Shows the complete process clearly</td>
+                        <td>More compact but less intuitive</td>
+                    </tr>
+                    <tr>
+                        <td>Missing terms</td>
+                        <td>Must include 0 coefficients for missing terms</td>
+                        <td>Must include 0 coefficients for missing terms</td>
+                    </tr>
+                    <tr>
+                        <td>Best for</td>
+                        <td>General polynomial division, teaching concepts</td>
+                        <td>Quick division by linear factors, polynomial evaluation</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>When to Use Each Method</h3>
+            <div class="division-container">
+                <p><strong>Use Long Division when:</strong></p>
+                <ul>
+                    <li>The divisor is not linear (degree > 1)</li>
+                    <li>You're learning polynomial division for the first time</li>
+                    <li>You need to clearly show each step of the process</li>
+                </ul>
+                
+                <p><strong>Use Synthetic Division when:</strong></p>
+                <ul>
+                    <li>The divisor is linear (x - c)</li>
+                    <li>You need a quick calculation</li>
+                    <li>You're evaluating a polynomial at x = c</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="practice" class="tab-content">
+            <h2>Practice Problems</h2>
+            <p>Test your understanding with these practice problems. Check your answers as you go!</p>
+            
+            <div class="practice-section">
+                <h3>Long Division Practice</h3>
+                
+                <div class="practice-problem">
+                    <p>Divide (x² + 7x + 12) by (x + 3)</p>
+                    <p>Quotient: <input type="text" id="practice-1-quotient" placeholder="?"> Remainder: <input type="text" id="practice-1-remainder" placeholder="?"></p>
+                    <button onclick="checkPractice(1)">Check Answer</button>
+                    <div id="practice-1-feedback" class="feedback"></div>
+                </div>
+                
+                <div class="practice-problem">
+                    <p>Divide (2x³ - 5x² + 3x - 7) by (x - 2)</p>
+                    <p>Quotient: <input type="text" id="practice-2-quotient" placeholder="?"> Remainder: <input type="text" id="practice-2-remainder" placeholder="?"></p>
+                    <button onclick="checkPractice(2)">Check Answer</button>
+                    <div id="practice-2-feedback" class="feedback"></div>
+                </div>
+                
+                <div class="practice-problem">
+                    <p>Divide (x³ - 4x² + x + 6) by (x² - x - 2)</p>
+                    <p>Quotient: <input type="text" id="practice-3-quotient" placeholder="?"> Remainder: <input type="text" id="practice-3-remainder" placeholder="?"></p>
+                    <button onclick="checkPractice(3)">Check Answer</button>
+                    <div id="practice-3-feedback" class="feedback"></div>
+                </div>
+            </div>
+            
+            <div class="practice-section">
+                <h3>Synthetic Division Practice</h3>
+                
+                <div class="practice-problem">
+                    <p>Divide (x³ - 6x² + 11x - 6) by (x - 1)</p>
+                    <p>Quotient: <input type="text" id="practice-4-quotient" placeholder="?"> Remainder: <input type="text" id="practice-4-remainder" placeholder="?"></p>
+                    <button onclick="checkPractice(4)">Check Answer</button>
+                    <div id="practice-4-feedback" class="feedback"></div>
+                </div>
+                
+                <div class="practice-problem">
+                    <p>Divide (2x³ + 3x² - 5x - 6) by (x + 2)</p>
+                    <p>Quotient: <input type="text" id="practice-5-quotient" placeholder="?"> Remainder: <input type="text" id="practice-5-remainder" placeholder="?"></p>
+                    <button onclick="checkPractice(5)">Check Answer</button>
+                    <div id="practice-5-feedback" class="feedback"></div>
+                </div>
+                
+                <div class="practice-problem">
+                    <p>Divide (x⁴ - 16) by (x - 2)</p>
+                    <p>Quotient: <input type="text" id="practice-6-quotient" placeholder="?"> Remainder: <input type="text" id="practice-6-remainder" placeholder="?"></p>
+                    <button onclick="checkPractice(6)">Check Answer</button>
+                    <div id="practice-6-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="quiz" class="tab-content">
+            <h2>Test Your Knowledge</h2>
+            <p>Take this quiz to see how well you understand polynomial division!</p>
+            
+            <div class="quiz-section">
+                <div class="quiz-question">
+                    <p><strong>1. Which method can be used to divide by any polynomial?</strong></p>
+                    <div class="quiz-options">
+                        <div class="quiz-option">
+                            <input type="radio" id="q1-a" name="q1" value="a">
+                            <label for="q1-a">Long Division</label>
+                        </div>
+                        <div class="quiz-option">
+                            <input type="radio" id="q1-b" name="q1" value="b">
+                            <label for="q1-b">Synthetic Division</label>
+                        </div>
+                        <div class="quiz-option">
+                            <input type="radio" id="q1-c" name="q1" value="c">
+                            <label for="q1-c">Both methods</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p><strong>2. What is the remainder when (x³ - 2x² - 5x + 6) is divided by (x - 3)?</strong></p>
+                    <div class="quiz-options">
+                        <div class="quiz-option">
+                            <input type="radio" id="q2-a" name="q2" value="a">
+                            <label for="q2-a">0</label>
+                        </div>
+                        <div class="quiz-option">
+                            <input type="radio" id="q2-b" name="q2" value="b">
+                            <label for="q2-b">1</label>
+                        </div>
+                        <div class="quiz-option">
+                            <input type="radio" id="q2-c" name="q2" value="c">
+                            <label for="q2-c">-1</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p><strong>3. When using synthetic division, what number do you write to the left?</strong></p>
+                    <div class="quiz-options">
+                        <div class="quiz-option">
+                            <input type="radio" id="q3-a" name="q3" value="a">
+                            <label for="q3-a">The coefficient of x in the divisor</label>
+                        </div>
+                        <div class="quiz-option">
+                            <input type="radio" id="q3-b" name="q3" value="b">
+                            <label for="q3-b">The constant term of the divisor</label>
+                        </div>
+                        <div class="quiz-option">
+                            <input type="radio" id="q3-c" name="q3" value="c">
+                            <label for="q3-c">The root of the divisor (x - c)</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p><strong>4. What is the quotient when (x² + 5x + 6) is divided by (x + 2)?</strong></p>
+                    <div class="quiz-options">
+                        <div class="quiz-option">
+                            <input type="radio" id="q4-a" name="q4" value="a">
+                            <label for="q4-a">x + 3</label>
+                        </div>
+                        <div class="quiz-option">
+                            <input type="radio" id="q4-b" name="q4" value="b">
+                            <label for="q4-b">x - 3</label>
+                        </div>
+                        <div class="quiz-option">
+                            <input type="radio" id="q4-c" name="q4" value="c">
+                            <label for="q4-c">x + 4</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p><strong>5. Which of the following divisions CANNOT be done using synthetic division?</strong></p>
+                    <div class="quiz-options">
+                        <div class="quiz-option">
+                            <input type="radio" id="q5-a" name="q5" value="a">
+                            <label for="q5-a">(x³ - 1) ÷ (x - 1)</label>
+                        </div>
+                        <div class="quiz-option">
+                            <input type="radio" id="q5-b" name="q5" value="b">
+                            <label for="q5-b">(x⁴ + 2x² - 3) ÷ (x + 2)</label>
+                        </div>
+                        <div class="quiz-option">
+                            <input type="radio" id="q5-c" name="q5" value="c">
+                            <label for="q5-c">(x³ - 2x + 1) ÷ (x² + 1)</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="submitQuiz()" style="display: block; margin: 20px auto;">Submit Quiz</button>
+                
+                <div id="quiz-results" class="results">
+                    <h3>Quiz Results</h3>
+                    <div class="progress-bar">
+                        <div class="progress" id="quiz-progress"></div>
+                    </div>
+                    <p id="quiz-score"></p>
+                    <p id="quiz-feedback"></p>
+                    <button onclick="resetQuiz()">Try Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab navigation
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Long Division Examples
+        const longDivisionExamples = [
+            {
+                title: "Example 1: (x² + 5x + 6) ÷ (x + 2)",
+                steps: [
+                    "Divide x² by x to get x",
+                    "Multiply (x + 2) by x to get x² + 2x",
+                    "Subtract: (x² + 5x) - (x² + 2x) = 3x",
+                    "Bring down +6 to get 3x + 6",
+                    "Divide 3x by x to get 3",
+                    "Multiply (x + 2) by 3 to get 3x + 6",
+                    "Subtract: (3x + 6) - (3x + 6) = 0",
+                    "Result: Quotient = x + 3, Remainder = 0"
+                ],
+                problem: `
+     x + 3
+x+2 ) x² + 5x + 6
+     -(x² + 2x)
+     ---------
+          3x + 6
+        -(3x + 6)
+        ---------
+               0`
+            },
+            {
+                title: "Example 2: (2x³ - 5x² + 3x - 7) ÷ (x - 2)",
+                steps: [
+                    "Divide 2x³ by x to get 2x²",
+                    "Multiply (x - 2) by 2x² to get 2x³ - 4x²",
+                    "Subtract: (2x³ - 5x²) - (2x³ - 4x²) = -x²",
+                    "Bring down +3x to get -x² + 3x",
+                    "Divide -x² by x to get -x",
+                    "Multiply (x - 2) by -x to get -x² + 2x",
+                    "Subtract: (-x² + 3x) - (-x² + 2x) = x",
+                    "Bring down -7 to get x - 7",
+                    "Divide x by x to get 1",
+                    "Multiply (x - 2) by 1 to get x - 2",
+                    "Subtract: (x - 7) - (x - 2) = -5",
+                    "Result: Quotient = 2x² - x + 1, Remainder = -5"
+                ],
+                problem: `
+     2x² - x + 1
+x-2 ) 2x³ - 5x² + 3x - 7
+     -(2x³ - 4x²)
+     -----------
+          -x² + 3x
+        -(-x² + 2x)
+        -----------
+                x - 7
+              -(x - 2)
+              -------
+                   -5`
+            },
+            {
+                title: "Example 3: (x³ - 4x² + x + 6) ÷ (x² - x - 2)",
+                steps: [
+                    "Divide x³ by x² to get x",
+                    "Multiply (x² - x - 2) by x to get x³ - x² - 2x",
+                    "Subtract: (x³ - 4x²) - (x³ - x²) = -3x²",
+                    "Bring down +x to get -3x² + x",
+                    "Subtract: (x + 2x) wait, let's fix that...",
+                    "Actually: (-3x² + x) - (-2x) = -3x² + 3x",
+                    "Divide -3x² by x² to get -3",
+                    "Multiply (x² - x - 2) by -3 to get -3x² + 3x + 6",
+                    "Subtract: (-3x² + 3x) - (-3x² + 3x) = 0",
+                    "Bring down +6 to get 6",
+                    "6 ÷ (x² - x - 2) gives remainder 6",
+                    "Result: Quotient = x - 3, Remainder = 0"
+                ],
+                problem: `
+        x - 3
+x²-x-2 ) x³ - 4x² + x + 6
+        -(x³ - x² - 2x)
+        --------------
+             -3x² + 3x + 6
+           -(-3x² + 3x + 6)
+           ----------------
+                         0`
+            }
+        ];
+
+        let currentLongDivExample = 0;
+
+        function updateLongDivisionExample() {
+            const example = longDivisionExamples[currentLongDivExample];
+            document.getElementById('long-div-example-title').textContent = example.title;
+            
+            const stepsContainer = document.getElementById('long-division-steps');
+            stepsContainer.innerHTML = '';
+            
+            // Add the division problem
+            const problemDiv = document.createElement('div');
+            problemDiv.className = 'division-problem';
+            problemDiv.textContent = example.problem;
+            stepsContainer.appendChild(problemDiv);
+            
+            // Add the steps
+            example.steps.forEach((step, index) => {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'division-step';
+                stepDiv.innerHTML = `<strong>Step ${index + 1}:</strong> ${step}`;
+                stepsContainer.appendChild(stepDiv);
+            });
+        }
+
+        document.getElementById('prev-long-div').addEventListener('click', () => {
+            if (currentLongDivExample > 0) {
+                currentLongDivExample--;
+                updateLongDivisionExample();
+            }
+        });
+
+        document.getElementById('next-long-div').addEventListener('click', () => {
+            if (currentLongDivExample < longDivisionExamples.length - 1) {
+                currentLongDivExample++;
+                updateLongDivisionExample();
+            }
+        });
+
+        // Synthetic Division Examples
+        const syntheticDivisionExamples = [
+            {
+                title: "Example 1: (x³ - 2x² - 5x + 6) ÷ (x - 3)",
+                steps: [
+                    "Write the root of (x - 3), which is 3",
+                    "Write coefficients: 1 (x³), -2 (x²), -5 (x), 6 (constant)",
+                    "Bring down the first coefficient: 1",
+                    "Multiply 1 by 3 = 3, add to next coefficient: -2 + 3 = 1",
+                    "Multiply 1 by 3 = 3, add to next coefficient: -5 + 3 = -2",
+                    "Multiply -2 by 3 = -6, add to next coefficient: 6 + (-6) = 0",
+                    "The quotient coefficients are 1, 1, -2 → x² + x - 2",
+                    "Remainder is 0"
+                ],
+                problem: `
+3 | 1  -2  -5   6
+  |    3   3  -6
+  ----------------
+    1   1  -2   0`
+            },
+            {
+                title: "Example 2: (2x³ + 3x² - 5x - 6) ÷ (x + 2)",
+                steps: [
+                    "Write the root of (x + 2), which is -2",
+                    "Write coefficients: 2, 3, -5, -6",
+                    "Bring down the first coefficient: 2",
+                    "Multiply 2 by -2 = -4, add to next coefficient: 3 + (-4) = -1",
+                    "Multiply -1 by -2 = 2, add to next coefficient: -5 + 2 = -3",
+                    "Multiply -3 by -2 = 6, add to next coefficient: -6 + 6 = 0",
+                    "The quotient coefficients are 2, -1, -3 → 2x² - x - 3",
+                    "Remainder is 0"
+                ],
+                problem: `
+-2 | 2   3  -5  -6
+   |    -4   2   6
+   ----------------
+     2  -1  -3   0`
+            },
+            {
+                title: "Example 3: (x⁴ - 16) ÷ (x - 2)",
+                steps: [
+                    "Write the root of (x - 2), which is 2",
+                    "Write coefficients: 1 (x⁴), 0 (x³), 0 (x²), 0 (x), -16 (constant)",
+                    "Bring down the first coefficient: 1",
+                    "Multiply 1 by 2 = 2, add to next coefficient: 0 + 2 = 2",
+                    "Multiply 2 by 2 = 4, add to next coefficient: 0 + 4 = 4",
+                    "Multiply 4 by 2 = 8, add to next coefficient: 0 + 8 = 8",
+                    "Multiply 8 by 2 = 16, add to next coefficient: -16 + 16 = 0",
+                    "The quotient coefficients are 1, 2, 4, 8 → x³ + 2x² + 4x + 8",
+                    "Remainder is 0"
+                ],
+                problem: `
+2 | 1   0   0   0  -16
+  |    2   4   8  16
+  --------------------
+    1   2   4   8   0`
+            }
+        ];
+
+        let currentSynthDivExample = 0;
+
+        function updateSyntheticDivisionExample() {
+            const example = syntheticDivisionExamples[currentSynthDivExample];
+            document.getElementById('synth-div-example-title').textContent = example.title;
+            
+            const stepsContainer = document.getElementById('synthetic-division-steps');
+            stepsContainer.innerHTML = '';
+            
+            // Add the division problem
+            const problemDiv = document.createElement('div');
+            problemDiv.className = 'division-problem';
+            problemDiv.textContent = example.problem;
+            stepsContainer.appendChild(problemDiv);
+            
+            // Add the steps
+            example.steps.forEach((step, index) => {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'division-step';
+                stepDiv.innerHTML = `<strong>Step ${index + 1}:</strong> ${step}`;
+                stepsContainer.appendChild(stepDiv);
+            });
+        }
+
+        document.getElementById('prev-synth-div').addEventListener('click', () => {
+            if (currentSynthDivExample > 0) {
+                currentSynthDivExample--;
+                updateSyntheticDivisionExample();
+            }
+        });
+
+        document.getElementById('next-synth-div').addEventListener('click', () => {
+            if (currentSynthDivExample < syntheticDivisionExamples.length - 1) {
+                currentSynthDivExample++;
+                updateSyntheticDivisionExample();
+            }
+        });
+
+        // Practice Problems
+        const practiceAnswers = {
+            1: { quotient: "x+4", remainder: "0" },
+            2: { quotient: "2x^2-x+1", remainder: "-5" },
+            3: { quotient: "x-3", remainder: "0" },
+            4: { quotient: "x^2-5x+6", remainder: "0" },
+            5: { quotient: "2x^2-x-3", remainder: "0" },
+            6: { quotient: "x^3+2x^2+4x+8", remainder: "0" }
+        };
+
+        function checkPractice(problemNum) {
+            const quotientInput = document.getElementById(`practice-${problemNum}-quotient`);
+            const remainderInput = document.getElementById(`practice-${problemNum}-remainder`);
+            const feedbackDiv = document.getElementById(`practice-${problemNum}-feedback`);
+            
+            const userQuotient = quotientInput.value.trim().toLowerCase().replace(/\s+/g, '');
+            const userRemainder = remainderInput.value.trim().toLowerCase().replace(/\s+/g, '');
+            
+            const correctAnswer = practiceAnswers[problemNum];
+            
+            // Normalize answers for comparison
+            const normalizedUserQuotient = userQuotient.replace(/\^/g, '').replace(/(\d)x/g, '$1x');
+            const normalizedCorrectQuotient = correctAnswer.quotient.replace(/\^/g, '').replace(/(\d)x/g, '$1x');
+            
+            if (normalizedUserQuotient === normalizedCorrectQuotient && userRemainder === correctAnswer.remainder) {
+                feedbackDiv.textContent = "Correct! Well done.";
+                feedbackDiv.className = "feedback correct";
+                feedbackDiv.style.display = "block";
+            } else {
+                feedbackDiv.textContent = `Not quite. The correct answer is: Quotient = ${correctAnswer.quotient}, Remainder = ${correctAnswer.remainder}`;
+                feedbackDiv.className = "feedback incorrect";
+                feedbackDiv.style.display = "block";
+            }
+        }
+
+        // Quiz
+        const quizAnswers = {
+            q1: "a",
+            q2: "a",
+            q3: "c",
+            q4: "a",
+            q5: "c"
+        };
+
+        function submitQuiz() {
+            let score = 0;
+            const totalQuestions = Object.keys(quizAnswers).length;
+            
+            // Check each question
+            for (let i = 1; i <= totalQuestions; i++) {
+                const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selectedOption && selectedOption.value === quizAnswers[`q${i}`]) {
+                    score++;
+                }
+            }
+            
+            // Display results
+            const percentage = (score / totalQuestions) * 100;
+            document.getElementById('quiz-progress').style.width = `${percentage}%`;
+            document.getElementById('quiz-score').textContent = `You scored ${score} out of ${totalQuestions} (${percentage}%)`;
+            
+            // Provide feedback based on score
+            if (percentage >= 80) {
+                document.getElementById('quiz-feedback').textContent = "Excellent! You have a strong understanding of polynomial division.";
+            } else if (percentage >= 60) {
+                document.getElementById('quiz-feedback').textContent = "Good job! You understand the basics but could use more practice.";
+            } else {
+                document.getElementById('quiz-feedback').textContent = "Keep practicing! Review the examples and try again.";
+            }
+            
+            document.getElementById('quiz-results').style.display = 'block';
+        }
+
+        function resetQuiz() {
+            // Clear all selections
+            document.querySelectorAll('input[type="radio"]').forEach(input => {
+                input.checked = false;
+            });
+            
+            // Hide results
+            document.getElementById('quiz-results').style.display = 'none';
+            document.getElementById('quiz-progress').style.width = '0%';
+        }
+
+        // Initialize the examples
+        updateLongDivisionExample();
+        updateSyntheticDivisionExample();
+    </script>
+</body>
+</html>
