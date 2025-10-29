@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quadratic Functions - Interactive Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            display: none;
+            width: 90%;
+            max-width: 1200px;
+            height: 85vh;
+            margin: 2vh auto;
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow-y: auto;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #764ba2;
+            font-size: 2em;
+            margin: 25px 0 15px 0;
+            border-left: 6px solid #764ba2;
+            padding-left: 15px;
+        }
+
+        h3 {
+            color: #667eea;
+            font-size: 1.5em;
+            margin: 20px 0 10px 0;
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-size: 1.1em;
+        }
+
+        .example-box {
+            background: #fff9e6;
+            border: 2px solid #ffd700;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .example-title {
+            color: #ff8c00;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .formula {
+            background: #f0f0f0;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            text-align: center;
+            border: 2px dashed #667eea;
+        }
+
+        .step {
+            margin: 10px 0;
+            padding-left: 20px;
+            border-left: 3px solid #764ba2;
+        }
+
+        .practice-section {
+            background: #e8f5e9;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+            border: 2px solid #4caf50;
+        }
+
+        .practice-problem {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1em;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            width: 200px;
+            margin: 0 10px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .slide-counter {
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .correct {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .incorrect {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .quiz-option {
+            background: white;
+            border: 2px solid #667eea;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: #f0f0ff;
+            transform: translateX(5px);
+        }
+
+        .quiz-option.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .quiz-option.correct-answer {
+            background: #4caf50;
+            color: white;
+        }
+
+        .quiz-option.wrong-answer {
+            background: #f44336;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 40px;
+            line-height: 1.8;
+        }
+
+        .graph-placeholder {
+            width: 100%;
+            height: 300px;
+            background: #f5f5f5;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="slides-wrapper">
+            <!-- Slide 1: Title -->
+            <div class="slide active" id="slide1">
+                <h1>MAT115 Prof. Khalid Kassou</h1>
+                <h1>Quadratic Functions</h1>
+                <h2 style="text-align: center; color: #764ba2; margin-top: 50px;">A Complete Interactive Guide</h2>
+                <div style="text-align: center; margin-top: 80px; font-size: 1.3em;">
+                    <p><strong>Topics Covered:</strong></p>
+                    <ul style="list-style: none; margin-top: 30px; line-height: 2.5;">
+                        <li>📐 Factoring Trinomials (ax² + bx + c)</li>
+                        <li>🔍 Solving by Factoring & Zero Product Property</li>
+                        <li>✨ Completing the Square Method</li>
+                        <li>📊 The Quadratic Formula & Discriminant</li>
+                        <li>✏️ Practice Exercises & Quiz</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 2: Quadratic Functions Definition -->
+            <div class="slide" id="slide2">
+                <h1>What is a Quadratic Function?</h1>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> A quadratic function is a polynomial function of degree 2. It has the general form:
+                    <div class="formula">f(x) = ax² + bx + c</div>
+                    where:
+                    <ul>
+                        <li><strong>a, b, c</strong> are constants (a ≠ 0)</li>
+                        <li><strong>a</strong> is the coefficient of x² (leading coefficient)</li>
+                        <li><strong>b</strong> is the coefficient of x (linear coefficient)</li>
+                        <li><strong>c</strong> is the constant term</li>
+                        <li><strong>x</strong> is the variable</li>
+                    </ul>
+                </div>
+
+                <h3>Key Properties:</h3>
+                <ul>
+                    <li><strong>Degree:</strong> The highest power of x is 2</li>
+                    <li><strong>Graph:</strong> The graph is a U-shaped curve called a <strong>parabola</strong></li>
+                    <li><strong>Vertex:</strong> The highest or lowest point on the parabola</li>
+                    <li><strong>Axis of Symmetry:</strong> A vertical line through the vertex</li>
+                    <li><strong>Direction:</strong> If a > 0, parabola opens upward; if a < 0, opens downward</li>
+                </ul>
+
+                <div class="note">
+                    <strong>Important:</strong> The coefficient 'a' must be non-zero. If a = 0, the function becomes linear (bx + c), not quadratic.
+                </div>
+
+                <h3>Examples of Quadratic Functions:</h3>
+                <ul>
+                    <li>f(x) = x² + 5x + 6 (a=1, b=5, c=6)</li>
+                    <li>f(x) = 2x² - 3x + 1 (a=2, b=-3, c=1)</li>
+                    <li>f(x) = -x² + 4 (a=-1, b=0, c=4)</li>
+                    <li>f(x) = 3x² (a=3, b=0, c=0)</li>
+                </ul>
+            </div>
+
+            <!-- Slide 3: Factoring Trinomials - Introduction -->
+            <div class="slide" id="slide3">
+                <h1>Factoring Trinomials: ax² + bx + c</h1>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> Factoring a trinomial means expressing it as a product of two binomials.
+                    <div class="formula">ax² + bx + c = (px + q)(rx + s)</div>
+                    This process is the reverse of multiplying binomials.
+                </div>
+
+                <h2>Why Factor Quadratics?</h2>
+                <ul>
+                    <li>To solve quadratic equations easily</li>
+                    <li>To find zeros/roots of the function</li>
+                    <li>To simplify algebraic expressions</li>
+                    <li>To understand the behavior of quadratic functions</li>
+                </ul>
+
+                <h2>Methods of Factoring:</h2>
+                
+                <h3>1. When a = 1 (Simple Trinomials)</h3>
+                <p>For trinomials of the form <strong>x² + bx + c</strong>, find two numbers that:</p>
+                <ul>
+                    <li><strong>Multiply</strong> to give c</li>
+                    <li><strong>Add</strong> to give b</li>
+                </ul>
+                <div class="formula">x² + bx + c = (x + m)(x + n)</div>
+                <p>where m × n = c and m + n = b</p>
+
+                <h3>2. When a ≠ 1 (Complex Trinomials)</h3>
+                <p>For trinomials of the form <strong>ax² + bx + c</strong> (where a ≠ 1), use the AC method:</p>
+                <ol>
+                    <li>Multiply a × c</li>
+                    <li>Find two numbers that multiply to ac and add to b</li>
+                    <li>Rewrite the middle term using these numbers</li>
+                    <li>Factor by grouping</li>
+                </ol>
+            </div>
+
+            <!-- Slide 4: Factoring Examples (a = 1) -->
+            <div class="slide" id="slide4">
+                <h1>Factoring When a = 1 - Examples</h1>
+
+                <div class="example-box">
+                    <div class="example-title">Example 1: x² + 7x + 12</div>
+                    <p><strong>Goal:</strong> Find two numbers that multiply to 12 and add to 7</p>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> List factor pairs of 12: (1,12), (2,6), (3,4)</p>
+                        <p><strong>Step 2:</strong> Check which pair adds to 7: 3 + 4 = 7 ✓</p>
+                        <p><strong>Step 3:</strong> Write the factored form: (x + 3)(x + 4)</p>
+                        <p><strong>Verification:</strong> (x + 3)(x + 4) = x² + 4x + 3x + 12 = x² + 7x + 12 ✓</p>
+                    </div>
+                    <div class="formula">x² + 7x + 12 = (x + 3)(x + 4)</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 2: x² + 5x + 6</div>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> Find two numbers that multiply to 6 and add to 5</p>
+                        <p><strong>Step 2:</strong> Factor pairs of 6: (1,6), (2,3)</p>
+                        <p><strong>Step 3:</strong> 2 + 3 = 5 ✓</p>
+                    </div>
+                    <div class="formula">x² + 5x + 6 = (x + 2)(x + 3)</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 3: x² - 8x + 15 (Both factors negative)</div>
+                    <div class="step">
+                        <p><strong>Goal:</strong> Find two numbers that multiply to +15 and add to -8</p>
+                        <p><strong>Analysis:</strong> Since the product is positive and sum is negative, both numbers must be negative</p>
+                        <p><strong>Factor pairs:</strong> (-1,-15), (-3,-5)</p>
+                        <p><strong>Check:</strong> -3 + (-5) = -8 ✓ and (-3) × (-5) = 15 ✓</p>
+                    </div>
+                    <div class="formula">x² - 8x + 15 = (x - 3)(x - 5)</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 4: x² + 2x - 15 (One positive, one negative)</div>
+                    <div class="step">
+                        <p><strong>Goal:</strong> Find two numbers that multiply to -15 and add to 2</p>
+                        <p><strong>Analysis:</strong> Since the product is negative, one number is positive and one is negative</p>
+                        <p><strong>Factor pairs:</strong> (1,-15), (-1,15), (3,-5), (-3,5)</p>
+                        <p><strong>Check:</strong> 5 + (-3) = 2 ✓ and 5 × (-3) = -15 ✓</p>
+                    </div>
+                    <div class="formula">x² + 2x - 15 = (x + 5)(x - 3)</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 5: x² - 4x - 21</div>
+                    <div class="step">
+                        <p><strong>Goal:</strong> Find two numbers that multiply to -21 and add to -4</p>
+                        <p><strong>Factor pairs:</strong> (1,-21), (-1,21), (3,-7), (-3,7)</p>
+                        <p><strong>Check:</strong> 3 + (-7) = -4 ✓ and 3 × (-7) = -21 ✓</p>
+                    </div>
+                    <div class="formula">x² - 4x - 21 = (x + 3)(x - 7)</div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Factoring When a ≠ 1 -->
+            <div class="slide" id="slide5">
+                <h1>Factoring When a ≠ 1 - The AC Method</h1>
+
+                <div class="definition-box">
+                    <strong>The AC Method:</strong> Used when the leading coefficient (a) is not equal to 1.
+                    <p><strong>Steps:</strong></p>
+                    <ol>
+                        <li>Multiply a × c (call this product AC)</li>
+                        <li>Find two numbers that multiply to AC and add to b</li>
+                        <li>Rewrite the middle term (bx) using these two numbers</li>
+                        <li>Factor by grouping</li>
+                    </ol>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 1: 2x² + 7x + 3</div>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> Calculate AC: 2 × 3 = 6</p>
+                        <p><strong>Step 2:</strong> Find two numbers that multiply to 6 and add to 7</p>
+                        <p>Factor pairs of 6: (1,6), (2,3)</p>
+                        <p>1 + 6 = 7 ✓</p>
+                        <p><strong>Step 3:</strong> Rewrite: 2x² + 1x + 6x + 3</p>
+                        <p><strong>Step 4:</strong> Group and factor:</p>
+                        <p>= (2x² + 1x) + (6x + 3)</p>
+                        <p>= x(2x + 1) + 3(2x + 1)</p>
+                        <p>= (2x + 1)(x + 3)</p>
+                    </div>
+                    <div class="formula">2x² + 7x + 3 = (2x + 1)(x + 3)</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 2: 3x² + 10x + 8</div>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> AC = 3 × 8 = 24</p>
+                        <p><strong>Step 2:</strong> Find two numbers that multiply to 24 and add to 10</p>
+                        <p>Pairs: (1,24), (2,12), (3,8), (4,6)</p>
+                        <p>4 + 6 = 10 ✓</p>
+                        <p><strong>Step 3:</strong> Rewrite: 3x² + 4x + 6x + 8</p>
+                        <p><strong>Step 4:</strong> Factor by grouping:</p>
+                        <p>= x(3x + 4) + 2(3x + 4)</p>
+                        <p>= (3x + 4)(x + 2)</p>
+                    </div>
+                    <div class="formula">3x² + 10x + 8 = (3x + 4)(x + 2)</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 3: 6x² + 11x + 4</div>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> AC = 6 × 4 = 24</p>
+                        <p><strong>Step 2:</strong> Find two numbers that multiply to 24 and add to 11</p>
+                        <p>3 + 8 = 11 ✓ and 3 × 8 = 24 ✓</p>
+                        <p><strong>Step 3:</strong> Rewrite: 6x² + 3x + 8x + 4</p>
+                        <p><strong>Step 4:</strong> Factor: = 3x(2x + 1) + 4(2x + 1) = (2x + 1)(3x + 4)</p>
+                    </div>
+                    <div class="formula">6x² + 11x + 4 = (2x + 1)(3x + 4)</div>
+                </div>
+            </div>
+
+            <!-- Slide 6: More Complex Factoring Examples -->
+            <div class="slide" id="slide6">
+                <h1>Advanced Factoring Examples</h1>
+
+                <div class="example-box">
+                    <div class="example-title">Example 4: 5x² - 13x - 6</div>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> AC = 5 × (-6) = -30</p>
+                        <p><strong>Step 2:</strong> Find two numbers that multiply to -30 and add to -13</p>
+                        <p>We need one positive and one negative number</p>
+                        <p>Pairs: (2,-15), (-2,15), (3,-10), (-3,10)</p>
+                        <p>2 + (-15) = -13 ✓ and 2 × (-15) = -30 ✓</p>
+                        <p><strong>Step 3:</strong> Rewrite: 5x² + 2x - 15x - 6</p>
+                        <p><strong>Step 4:</strong> Factor by grouping:</p>
+                        <p>= x(5x + 2) - 3(5x + 2)</p>
+                        <p>= (5x + 2)(x - 3)</p>
+                    </div>
+                    <div class="formula">5x² - 13x - 6 = (5x + 2)(x - 3)</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 5: 4x² - 12x + 9 (Perfect Square Trinomial)</div>
+                    <div class="step">
+                        <p><strong>Recognition:</strong> This is a perfect square trinomial of the form a² - 2ab + b²</p>
+                        <p><strong>Check:</strong> 4x² = (2x)², 9 = 3², and 12x = 2(2x)(3) ✓</p>
+                        <p><strong>Pattern:</strong> a² - 2ab + b² = (a - b)²</p>
+                        <p><strong>Solution:</strong> (2x - 3)²</p>
+                        <p><strong>Verification:</strong> (2x - 3)² = (2x - 3)(2x - 3) = 4x² - 6x - 6x + 9 = 4x² - 12x + 9 ✓</p>
+                    </div>
+                    <div class="formula">4x² - 12x + 9 = (2x - 3)²</div>
+                </div>
+
+                <div class="note">
+                    <strong>Perfect Square Trinomial Patterns:</strong>
+                    <ul>
+                        <li>a² + 2ab + b² = (a + b)²</li>
+                        <li>a² - 2ab + b² = (a - b)²</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 6: 9x² - 16 (Difference of Squares)</div>
+                    <div class="step">
+                        <p><strong>Recognition:</strong> This is a difference of squares: a² - b²</p>
+                        <p><strong>Pattern:</strong> a² - b² = (a + b)(a - b)</p>
+                        <p><strong>Here:</strong> 9x² = (3x)² and 16 = 4²</p>
+                        <p><strong>Solution:</strong> (3x + 4)(3x - 4)</p>
+                    </div>
+                    <div class="formula">9x² - 16 = (3x + 4)(3x - 4)</div>
+                </div>
+            </div>
+
+            <!-- Slide 7: Zero Product Property -->
+            <div class="slide" id="slide7">
+                <h1>The Zero Product Property</h1>
+
+                <div class="definition-box">
+                    <strong>Zero Product Property:</strong> If the product of two or more factors equals zero, then at least one of the factors must be zero.
+                    <div class="formula">If AB = 0, then A = 0 or B = 0 (or both)</div>
+                    <p><strong>Mathematical Expression:</strong></p>
+                    <p>If (x - a)(x - b) = 0, then x - a = 0 or x - b = 0</p>
+                    <p>Therefore: x = a or x = b</p>
+                </div>
+
+                <h2>Why is This Property Important?</h2>
+                <ul>
+                    <li>It allows us to solve quadratic equations by factoring</li>
+                    <li>Once we factor a quadratic, we can set each factor equal to zero</li>
+                    <li>This gives us the solutions (roots) of the equation</li>
+                    <li>The solutions are also called zeros, roots, or x-intercepts</li>
+                </ul>
+
+                <h2>How to Use the Zero Product Property:</h2>
+                <ol>
+                    <li>Factor the quadratic equation completely</li>
+                    <li>Set the equation equal to zero</li>
+                    <li>Set each factor equal to zero</li>
+                    <li>Solve each resulting equation</li>
+                    <li>Check your solutions</li>
+                </ol>
+
+                <div class="note">
+                    <strong>Important:</strong> The Zero Product Property only works when one side of the equation equals zero. If the equation is not equal to zero, you must first rearrange it.
+                </div>
+
+                <h3>Visual Understanding:</h3>
+                <p>The solutions to a quadratic equation are the x-values where the parabola crosses the x-axis (where y = 0). These are also called the <strong>roots</strong> or <strong>zeros</strong> of the function.</p>
+            </div>
+
+            <!-- Slide 8: Solving by Factoring - Examples -->
+            <div class="slide" id="slide8">
+                <h1>Solving Quadratic Equations by Factoring</h1>
+
+                <div class="example-box">
+                    <div class="example-title">Example 1: x² + 5x + 6 = 0</div>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> Factor the trinomial</p>
+                        <p>Find two numbers that multiply to 6 and add to 5: 2 and 3</p>
+                        <p>x² + 5x + 6 = (x + 2)(x + 3)</p>
+                        <p><strong>Step 2:</strong> Set each factor equal to zero</p>
+                        <p>x + 2 = 0  or  x + 3 = 0</p>
+                        <p><strong>Step 3:</strong> Solve each equation</p>
+                        <p>x = -2  or  x = -3</p>
+                        <p><strong>Step 4:</strong> Check (substitute back):</p>
+                        <p>For x = -2: (-2)² + 5(-2) + 6 = 4 - 10 + 6 = 0 ✓</p>
+                        <p>For x = -3: (-3)² + 5(-3) + 6 = 9 - 15 + 6 = 0 ✓</p>
+                    </div>
+                    <div class="formula">Solution: x = -2 or x = -3</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 2: x² - 7x + 12 = 0</div>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> Factor: x² - 7x + 12 = (x - 3)(x - 4)</p>
+                        <p><strong>Step 2:</strong> Apply Zero Product Property:</p>
+                        <p>x - 3 = 0  or  x - 4 = 0</p>
+                        <p><strong>Step 3:</strong> Solve: x = 3 or x = 4</p>
+                    </div>
+                    <div class="formula">Solution: x = 3 or x = 4</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 3: 2x² + 7x + 3 = 0</div>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> Factor using AC method (AC = 6, factors: 1 and 6)</p>
+                        <p>2x² + 7x + 3 = 2x² + 6x + x + 3 = 2x(x + 3) + 1(x + 3) = (2x + 1)(x + 3)</p>
+                        <p><strong>Step 2:</strong> Set each factor to zero:</p>
+                        <p>2x + 1 = 0  or  x + 3 = 0</p>
+                        <p><strong>Step 3:</strong> Solve:</p>
+                        <p>2x = -1 → x = -1/2  or  x = -3</p>
+                    </div>
+                    <div class="formula">Solution: x = -1/2 or x = -3</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 4: x² - 9 = 0 (Difference of Squares)</div>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> Factor: x² - 9 = (x + 3)(x - 3)</p>
+                        <p><strong>Step 2:</strong> x + 3 = 0  or  x - 3 = 0</p>
+                        <p><strong>Step 3:</strong> x = -3 or x = 3</p>
+                    </div>
+                    <div class="formula">Solution: x = -3 or x = 3</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 5: 3x² - 5x - 2 = 0</div>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> AC = -6, factors: -6 and 1 (since -6 + 1 = -5)</p>
+                        <p>3x² - 6x + x - 2 = 3x(x - 2) + 1(x - 2) = (3x + 1)(x - 2)</p>
+                        <p><strong>Step 2:</strong> 3x + 1 = 0  or  x - 2 = 0</p>
+                        <p><strong>Step 3:</strong> x = -1/3  or  x = 2</p>
+                    </div>
+                    <div class="formula">Solution: x = -1/3 or x = 2</div>
+                </div>
+            </div>
+
+            <!-- Slide 9: Completing the Square - Introduction -->
+            <div class="slide" id="slide9">
+                <h1>Completing the Square Method</h1>
+
+                <div class="definition-box">
+                    <strong>Completing the Square:</strong> A method of solving quadratic equations by converting the equation into a perfect square trinomial, which can then be solved using the square root property.
+                    <p><strong>Goal:</strong> Transform ax² + bx + c = 0 into the form (x - h)² = k</p>
+                </div>
+
+                <h2>Steps to Complete the Square:</h2>
+                <ol>
+                    <li>Move the constant term to the right side of the equation</li>
+                    <li>If a ≠ 1, divide every term by a</li>
+                    <li>Take half of the coefficient of x, square it, and add to both sides</li>
+                    <li>Factor the left side as a perfect square</li>
+                    <li>Apply the square root property</li>
+                    <li>Solve for x</li>
+                </ol>
+
+                <div class="definition-box">
+                    <strong>Square Root Property:</strong> If x² = k, then x = ±√k
+                    <p>This means: x = √k or x = -√k</p>
+                    <p>We write this as: x = ±√k (read as "plus or minus square root of k")</p>
+                </div>
+
+                <h3>The Perfect Square Pattern:</h3>
+                <p>Remember that (x + p)² = x² + 2px + p²</p>
+                <p>So to complete the square for x² + bx:</p>
+                <ul>
+                    <li>Take half of b: b/2</li>
+                    <li>Square it: (b/2)²</li>
+                    <li>Add this to both sides</li>
+                    <li>The left side becomes (x + b/2)²</li>
+                </ul>
+
+                <div class="note">
+                    <strong>Why "Completing the Square"?</strong> We're adding a specific value to make the expression a perfect square trinomial—literally "completing" what's needed to form a perfect square.
+                </div>
+            </div>
+
+            <!-- Slide 10: Completing the Square - Examples -->
+            <div class="slide" id="slide10">
+                <h1>Completing the Square - Examples</h1>
+
+                <div class="example-box">
+                    <div class="example-title">Example 1: x² + 6x + 5 = 0 (Simple case, a = 1)</div>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> Move constant to right: x² + 6x = -5</p>
+                        <p><strong>Step 2:</strong> Take half of 6, square it: (6/2)² = 3² = 9</p>
+                        <p><strong>Step 3:</strong> Add 9 to both sides: x² + 6x + 9 = -5 + 9</p>
+                        <p><strong>Step 4:</strong> Factor left side: (x + 3)² = 4</p>
+                        <p><strong>Step 5:</strong> Apply square root property: x + 3 = ±√4 = ±2</p>
+                        <p><strong>Step 6:</strong> Solve:</p>
+                        <p>x + 3 = 2  →  x = -1</p>
+                        <p>x + 3 = -2  →  x = -5</p>
+                    </div>
+                    <div class="formula">Solution: x = -1 or x = -5</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 2: x² - 8x + 7 = 0</div>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> x² - 8x = -7</p>
+                        <p><strong>Step 2:</strong> (-8/2)² = (-4)² = 16</p>
+                        <p><strong>Step 3:</strong> x² - 8x + 16 = -7 + 16</p>
+                        <p><strong>Step 4:</strong> (x - 4)² = 9</p>
+                        <p><strong>Step 5:</strong> x - 4 = ±3</p>
+                        <p><strong>Step 6:</strong> x = 4 + 3 = 7  or  x = 4 - 3 = 1</p>
+                    </div>
+                    <div class="formula">Solution: x = 7 or x = 1</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 3: 2x² + 8x - 10 = 0 (When a ≠ 1)</div>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> Move constant: 2x² + 8x = 10</p>
+                        <p><strong>Step 2:</strong> Divide by a (which is 2): x² + 4x = 5</p>
+                        <p><strong>Step 3:</strong> (4/2)² = 4, add to both sides: x² + 4x + 4 = 5 + 4</p>
+                        <p><strong>Step 4:</strong> (x + 2)² = 9</p>
+                        <p><strong>Step 5:</strong> x + 2 = ±3</p>
+                        <p><strong>Step 6:</strong> x = -2 + 3 = 1  or  x = -2 - 3 = -5</p>
+                    </div>
+                    <div class="formula">Solution: x = 1 or x = -5</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 4: x² + 5x - 6 = 0 (Fractional completion)</div>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> x² + 5x = 6</p>
+                        <p><strong>Step 2:</strong> (5/2)² = 25/4</p>
+                        <p><strong>Step 3:</strong> x² + 5x + 25/4 = 6 + 25/4 = 24/4 + 25/4 = 49/4</p>
+                        <p><strong>Step 4:</strong> (x + 5/2)² = 49/4</p>
+                        <p><strong>Step 5:</strong> x + 5/2 = ±7/2</p>
+                        <p><strong>Step 6:</strong> x = -5/2 + 7/2 = 2/2 = 1  or  x = -5/2 - 7/2 = -12/2 = -6</p>
+                    </div>
+                    <div class="formula">Solution: x = 1 or x = -6</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 5: 3x² - 12x + 9 = 0</div>
+                    <div class="step">
+                        <p><strong>Step 1:</strong> 3x² - 12x = -9</p>
+                        <p><strong>Step 2:</strong> Divide by 3: x² - 4x = -3</p>
+                        <p><strong>Step 3:</strong> (-4/2)² = 4: x² - 4x + 4 = -3 + 4</p>
+                        <p><strong>Step 4:</strong> (x - 2)² = 1</p>
+                        <p><strong>Step 5:</strong> x - 2 = ±1</p>
+                        <p><strong>Step 6:</strong> x = 3  or  x = 1</p>
+                    </div>
+                    <div class="formula">Solution: x = 3 or x = 1</div>
+                </div>
+            </div>
+
+            <!-- Slide 11: The Quadratic Formula - Derivation -->
+            <div class="slide" id="slide11">
+                <h1>The Quadratic Formula - Derivation</h1>
+
+                <div class="definition-box">
+                    <strong>The Quadratic Formula:</strong> The solution to any quadratic equation ax² + bx + c = 0 is:
+                    <div class="formula">x = (-b ± √(b² - 4ac)) / (2a)</div>
+                </div>
+
+                <h2>Deriving the Formula (Using Completing the Square):</h2>
+                <div class="step">
+                    <p><strong>Start with:</strong> ax² + bx + c = 0</p>
+                    <p><strong>Step 1:</strong> Move c to right side: ax² + bx = -c</p>
+                    <p><strong>Step 2:</strong> Divide by a: x² + (b/a)x = -c/a</p>
+                    <p><strong>Step 3:</strong> Complete the square. Take half of b/a and square it:</p>
+                    <p>[b/(2a)]² = b²/(4a²)</p>
+                    <p><strong>Step 4:</strong> Add to both sides:</p>
+                    <p>x² + (b/a)x + b²/(4a²) = -c/a + b²/(4a²)</p>
+                    <p><strong>Step 5:</strong> Factor left side and combine right side:</p>
+                    <p>(x + b/(2a))² = -c/a + b²/(4a²)</p>
+                    <p>(x + b/(2a))² = (-4ac + b²)/(4a²)</p>
+                    <p>(x + b/(2a))² = (b² - 4ac)/(4a²)</p>
+                    <p><strong>Step 6:</strong> Take square root of both sides:</p>
+                    <p>x + b/(2a) = ±√[(b² - 4ac)/(4a²)]</p>
+                    <p>x + b/(2a) = ±√(b² - 4ac)/(2a)</p>
+                    <p><strong>Step 7:</strong> Solve for x:</p>
+                    <p>x = -b/(2a) ± √(b² - 4ac)/(2a)</p>
+                    <p>x = [-b ± √(b² - 4ac)]/(2a)</p>
+                </div>
+
+                <div class="note">
+                    <strong>Key Point:</strong> This formula works for ALL quadratic equations, regardless of whether they can be factored easily or not!
+                </div>
+            </div>
+
+            <!-- Slide 12: The Discriminant -->
+            <div class="slide" id="slide12">
+                <h1>The Discriminant</h1>
+
+                <div class="definition-box">
+                    <strong>The Discriminant:</strong> The expression under the square root in the quadratic formula:
+                    <div class="formula">Discriminant (Δ) = b² - 4ac</div>
+                    <p>The discriminant determines the nature and number of solutions to a quadratic equation.</p>
+                </div>
+
+                <h2>How the Discriminant Affects Solutions:</h2>
+
+                <table>
+                    <tr>
+                        <th>Discriminant Value</th>
+                        <th>Sign</th>
+                        <th>Number of Solutions</th>
+                        <th>Type of Solutions</th>
+                    </tr>
+                    <tr>
+                        <td>Δ > 0</td>
+                        <td>Positive</td>
+                        <td>Two distinct real solutions</td>
+                        <td>Two different real numbers</td>
+                    </tr>
+                    <tr>
+                        <td>Δ = 0</td>
+                        <td>Zero</td>
+                        <td>One real solution (repeated)</td>
+                        <td>One real number (double root)</td>
+                    </tr>
+                    <tr>
+                        <td>Δ < 0</td>
+                        <td>Negative</td>
+                        <td>No real solutions</td>
+                        <td>Two complex (imaginary) solutions</td>
+                    </tr>
+                </table>
+
+                <h2>Understanding Each Case:</h2>
+
+                <h3>Case 1: Δ > 0 (Positive Discriminant)</h3>
+                <ul>
+                    <li>The square root of a positive number is real</li>
+                    <li>The ± symbol gives two different values</li>
+                    <li>The parabola crosses the x-axis at two points</li>
+                    <li><strong>Example:</strong> x² - 5x + 6 = 0: Δ = 25 - 24 = 1 > 0 ✓</li>
+                </ul>
+
+                <h3>Case 2: Δ = 0 (Zero Discriminant)</h3>
+                <ul>
+                    <li>The square root of zero is zero</li>
+                    <li>The ± gives the same value both times: x = -b/(2a)</li>
+                    <li>The parabola touches the x-axis at exactly one point (the vertex)</li>
+                    <li>This is called a <strong>perfect square trinomial</strong></li>
+                    <li><strong>Example:</strong> x² - 6x + 9 = 0: Δ = 36 - 36 = 0 ✓</li>
+                </ul>
+
+                <h3>Case 3: Δ < 0 (Negative Discriminant)</h3>
+                <ul>
+                    <li>Cannot take the square root of a negative number (in real numbers)</li>
+                    <li>No real solutions; solutions are complex numbers involving i (where i² = -1)</li>
+                    <li>The parabola does not cross the x-axis</li>
+                    <li><strong>Example:</strong> x² + 2x + 5 = 0: Δ = 4 - 20 = -16 < 0 ✓</li>
+                </ul>
+
+                <div class="note">
+                    <strong>Visual Tip:</strong> The discriminant tells you how many times the parabola intersects the x-axis before you even solve the equation!
+                </div>
+            </div>
+
+            <!-- Slide 13: Quadratic Formula - Examples -->
+            <div class="slide" id="slide13">
+                <h1>Using the Quadratic Formula - Examples</h1>
+
+                <div class="example-box">
+                    <div class="example-title">Example 1: x² + 5x + 6 = 0</div>
+                    <div class="step">
+                        <p><strong>Identify:</strong> a = 1, b = 5, c = 6</p>
+                        <p><strong>Calculate discriminant:</strong> Δ = b² - 4ac = 25 - 24 = 1 > 0</p>
+                        <p>→ Two distinct real solutions ✓</p>
+                        <p><strong>Apply formula:</strong></p>
+                        <p>x = [-5 ± √1] / 2</p>
+                        <p>x = [-5 ± 1] / 2</p>
+                        <p>x = (-5 + 1)/2 = -4/2 = -2  or  x = (-5 - 1)/2 = -6/2 = -3</p>
+                    </div>
+                    <div class="formula">Solution: x = -2 or x = -3</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 2: 2x² - 4x - 6 = 0</div>
+                    <div class="step">
+                        <p><strong>Identify:</strong> a = 2, b = -4, c = -6</p>
+                        <p><strong>Discriminant:</strong> Δ = (-4)² - 4(2)(-6) = 16 + 48 = 64 > 0</p>
+                        <p>→ Two distinct real solutions</p>
+                        <p><strong>Apply formula:</strong></p>
+                        <p>x = [4 ± √64] / 4</p>
+                        <p>x = [4 ± 8] / 4</p>
+                        <p>x = 12/4 = 3  or  x = -4/4 = -1</p>
+                    </div>
+                    <div class="formula">Solution: x = 3 or x = -1</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 3: x² - 6x + 9 = 0 (Δ = 0 case)</div>
+                    <div class="step">
+                        <p><strong>Identify:</strong> a = 1, b = -6, c = 9</p>
+                        <p><strong>Discriminant:</strong> Δ = 36 - 36 = 0</p>
+                        <p>→ One repeated real solution (perfect square)</p>
+                        <p><strong>Apply formula:</strong></p>
+                        <p>x = [6 ± √0] / 2 = 6/2 = 3</p>
+                        <p><strong>Note:</strong> This is a perfect square: (x - 3)² = 0</p>
+                    </div>
+                    <div class="formula">Solution: x = 3 (double root)</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 4: 3x² + 2x - 5 = 0</div>
+                    <div class="step">
+                        <p><strong>Identify:</strong> a = 3, b = 2, c = -5</p>
+                        <p><strong>Discriminant:</strong> Δ = 4 - 4(3)(-5) = 4 + 60 = 64 > 0</p>
+                        <p><strong>Apply formula:</strong></p>
+                        <p>x = [-2 ± √64] / 6</p>
+                        <p>x = [-2 ± 8] / 6</p>
+                        <p>x = 6/6 = 1  or  x = -10/6 = -5/3</p>
+                    </div>
+                    <div class="formula">Solution: x = 1 or x = -5/3</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">Example 5: x² + x + 1 = 0 (Δ < 0 case)</div>
+                    <div class="step">
+                        <p><strong>Identify:</strong> a = 1, b = 1, c = 1</p>
+                        <p><strong>Discriminant:</strong> Δ = 1 - 4 = -3 < 0</p>
+                        <p>→ No real solutions (complex solutions)</p>
+                        <p><strong>Complex solutions:</strong></p>
+                        <p>x = [-1 ± √(-3)] / 2 = [-1 ± i√3] / 2</p>
+                        <p>Where i = √(-1)</p>
+                    </div>
+                    <div class="formula">No real solutions (complex: x = -1/2 ± i√3/2)</div>
+                </div>
+            </div>
+
+            <!-- Slide 14: Practice Problems -->
+            <div class="slide" id="slide14">
+                <h1>Practice Exercises</h1>
+
+                <div class="practice-section">
+                    <h2>Set 1: Factoring Trinomials (a = 1)</h2>
+                    <div class="practice-problem">
+                        <p><strong>1.</strong> Factor: x² + 9x + 20</p>
+                        <input type="text" id="p1" placeholder="(x + ?)(x + ?)">
+                        <button onclick="checkAnswer('p1', '(x+4)(x+5)', '(x+5)(x+4)', 1)">Check</button>
+                        <div id="feedback1" class="feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <p><strong>2.</strong> Factor: x² - 11x + 28</p>
+                        <input type="text" id="p2" placeholder="(x - ?)(x - ?)">
+                        <button onclick="checkAnswer('p2', '(x-4)(x-7)', '(x-7)(x-4)', 2)">Check</button>
+                        <div id="feedback2" class="feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <p><strong>3.</strong> Factor: x² + 3x - 18</p>
+                        <input type="text" id="p3" placeholder="(x + ?)(x - ?)">
+                        <button onclick="checkAnswer('p3', '(x+6)(x-3)', '(x-3)(x+6)', 3)">Check</button>
+                        <div id="feedback3" class="feedback"></div>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <h2>Set 2: Factoring Trinomials (a ≠ 1)</h2>
+                    <div class="practice-problem">
+                        <p><strong>4.</strong> Factor: 2x² + 11x + 12</p>
+                        <input type="text" id="p4" placeholder="(2x + ?)(x + ?)">
+                        <button onclick="checkAnswer('p4', '(2x+3)(x+4)', '(x+4)(2x+3)', 4)">Check</button>
+                        <div id="feedback4" class="feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <p><strong>5.</strong> Factor: 3x² - 10x + 8</p>
+                        <input type="text" id="p5" placeholder="(3x - ?)(x - ?)">
+                        <button onclick="checkAnswer('p5', '(3x-4)(x-2)', '(x-2)(3x-4)', 5)">Check</button>
+                        <div id="feedback5" class="feedback"></div>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <h2>Set 3: Solving by Factoring</h2>
+                    <div class="practice-problem">
+                        <p><strong>6.</strong> Solve: x² + 7x + 10 = 0</p>
+                        <input type="text" id="p6" placeholder="x = ? or x = ?">
+                        <button onclick="checkAnswer('p6', 'x=-2orx=-5', 'x=-5orx=-2', 6)">Check</button>
+                        <div id="feedback6" class="feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <p><strong>7.</strong> Solve: x² - 16 = 0</p>
+                        <input type="text" id="p7" placeholder="x = ? or x = ?">
+                        <button onclick="checkAnswer('p7', 'x=4orx=-4', 'x=-4orx=4', 7)">Check</button>
+                        <div id="feedback7" class="feedback"></div>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <h2>Set 4: Using the Quadratic Formula</h2>
+                    <div class="practice-problem">
+                        <p><strong>8.</strong> First find the discriminant of: x² + 4x + 3 = 0</p>
+                        <input type="text" id="p8" placeholder="Δ = ?">
+                        <button onclick="checkAnswer('p8', '4', '4', 8)">Check</button>
+                        <div id="feedback8" class="feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <p><strong>9.</strong> What does Δ = 0 tell us about the solutions?</p>
+                        <input type="text" id="p9" placeholder="Type answer">
+                        <button onclick="checkAnswer('p9', 'one', 'repeated', 9)">Check</button>
+                        <div id="feedback9" class="feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <p><strong>10.</strong> If Δ = -5, how many real solutions exist?</p>
+                        <input type="text" id="p10" placeholder="Type answer">
+                        <button onclick="checkAnswer('p10', 'none', '0', 10)">Check</button>
+                        <div id="feedback10" class="feedback"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 15: Quiz -->
+            <div class="slide" id="slide15">
+                <h1>Final Quiz</h1>
+
+                <div class="practice-section">
+                    <h2>Question 1: Factor x² + 8x + 15</h2>
+                    <div class="quiz-option" onclick="selectQuiz(1, 'A')">A) (x + 3)(x + 5)</div>
+                    <div class="quiz-option" onclick="selectQuiz(1, 'B')">B) (x + 5)(x + 3)</div>
+                    <div class="quiz-option" onclick="selectQuiz(1, 'C')">C) Both A and B are correct</div>
+                    <div class="quiz-option" onclick="selectQuiz(1, 'D')">D) (x + 2)(x + 6)</div>
+                    <div id="quiz1-feedback"></div>
+                </div>
+
+                <div class="practice-section">
+                    <h2>Question 2: What is the Zero Product Property?</h2>
+                    <div class="quiz-option" onclick="selectQuiz(2, 'A')">A) If A + B = 0, then A = 0 or B = 0</div>
+                    <div class="quiz-option" onclick="selectQuiz(2, 'B')">B) If A × B = 0, then A = 0 or B = 0</div>
+                    <div class="quiz-option" onclick="selectQuiz(2, 'C')">C) If A × B = 1, then A = 1 or B = 1</div>
+                    <div class="quiz-option" onclick="selectQuiz(2, 'D')">D) If A - B = 0, then A = B</div>
+                    <div id="quiz2-feedback"></div>
+                </div>
+
+                <div class="practice-section">
+                    <h2>Question 3: Solve x² - 9 = 0</h2>
+                    <div class="quiz-option" onclick="selectQuiz(3, 'A')">A) x = 3 only</div>
+                    <div class="quiz-option" onclick="selectQuiz(3, 'B')">B) x = ±3</div>
+                    <div class="quiz-option" onclick="selectQuiz(3, 'C')">C) x = 9</div>
+                    <div class="quiz-option" onclick="selectQuiz(3, 'D')">D) x = ±9</div>
+                    <div id="quiz3-feedback"></div>
+                </div>
+
+                <div class="practice-section">
+                    <h2>Question 4: If the discriminant = 25, how many real solutions are there?</h2>
+                    <div class="quiz-option" onclick="selectQuiz(4, 'A')">A) None</div>
+                    <div class="quiz-option" onclick="selectQuiz(4, 'B')">B) One</div>
+                    <div class="quiz-option" onclick="selectQuiz(4, 'C')">C) Two</div>
+                    <div class="quiz-option" onclick="selectQuiz(4, 'D')">D) Three</div>
+                    <div id="quiz4-feedback"></div>
+                </div>
+
+                <div class="practice-section">
+                    <h2>Question 5: Complete the square for x² + 10x = 11</h2>
+                    <div class="quiz-option" onclick="selectQuiz(5, 'A')">A) (x + 5)² = 36</div>
+                    <div class="quiz-option" onclick="selectQuiz(5, 'B')">B) (x + 10)² = 21</div>
+                    <div class="quiz-option" onclick="selectQuiz(5, 'C')">C) (x + 5)² = 16</div>
+                    <div class="quiz-option" onclick="selectQuiz(5, 'D')">D) (x + 10)² = 36</div>
+                    <div id="quiz5-feedback"></div>
+                </div>
+
+                <div class="practice-section">
+                    <h2>Question 6: Factor 6x² + 11x + 3</h2>
+                    <div class="quiz-option" onclick="selectQuiz(6, 'A')">A) (2x + 1)(3x + 3)</div>
+                    <div class="quiz-option" onclick="selectQuiz(6, 'B')">B) (6x + 3)(x + 1)</div>
+                    <div class="quiz-option" onclick="selectQuiz(6, 'C')">C) (3x + 1)(2x + 3)</div>
+                    <div class="quiz-option" onclick="selectQuiz(6, 'D')">D) (2x + 3)(3x + 1)</div>
+                    <div id="quiz6-feedback"></div>
+                </div>
+
+                <div class="practice-section">
+                    <h2>Question 7: When completing the square for x² + 14x, what do you add?</h2>
+                    <div class="quiz-option" onclick="selectQuiz(7, 'A')">A) 7</div>
+                    <div class="quiz-option" onclick="selectQuiz(7, 'B')">B) 14</div>
+                    <div class="quiz-option" onclick="selectQuiz(7, 'C')">C) 49</div>
+                    <div class="quiz-option" onclick="selectQuiz(7, 'D')">D) 196</div>
+                    <div id="quiz7-feedback"></div>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button onclick="showQuizScore()" style="font-size: 1.2em; padding: 15px 40px;">Submit Quiz</button>
+                    <div id="final-score" style="margin-top: 20px; font-size: 1.5em; font-weight: bold;"></div>
+                </div>
+            </div>
+
+            <!-- Slide 16: Summary -->
+            <div class="slide" id="slide16">
+                <h1>Summary & Key Takeaways</h1>
+
+                <h2>Methods for Solving Quadratic Equations:</h2>
+                
+                <div class="definition-box">
+                    <h3>1. Factoring Method</h3>
+                    <ul>
+                        <li><strong>Best for:</strong> Equations that factor easily</li>
+                        <li><strong>Steps:</strong> Factor → Apply Zero Product Property → Solve</li>
+                        <li><strong>Limitation:</strong> Not all quadratics factor nicely</li>
+                    </ul>
+                </div>
+
+                <div class="definition-box">
+                    <h3>2. Completing the Square</h3>
+                    <ul>
+                        <li><strong>Best for:</strong> Any quadratic, especially when deriving formulas</li>
+                        <li><strong>Key:</strong> Add (b/2)² to create a perfect square trinomial</li>
+                        <li><strong>Result:</strong> (x + h)² = k format, then use square root property</li>
+                    </ul>
+                </div>
+
+                <div class="definition-box">
+                    <h3>3. Quadratic Formula</h3>
+                    <ul>
+                        <li><strong>Best for:</strong> ANY quadratic equation (most versatile)</li>
+                        <li><strong>Formula:</strong> x = [-b ± √(b² - 4ac)] / (2a)</li>
+                        <li><strong>Advantage:</strong> Always works, even when factoring is difficult</li>
+                    </ul>
+                </div>
+
+                <h2>The Discriminant (Δ = b² - 4ac):</h2>
+                <table>
+                    <tr>
+                        <th>Value</th>
+                        <th>Solutions</th>
+                        <th>Graph</th>
+                    </tr>
+                    <tr>
+                        <td>Δ > 0</td>
+                        <td>Two distinct real solutions</td>
+                        <td>Parabola crosses x-axis twice</td>
+                    </tr>
+                    <tr>
+                        <td>Δ = 0</td>
+                        <td>One repeated real solution</td>
+                        <td>Parabola touches x-axis once (vertex)</td>
+                    </tr>
+                    <tr>
+                        <td>Δ < 0</td>
+                        <td>No real solutions (complex)</td>
+                        <td>Parabola doesn't touch x-axis</td>
+                    </tr>
+                </table>
+
+                <h2>Which Method to Use?</h2>
+                <ul>
+                    <li><strong>Quick check:</strong> Try factoring first (if it's obvious)</li>
+                    <li><strong>When a = 1 and b is even:</strong> Completing the square is efficient</li>
+                    <li><strong>When in doubt:</strong> Use the quadratic formula (it always works!)</li>
+                    <li><strong>Check the discriminant first:</strong> Know what to expect before solving</li>
+                </ul>
+
+                <div class="note">
+                    <strong>Remember:</strong> All three methods will give you the same answer—choose the one that works best for the problem at hand!
+                </div>
+
+                <h2 style="text-align: center; margin-top: 40px; color: #667eea;">Congratulations on Completing the Presentation! 🎉</h2>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button onclick="previousSlide()">← Previous</button>
+            <span class="slide-counter">
+                <span id="current-slide">1</span> / <span id="total-slides">16</span>
+            </span>
+            <button onclick="nextSlide()">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 16;
+        let quizAnswers = {
+            1: { selected: '', correct: 'C' },
+            2: { selected: '', correct: 'B' },
+            3: { selected: '', correct: 'B' },
+            4: { selected: '', correct: 'C' },
+            5: { selected: '', correct: 'A' },
+            6: { selected: '', correct: 'D' },
+            7: { selected: '', correct: 'C' }
+        };
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            if (n > totalSlides) currentSlide = totalSlides;
+            if (n < 1) currentSlide = 1;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide;
+            document.getElementById('total-slides').textContent = totalSlides;
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            if (currentSlide > totalSlides) currentSlide = totalSlides;
+            showSlide(currentSlide);
+        }
+
+        function previousSlide() {
+            currentSlide--;
+            if (currentSlide < 1) currentSlide = 1;
+            showSlide(currentSlide);
+        }
+
+        function checkAnswer(inputId, correct1, correct2, feedbackNum) {
+            const input = document.getElementById(inputId);
+            const feedback = document.getElementById('feedback' + feedbackNum);
+            const userAnswer = input.value.toLowerCase().replace(/\s/g, '');
+            const correctAnswer1 = correct1.toLowerCase().replace(/\s/g, '');
+            const correctAnswer2 = correct2.toLowerCase().replace(/\s/g, '');
+            
+            if (userAnswer === correctAnswer1 || userAnswer === correctAnswer2) {
+                feedback.textContent = '✓ Correct! Well done!';
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = '✗ Incorrect. Try again! Hint: Check your signs and order.';
+                feedback.className = 'feedback incorrect';
+            }
+        }
+
+        function selectQuiz(questionNum, option) {
+            // Remove previous selections for this question
+            const options = document.querySelectorAll(`#quiz${questionNum}-feedback`)[0].parentElement.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Mark new selection
+            event.target.classList.add('selected');
+            quizAnswers[questionNum].selected = option;
+        }
+
+        function showQuizScore() {
+            let score = 0;
+            const totalQuestions = 7;
+            
+            // Check answers and show feedback
+            for (let i = 1; i <= totalQuestions; i++) {
+                const selected = quizAnswers[i].selected;
+                const correct = quizAnswers[i].correct;
+                const feedback = document.getElementById(`quiz${i}-feedback`);
+                const options = feedback.parentElement.querySelectorAll('.quiz-option');
+                
+                if (selected === '') {
+                    feedback.innerHTML = '<p style="color: red;">Please select an answer!</p>';
+                    continue;
+                }
+                
+                options.forEach((opt, index) => {
+                    const optionLetter = String.fromCharCode(65 + index); // A, B, C, D
+                    if (optionLetter === correct) {
+                        opt.classList.add('correct-answer');
+                    }
+                    if (optionLetter === selected && selected !== correct) {
+                        opt.classList.add('wrong-answer');
+                    }
+                });
+                
+                if (selected === correct) {
+                    score++;
+                    feedback.innerHTML = '<p style="color: green; font-weight: bold;">✓ Correct!</p>';
+                } else {
+                    feedback.innerHTML = '<p style="color: red; font-weight: bold;">✗ Incorrect. The correct answer is highlighted in green.</p>';
+                }
+            }
+            
+            const percentage = Math.round((score / totalQuestions) * 100);
+            const finalScore = document.getElementById('final-score');
+            
+            let message = '';
+            if (percentage >= 90) message = 'Excellent! 🌟';
+            else if (percentage >= 70) message = 'Good job! 👍';
+            else if (percentage >= 50) message = 'Keep practicing! 📚';
+            else message = 'Review the material and try again! 💪';
+            
+            finalScore.innerHTML = `Your Score: ${score}/${totalQuestions} (${percentage}%)<br>${message}`;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') nextSlide();
+            if (event.key === 'ArrowLeft') previousSlide();
+        });
+
+        // Initialize
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
