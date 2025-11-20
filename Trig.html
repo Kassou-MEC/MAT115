@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Trigonometry: Angles & Functions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.8em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .canvas-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        canvas {
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 100%;
+        }
+
+        .info-box {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .formula-box {
+            background: #fff9e6;
+            border: 2px solid #ffb347;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-size: 1.1em;
+        }
+
+        .example-box {
+            background: #e6f7ff;
+            border-left: 4px solid #1890ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .interactive-controls {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .slider-container {
+            margin: 15px 0;
+        }
+
+        .slider-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        .value-display {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9ff;
+        }
+
+        .problem-solver {
+            background: #f5f5f5;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .result-box {
+            background: #e6ffe6;
+            border-left: 4px solid #52c41a;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+        }
+
+        .identity-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .angle-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .angle-card {
+            background: white;
+            border: 2px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .angle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background: #f8f9ff;
+        }
+
+        .angle-deg {
+            font-size: 1.5em;
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .angle-rad {
+            font-size: 1.1em;
+            color: #764ba2;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+        }
+
+        .trig-functions-table {
+            overflow-x: auto;
+        }
+
+        .quiz-container {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .quiz-question {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            background: white;
+            border: 2px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            border-color: #667eea;
+            background: #f0f0ff;
+        }
+
+        .quiz-option.correct {
+            border-color: #52c41a;
+            background: #e6ffe6;
+        }
+
+        .quiz-option.incorrect {
+            border-color: #ff4d4f;
+            background: #ffe6e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔺 MAT115 Prof. Khalid Kassou</h1>
+            <h1>🔺 Advanced Trigonometry</h1>
+            <p>Angles, Unit Circle, and Trigonometric Functions</p>
+        </header>
+
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showSection('unit-circle')">Unit Circle</button>
+            <button class="nav-btn" onclick="showSection('measurement')">Angle Measurement</button>
+            <button class="nav-btn" onclick="showSection('trig-functions')">Trig Functions</button>
+            <button class="nav-btn" onclick="showSection('right-triangles')">Right Triangles</button>
+            <button class="nav-btn" onclick="showSection('identities')">Identities</button>
+            <button class="nav-btn" onclick="showSection('applications')">Applications</button>
+            <button class="nav-btn" onclick="showSection('any-angle')">Any Angle</button>
+            <button class="nav-btn" onclick="showSection('practice')">Practice Exercises</button>
+        </div>
+
+        <!-- Unit Circle Section -->
+        <div id="unit-circle" class="section active">
+            <h2>📐 The Unit Circle</h2>
+            
+            <div class="info-box">
+                <h3>What is the Unit Circle?</h3>
+                <p>The unit circle is a circle with radius 1 centered at the origin (0, 0) of the coordinate plane. It's fundamental to understanding trigonometry because it relates angles to coordinates and trigonometric values.</p>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="unitCircleCanvas" width="600" height="600"></canvas>
+            </div>
+
+            <div class="interactive-controls">
+                <h3>Interactive Unit Circle</h3>
+                <div class="slider-container">
+                    <label>Angle (Degrees): <span id="degreeValue">0°</span></label>
+                    <input type="range" id="angleSlider" min="0" max="360" value="0" step="1">
+                </div>
+                <div class="value-display">
+                    <p><strong>Radians:</strong> <span id="radianValue">0</span></p>
+                    <p><strong>Coordinates:</strong> (<span id="coordX">1</span>, <span id="coordY">0</span>)</p>
+                    <p><strong>sin θ:</strong> <span id="sinValue">0</span></p>
+                    <p><strong>cos θ:</strong> <span id="cosValue">1</span></p>
+                    <p><strong>tan θ:</strong> <span id="tanValue">0</span></p>
+                </div>
+            </div>
+
+            <h3>Common Angles on the Unit Circle</h3>
+            <div class="angle-list">
+                <div class="angle-card">
+                    <div class="angle-deg">0°</div>
+                    <div class="angle-rad">0</div>
+                    <div>(1, 0)</div>
+                </div>
+                <div class="angle-card">
+                    <div class="angle-deg">30°</div>
+                    <div class="angle-rad">π/6</div>
+                    <div>(√3/2, 1/2)</div>
+                </div>
+                <div class="angle-card">
+                    <div class="angle-deg">45°</div>
+                    <div class="angle-rad">π/4</div>
+                    <div>(√2/2, √2/2)</div>
+                </div>
+                <div class="angle-card">
+                    <div class="angle-deg">60°</div>
+                    <div class="angle-rad">π/3</div>
+                    <div>(1/2, √3/2)</div>
+                </div>
+                <div class="angle-card">
+                    <div class="angle-deg">90°</div>
+                    <div class="angle-rad">π/2</div>
+                    <div>(0, 1)</div>
+                </div>
+                <div class="angle-card">
+                    <div class="angle-deg">120°</div>
+                    <div class="angle-rad">2π/3</div>
+                    <div>(-1/2, √3/2)</div>
+                </div>
+                <div class="angle-card">
+                    <div class="angle-deg">135°</div>
+                    <div class="angle-rad">3π/4</div>
+                    <div>(-√2/2, √2/2)</div>
+                </div>
+                <div class="angle-card">
+                    <div class="angle-deg">150°</div>
+                    <div class="angle-rad">5π/6</div>
+                    <div>(-√3/2, 1/2)</div>
+                </div>
+                <div class="angle-card">
+                    <div class="angle-deg">180°</div>
+                    <div class="angle-rad">π</div>
+                    <div>(-1, 0)</div>
+                </div>
+                <div class="angle-card">
+                    <div class="angle-deg">210°</div>
+                    <div class="angle-rad">7π/6</div>
+                    <div>(-√3/2, -1/2)</div>
+                </div>
+                <div class="angle-card">
+                    <div class="angle-deg">225°</div>
+                    <div class="angle-rad">5π/4</div>
+                    <div>(-√2/2, -√2/2)</div>
+                </div>
+                <div class="angle-card">
+                    <div class="angle-deg">240°</div>
+                    <div class="angle-rad">4π/3</div>
+                    <div>(-1/2, -√3/2)</div>
+                </div>
+                <div class="angle-card">
+                    <div class="angle-deg">270°</div>
+                    <div class="angle-rad">3π/2</div>
+                    <div>(0, -1)</div>
+                </div>
+                <div class="angle-card">
+                    <div class="angle-deg">300°</div>
+                    <div class="angle-rad">5π/3</div>
+                    <div>(1/2, -√3/2)</div>
+                </div>
+                <div class="angle-card">
+                    <div class="angle-deg">315°</div>
+                    <div class="angle-rad">7π/4</div>
+                    <div>(√2/2, -√2/2)</div>
+                </div>
+                <div class="angle-card">
+                    <div class="angle-deg">330°</div>
+                    <div class="angle-rad">11π/6</div>
+                    <div>(√3/2, -1/2)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Angle Measurement Section -->
+        <div id="measurement" class="section">
+            <h2>📏 Angle Measurement</h2>
+            
+            <div class="content-grid">
+                <div>
+                    <h3>Degrees</h3>
+                    <div class="info-box">
+                        <p>A <strong>degree</strong> is 1/360 of a complete rotation around a circle.</p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Full circle: 360°</li>
+                            <li>Straight angle: 180°</li>
+                            <li>Right angle: 90°</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h3>Radians</h3>
+                    <div class="info-box">
+                        <p>A <strong>radian</strong> is the angle formed when the arc length equals the radius.</p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Full circle: 2π radians</li>
+                            <li>Straight angle: π radians</li>
+                            <li>Right angle: π/2 radians</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="formula-box">
+                <h3>Conversion Formulas</h3>
+                <p><strong>Degrees to Radians:</strong> radians = degrees × (π/180)</p>
+                <p><strong>Radians to Degrees:</strong> degrees = radians × (180/π)</p>
+            </div>
+
+            <div class="problem-solver">
+                <h3>Angle Converter</h3>
+                <div class="input-group">
+                    <label>Enter Degrees:</label>
+                    <input type="number" id="degInput" placeholder="e.g., 45">
+                    <button class="btn" onclick="convertDegToRad()">Convert to Radians</button>
+                </div>
+                <div class="input-group">
+                    <label>Enter Radians (as decimal or π):</label>
+                    <input type="text" id="radInput" placeholder="e.g., 1.5708 or pi/4">
+                    <button class="btn" onclick="convertRadToDeg()">Convert to Degrees</button>
+                </div>
+                <div id="conversionResult" class="result-box"></div>
+            </div>
+
+            <h3>Common Angle Conversions</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Degrees</th>
+                        <th>Radians</th>
+                        <th>Radians (Decimal)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>0°</td><td>0</td><td>0</td></tr>
+                    <tr><td>30°</td><td>π/6</td><td>≈ 0.524</td></tr>
+                    <tr><td>45°</td><td>π/4</td><td>≈ 0.785</td></tr>
+                    <tr><td>60°</td><td>π/3</td><td>≈ 1.047</td></tr>
+                    <tr><td>90°</td><td>π/2</td><td>≈ 1.571</td></tr>
+                    <tr><td>120°</td><td>2π/3</td><td>≈ 2.094</td></tr>
+                    <tr><td>135°</td><td>3π/4</td><td>≈ 2.356</td></tr>
+                    <tr><td>150°</td><td>5π/6</td><td>≈ 2.618</td></tr>
+                    <tr><td>180°</td><td>π</td><td>≈ 3.142</td></tr>
+                    <tr><td>270°</td><td>3π/2</td><td>≈ 4.712</td></tr>
+                    <tr><td>360°</td><td>2π</td><td>≈ 6.283</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Trigonometric Functions Section -->
+        <div id="trig-functions" class="section">
+            <h2>📊 Trigonometric Functions</h2>
+            
+            <h3>Definition of Basic Trigonometric Ratios</h3>
+            <div class="info-box">
+                <p>In a right triangle with an angle θ:</p>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="triangleCanvas" width="500" height="400"></canvas>
+            </div>
+
+            <div class="formula-box">
+                <h3>Primary Trigonometric Functions</h3>
+                <p><strong>Sine (sin θ):</strong> sin θ = opposite / hypotenuse</p>
+                <p><strong>Cosine (cos θ):</strong> cos θ = adjacent / hypotenuse</p>
+                <p><strong>Tangent (tan θ):</strong> tan θ = opposite / adjacent = sin θ / cos θ</p>
+            </div>
+
+            <div class="formula-box">
+                <h3>Reciprocal Trigonometric Functions</h3>
+                <p><strong>Cosecant (csc θ):</strong> csc θ = 1 / sin θ = hypotenuse / opposite</p>
+                <p><strong>Secant (sec θ):</strong> sec θ = 1 / cos θ = hypotenuse / adjacent</p>
+                <p><strong>Cotangent (cot θ):</strong> cot θ = 1 / tan θ = adjacent / opposite</p>
+            </div>
+
+            <h3>Values of Trigonometric Functions for Common Angles</h3>
+            <div class="trig-functions-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Angle</th>
+                            <th>sin θ</th>
+                            <th>cos θ</th>
+                            <th>tan θ</th>
+                            <th>csc θ</th>
+                            <th>sec θ</th>
+                            <th>cot θ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0° (0)</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>undefined</td>
+                            <td>1</td>
+                            <td>undefined</td>
+                        </tr>
+                        <tr>
+                            <td>30° (π/6)</td>
+                            <td>1/2</td>
+                            <td>√3/2</td>
+                            <td>√3/3</td>
+                            <td>2</td>
+                            <td>2√3/3</td>
+                            <td>√3</td>
+                        </tr>
+                        <tr>
+                            <td>45° (π/4)</td>
+                            <td>√2/2</td>
+                            <td>√2/2</td>
+                            <td>1</td>
+                            <td>√2</td>
+                            <td>√2</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>60° (π/3)</td>
+                            <td>√3/2</td>
+                            <td>1/2</td>
+                            <td>√3</td>
+                            <td>2√3/3</td>
+                            <td>2</td>
+                            <td>√3/3</td>
+                        </tr>
+                        <tr>
+                            <td>90° (π/2)</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>undefined</td>
+                            <td>1</td>
+                            <td>undefined</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="example-box">
+                <h3>Example: Evaluate Trigonometric Functions</h3>
+                <p><strong>Problem:</strong> Find sin 30°, cos 45°, and tan 60°</p>
+                <p><strong>Solution:</strong></p>
+                <ul style="margin-left: 20px;">
+                    <li>sin 30° = 1/2</li>
+                    <li>cos 45° = √2/2 ≈ 0.707</li>
+                    <li>tan 60° = √3 ≈ 1.732</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right Triangles Section -->
+        <div id="right-triangles" class="section">
+            <h2>🔺 Right Triangle Trigonometry</h2>
+            
+            <h3>Solving Right Triangles</h3>
+            <div class="info-box">
+                <p>To solve a right triangle means to find all unknown sides and angles. You need:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>One angle (besides the right angle)</li>
+                    <li>One side, OR</li>
+                    <li>Two sides</li>
+                </ul>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="solveTriangleCanvas" width="500" height="400"></canvas>
+            </div>
+
+            <div class="problem-solver">
+                <h3>Right Triangle Solver</h3>
+                <p>Enter any two values (sides or one angle and one side):</p>
+                <div class="input-group">
+                    <label>Angle A (degrees):</label>
+                    <input type="number" id="angleA" placeholder="Leave blank if unknown">
+                </div>
+                <div class="input-group">
+                    <label>Side a (opposite to angle A):</label>
+                    <input type="number" id="sideA" placeholder="Leave blank if unknown">
+                </div>
+                <div class="input-group">
+                    <label>Side b (adjacent to angle A):</label>
+                    <input type="number" id="sideB" placeholder="Leave blank if unknown">
+                </div>
+                <div class="input-group">
+                    <label>Hypotenuse c:</label>
+                    <input type="number" id="sideC" placeholder="Leave blank if unknown">
+                </div>
+                <button class="btn" onclick="solveTriangle()">Solve Triangle</button>
+                <div id="triangleResult" class="result-box"></div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 1: Given an Angle and a Side</h3>
+                <p><strong>Problem:</strong> In a right triangle, angle A = 35° and the hypotenuse = 10. Find the other sides.</p>
+                <p><strong>Solution:</strong></p>
+                <ul style="margin-left: 20px;">
+                    <li>a = c × sin A = 10 × sin 35° ≈ 10 × 0.574 = 5.74</li>
+                    <li>b = c × cos A = 10 × cos 35° ≈ 10 × 0.819 = 8.19</li>
+                    <li>Angle B = 90° - 35° = 55°</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 2: Given Two Sides</h3>
+                <p><strong>Problem:</strong> In a right triangle, a = 6 and b = 8. Find the hypotenuse and angles.</p>
+                <p><strong>Solution:</strong></p>
+                <ul style="margin-left: 20px;">
+                    <li>c = √(a² + b²) = √(36 + 64) = √100 = 10 (Pythagorean Theorem)</li>
+                    <li>tan A = a/b = 6/8 = 0.75, so A = arctan(0.75) ≈ 36.87°</li>
+                    <li>Angle B = 90° - 36.87° = 53.13°</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Pythagorean Identities Section -->
+        <div id="identities" class="section">
+            <h2>🔢 Pythagorean Identities</h2>
+            
+            <div class="info-box">
+                <p>Pythagorean identities are fundamental relationships between trigonometric functions derived from the Pythagorean theorem applied to the unit circle.</p>
+            </div>
+
+            <div class="identity-card">
+                <h3 style="color: white;">Primary Pythagorean Identity</h3>
+                <p style="font-size: 1.3em; text-align: center;">sin²θ + cos²θ = 1</p>
+            </div>
+
+            <div class="identity-card">
+                <h3 style="color: white;">Tangent-Secant Identity</h3>
+                <p style="font-size: 1.3em; text-align: center;">1 + tan²θ = sec²θ</p>
+                <p style="font-size: 0.9em; margin-top: 10px;">Derived by dividing the primary identity by cos²θ</p>
+            </div>
+
+            <div class="identity-card">
+                <h3 style="color: white;">Cotangent-Cosecant Identity</h3>
+                <p style="font-size: 1.3em; text-align: center;">1 + cot²θ = csc²θ</p>
+                <p style="font-size: 0.9em; margin-top: 10px;">Derived by dividing the primary identity by sin²θ</p>
+            </div>
+
+            <h3>Proof of the Primary Identity</h3>
+            <div class="example-box">
+                <p>Consider a point (x, y) on the unit circle at angle θ from the positive x-axis:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>By definition: x = cos θ and y = sin θ</li>
+                    <li>The point lies on a circle of radius 1: x² + y² = 1²</li>
+                    <li>Substituting: cos²θ + sin²θ = 1</li>
+                    <li>Therefore: sin²θ + cos²θ = 1 ✓</li>
+                </ul>
+            </div>
+
+            <h3>Applications of Pythagorean Identities</h3>
+            <div class="example-box">
+                <h4>Example 1: Finding sin θ given cos θ</h4>
+                <p><strong>Problem:</strong> If cos θ = 3/5 and θ is in Quadrant I, find sin θ.</p>
+                <p><strong>Solution:</strong></p>
+                <ul style="margin-left: 20px;">
+                    <li>Use: sin²θ + cos²θ = 1</li>
+                    <li>sin²θ = 1 - cos²θ = 1 - (3/5)² = 1 - 9/25 = 16/25</li>
+                    <li>sin θ = ±4/5</li>
+                    <li>Since θ is in Quadrant I: sin θ = 4/5</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h4>Example 2: Simplifying using identities</h4>
+                <p><strong>Problem:</strong> Simplify sec²θ - tan²θ</p>
+                <p><strong>Solution:</strong></p>
+                <ul style="margin-left: 20px;">
+                    <li>We know: 1 + tan²θ = sec²θ</li>
+                    <li>Rearranging: sec²θ - tan²θ = 1</li>
+                </ul>
+            </div>
+
+            <div class="problem-solver">
+                <h3>Identity Verifier</h3>
+                <div class="input-group">
+                    <label>Enter sin θ value (between -1 and 1):</label>
+                    <input type="number" id="sinInput" step="0.01" min="-1" max="1" placeholder="e.g., 0.6">
+                </div>
+                <button class="btn" onclick="verifyIdentity()">Calculate cos θ using Identity</button>
+                <div id="identityResult" class="result-box"></div>
+            </div>
+        </div>
+
+        <!-- Applications Section -->
+        <div id="applications" class="section">
+            <h2>🏔️ Applications: Angles of Elevation and Depression</h2>
+            
+            <div class="content-grid">
+                <div>
+                    <h3>Angle of Elevation</h3>
+                    <div class="info-box">
+                        <p>The angle of elevation is the angle formed by the horizontal line and the line of sight when looking UP at an object.</p>
+                    </div>
+                </div>
+                <div>
+                    <h3>Angle of Depression</h3>
+                    <div class="info-box">
+                        <p>The angle of depression is the angle formed by the horizontal line and the line of sight when looking DOWN at an object.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="elevationCanvas" width="600" height="400"></canvas>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 1: Angle of Elevation</h3>
+                <p><strong>Problem:</strong> A person standing 50 meters from the base of a building observes the top of the building at an angle of elevation of 60°. How tall is the building?</p>
+                <p><strong>Solution:</strong></p>
+                <ul style="margin-left: 20px;">
+                    <li>We have: adjacent = 50 m, angle = 60°, find opposite (height)</li>
+                    <li>tan 60° = height / 50</li>
+                    <li>height = 50 × tan 60° = 50 × √3 ≈ 50 × 1.732 = 86.6 meters</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 2: Angle of Depression</h3>
+                <p><strong>Problem:</strong> From the top of a lighthouse 120 feet high, the angle of depression to a boat is 15°. How far is the boat from the base of the lighthouse?</p>
+                <p><strong>Solution:</strong></p>
+                <ul style="margin-left: 20px;">
+                    <li>Angle of depression = angle of elevation from boat to lighthouse = 15°</li>
+                    <li>We have: opposite = 120 ft, angle = 15°, find adjacent (distance)</li>
+                    <li>tan 15° = 120 / distance</li>
+                    <li>distance = 120 / tan 15° ≈ 120 / 0.268 ≈ 448 feet</li>
+                </ul>
+            </div>
+
+            <div class="problem-solver">
+                <h3>Application Problem Solver</h3>
+                <div class="input-group">
+                    <label>Problem Type:</label>
+                    <select id="problemType" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 5px;">
+                        <option value="elevation">Angle of Elevation (find height)</option>
+                        <option value="depression">Angle of Depression (find distance)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Angle (degrees):</label>
+                    <input type="number" id="appAngle" placeholder="e.g., 30">
+                </div>
+                <div class="input-group">
+                    <label>Known Distance/Height:</label>
+                    <input type="number" id="appDistance" placeholder="e.g., 100">
+                </div>
+                <button class="btn" onclick="solveApplication()">Solve Problem</button>
+                <div id="applicationResult" class="result-box"></div>
+            </div>
+        </div>
+
+        <!-- Any Angle Section -->
+        <div id="any-angle" class="section">
+            <h2>🔄 Trigonometric Functions of Any Angle</h2>
+            
+            <div class="info-box">
+                <p>Trigonometric functions can be defined for any angle, not just acute angles. We use the unit circle and reference angles to find these values.</p>
+            </div>
+
+            <h3>Quadrants and Signs</h3>
+            <div class="content-grid">
+                <div>
+                    <div class="identity-card">
+                        <h4 style="color: white;">Quadrant I (0° to 90°)</h4>
+                        <p>All functions positive</p>
+                        <p>sin > 0, cos > 0, tan > 0</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="identity-card">
+                        <h4 style="color: white;">Quadrant II (90° to 180°)</h4>
+                        <p>Only sine positive</p>
+                        <p>sin > 0, cos < 0, tan < 0</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="identity-card">
+                        <h4 style="color: white;">Quadrant III (180° to 270°)</h4>
+                        <p>Only tangent positive</p>
+                        <p>sin < 0, cos < 0, tan > 0</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="identity-card">
+                        <h4 style="color: white;">Quadrant IV (270° to 360°)</h4>
+                        <p>Only cosine positive</p>
+                        <p>sin < 0, cos > 0, tan < 0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3>Memory Aid: "All Students Take Calculus"</h3>
+                <ul style="margin-left: 20px;">
+                    <li><strong>A</strong>ll (Quadrant I): All functions positive</li>
+                    <li><strong>S</strong>tudents (Quadrant II): Sine positive</li>
+                    <li><strong>T</strong>ake (Quadrant III): Tangent positive</li>
+                    <li><strong>C</strong>alculus (Quadrant IV): Cosine positive</li>
+                </ul>
+            </div>
+
+            <h3>Reference Angles</h3>
+            <div class="formula-box">
+                <p>A <strong>reference angle</strong> is the acute angle formed between the terminal side of an angle and the x-axis.</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Quadrant I: reference angle = θ</li>
+                    <li>Quadrant II: reference angle = 180° - θ</li>
+                    <li>Quadrant III: reference angle = θ - 180°</li>
+                    <li>Quadrant IV: reference angle = 360° - θ</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 1: Finding Trig Values for Any Angle</h3>
+                <p><strong>Problem:</strong> Find sin 210°</p>
+                <p><strong>Solution:</strong></p>
+                <ul style="margin-left: 20px;">
+                    <li>210° is in Quadrant III (180° < 210° < 270°)</li>
+                    <li>Reference angle = 210° - 180° = 30°</li>
+                    <li>In Quadrant III, sine is negative</li>
+                    <li>sin 210° = -sin 30° = -1/2</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 2: Using Reference Angles</h3>
+                <p><strong>Problem:</strong> Find cos 135° and tan 315°</p>
+                <p><strong>Solution:</strong></p>
+                <p><strong>For cos 135°:</strong></p>
+                <ul style="margin-left: 20px;">
+                    <li>135° is in Quadrant II</li>
+                    <li>Reference angle = 180° - 135° = 45°</li>
+                    <li>In Quadrant II, cosine is negative</li>
+                    <li>cos 135° = -cos 45° = -√2/2</li>
+                </ul>
+                <p><strong>For tan 315°:</strong></p>
+                <ul style="margin-left: 20px;">
+                    <li>315° is in Quadrant IV</li>
+                    <li>Reference angle = 360° - 315° = 45°</li>
+                    <li>In Quadrant IV, tangent is negative</li>
+                    <li>tan 315° = -tan 45° = -1</li>
+                </ul>
+            </div>
+
+            <div class="problem-solver">
+                <h3>Any Angle Calculator</h3>
+                <div class="input-group">
+                    <label>Enter Angle (degrees):</label>
+                    <input type="number" id="anyAngle" placeholder="e.g., 225">
+                </div>
+                <button class="btn" onclick="calculateAnyAngle()">Calculate Trig Functions</button>
+                <div id="anyAngleResult" class="result-box"></div>
+            </div>
+        </div>
+
+        <!-- Practice Exercises Section -->
+        <div id="practice" class="section">
+            <h2>✏️ Practice Exercises</h2>
+            
+            <div class="info-box">
+                <p>Test your understanding with these practice problems! Each section includes problems of varying difficulty with step-by-step solutions.</p>
+            </div>
+
+            <!-- Exercise Set 1: Evaluating Trig Functions -->
+            <h3>Exercise Set 1: Evaluate Trigonometric Functions</h3>
+            
+            <div class="quiz-container">
+                <div class="quiz-question">Problem 1: Evaluate tan(5π/3)</div>
+                <div class="problem-solver" style="background: white; padding: 20px;">
+                    <button class="btn" onclick="showSolution('sol1')">Show Solution</button>
+                    <div id="sol1" class="result-box">
+                        <h4>Solution:</h4>
+                        <p><strong>Step 1:</strong> Convert to degrees: 5π/3 × (180°/π) = 300°</p>
+                        <p><strong>Step 2:</strong> Determine quadrant: 300° is in Quadrant IV (270° < 300° < 360°)</p>
+                        <p><strong>Step 3:</strong> Find reference angle: 360° - 300° = 60°</p>
+                        <p><strong>Step 4:</strong> In Quadrant IV, tangent is negative</p>
+                        <p><strong>Step 5:</strong> tan(300°) = -tan(60°) = -√3</p>
+                        <p><strong>Answer:</strong> tan(5π/3) = <strong>-√3 ≈ -1.732</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Problem 2: Evaluate sin(7π/4)</div>
+                <div class="problem-solver" style="background: white; padding: 20px;">
+                    <button class="btn" onclick="showSolution('sol2')">Show Solution</button>
+                    <div id="sol2" class="result-box">
+                        <h4>Solution:</h4>
+                        <p><strong>Step 1:</strong> Convert to degrees: 7π/4 × (180°/π) = 315°</p>
+                        <p><strong>Step 2:</strong> Quadrant IV (270° < 315° < 360°)</p>
+                        <p><strong>Step 3:</strong> Reference angle: 360° - 315° = 45°</p>
+                        <p><strong>Step 4:</strong> In Quadrant IV, sine is negative</p>
+                        <p><strong>Step 5:</strong> sin(315°) = -sin(45°) = -√2/2</p>
+                        <p><strong>Answer:</strong> sin(7π/4) = <strong>-√2/2 ≈ -0.707</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Problem 3: Evaluate cos(5π/6)</div>
+                <div class="problem-solver" style="background: white; padding: 20px;">
+                    <button class="btn" onclick="showSolution('sol3')">Show Solution</button>
+                    <div id="sol3" class="result-box">
+                        <h4>Solution:</h4>
+                        <p><strong>Step 1:</strong> Convert to degrees: 5π/6 × (180°/π) = 150°</p>
+                        <p><strong>Step 2:</strong> Quadrant II (90° < 150° < 180°)</p>
+                        <p><strong>Step 3:</strong> Reference angle: 180° - 150° = 30°</p>
+                        <p><strong>Step 4:</strong> In Quadrant II, cosine is negative</p>
+                        <p><strong>Step 5:</strong> cos(150°) = -cos(30°) = -√3/2</p>
+                        <p><strong>Answer:</strong> cos(5π/6) = <strong>-√3/2 ≈ -0.866</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Problem 4: Evaluate csc(3π/4)</div>
+                <div class="problem-solver" style="background: white; padding: 20px;">
+                    <button class="btn" onclick="showSolution('sol4')">Show Solution</button>
+                    <div id="sol4" class="result-box">
+                        <h4>Solution:</h4>
+                        <p><strong>Step 1:</strong> Convert to degrees: 3π/4 × (180°/π) = 135°</p>
+                        <p><strong>Step 2:</strong> Quadrant II (90° < 135° < 180°)</p>
+                        <p><strong>Step 3:</strong> Reference angle: 180° - 135° = 45°</p>
+                        <p><strong>Step 4:</strong> In Quadrant II, sine is positive, so csc is positive</p>
+                        <p><strong>Step 5:</strong> sin(135°) = sin(45°) = √2/2</p>
+                        <p><strong>Step 6:</strong> csc(135°) = 1/sin(135°) = 1/(√2/2) = 2/√2 = √2</p>
+                        <p><strong>Answer:</strong> csc(3π/4) = <strong>√2 ≈ 1.414</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise Set 2: Using Identities -->
+            <h3>Exercise Set 2: Using Pythagorean Identities</h3>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Problem 5: If sin θ = 3/5 and θ is in Quadrant II, find cos θ and tan θ</div>
+                <div class="problem-solver" style="background: white; padding: 20px;">
+                    <button class="btn" onclick="showSolution('sol5')">Show Solution</button>
+                    <div id="sol5" class="result-box">
+                        <h4>Solution:</h4>
+                        <p><strong>Finding cos θ:</strong></p>
+                        <p>Use: sin²θ + cos²θ = 1</p>
+                        <p>(3/5)² + cos²θ = 1</p>
+                        <p>9/25 + cos²θ = 1</p>
+                        <p>cos²θ = 1 - 9/25 = 16/25</p>
+                        <p>cos θ = ±4/5</p>
+                        <p>Since θ is in Quadrant II, cos θ is negative</p>
+                        <p><strong>cos θ = -4/5</strong></p>
+                        <p><strong>Finding tan θ:</strong></p>
+                        <p>tan θ = sin θ / cos θ = (3/5) / (-4/5) = -3/4</p>
+                        <p><strong>tan θ = -3/4 = -0.75</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Problem 6: If tan θ = 2 and θ is in Quadrant III, find sin θ and cos θ</div>
+                <div class="problem-solver" style="background: white; padding: 20px;">
+                    <button class="btn" onclick="showSolution('sol6')">Show Solution</button>
+                    <div id="sol6" class="result-box">
+                        <h4>Solution:</h4>
+                        <p><strong>Using the identity:</strong> 1 + tan²θ = sec²θ</p>
+                        <p>1 + (2)² = sec²θ</p>
+                        <p>1 + 4 = sec²θ</p>
+                        <p>sec²θ = 5</p>
+                        <p>sec θ = ±√5</p>
+                        <p>Since θ is in Quadrant III, sec θ is negative</p>
+                        <p>sec θ = -√5</p>
+                        <p><strong>cos θ = 1/sec θ = -1/√5 = -√5/5 ≈ -0.447</strong></p>
+                        <p><strong>Finding sin θ:</strong></p>
+                        <p>tan θ = sin θ / cos θ</p>
+                        <p>2 = sin θ / (-√5/5)</p>
+                        <p>sin θ = 2 × (-√5/5) = -2√5/5</p>
+                        <p><strong>sin θ = -2√5/5 ≈ -0.894</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise Set 3: Right Triangle Problems -->
+            <h3>Exercise Set 3: Right Triangle Applications</h3>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Problem 7: A ladder 20 feet long leans against a wall. If the ladder makes an angle of 65° with the ground, how high up the wall does the ladder reach?</div>
+                <div class="problem-solver" style="background: white; padding: 20px;">
+                    <button class="btn" onclick="showSolution('sol7')">Show Solution</button>
+                    <div id="sol7" class="result-box">
+                        <h4>Solution:</h4>
+                        <p><strong>Given:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Hypotenuse (ladder) = 20 feet</li>
+                            <li>Angle with ground = 65°</li>
+                            <li>Find: height (opposite side)</li>
+                        </ul>
+                        <p><strong>Using sine:</strong></p>
+                        <p>sin(65°) = height / 20</p>
+                        <p>height = 20 × sin(65°)</p>
+                        <p>height = 20 × 0.906</p>
+                        <p><strong>Answer: The ladder reaches approximately 18.13 feet up the wall</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Problem 8: From a point 100 meters from the base of a tower, the angle of elevation to the top is 28°. Find the height of the tower.</div>
+                <div class="problem-solver" style="background: white; padding: 20px;">
+                    <button class="btn" onclick="showSolution('sol8')">Show Solution</button>
+                    <div id="sol8" class="result-box">
+                        <h4>Solution:</h4>
+                        <p><strong>Given:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Adjacent side (distance) = 100 meters</li>
+                            <li>Angle of elevation = 28°</li>
+                            <li>Find: height (opposite side)</li>
+                        </ul>
+                        <p><strong>Using tangent:</strong></p>
+                        <p>tan(28°) = height / 100</p>
+                        <p>height = 100 × tan(28°)</p>
+                        <p>height = 100 × 0.532</p>
+                        <p><strong>Answer: The tower is approximately 53.2 meters tall</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise Set 4: Angle Conversions -->
+            <h3>Exercise Set 4: Convert Between Degrees and Radians</h3>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Problem 9: Convert 225° to radians (exact and decimal)</div>
+                <div class="problem-solver" style="background: white; padding: 20px;">
+                    <button class="btn" onclick="showSolution('sol9')">Show Solution</button>
+                    <div id="sol9" class="result-box">
+                        <h4>Solution:</h4>
+                        <p><strong>Formula:</strong> radians = degrees × (π/180)</p>
+                        <p>radians = 225° × (π/180)</p>
+                        <p>radians = 225π/180</p>
+                        <p>radians = 5π/4 (simplified)</p>
+                        <p><strong>Exact Answer: 5π/4 radians</strong></p>
+                        <p><strong>Decimal: ≈ 3.927 radians</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Problem 10: Convert 11π/6 radians to degrees</div>
+                <div class="problem-solver" style="background: white; padding: 20px;">
+                    <button class="btn" onclick="showSolution('sol10')">Show Solution</button>
+                    <div id="sol10" class="result-box">
+                        <h4>Solution:</h4>
+                        <p><strong>Formula:</strong> degrees = radians × (180/π)</p>
+                        <p>degrees = (11π/6) × (180/π)</p>
+                        <p>degrees = (11 × 180) / 6</p>
+                        <p>degrees = 1980 / 6</p>
+                        <p>degrees = 330°</p>
+                        <p><strong>Answer: 330°</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Practice Problems -->
+            <h3>Interactive Practice: Try These!</h3>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Evaluate the following trigonometric expressions:</div>
+                <div class="problem-solver" style="background: white; padding: 20px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                        <div class="info-box">
+                            <p><strong>a)</strong> sin(4π/3) = ?</p>
+                            <button class="btn" onclick="showSolution('solA')">Show Answer</button>
+                            <div id="solA" class="result-box">
+                                <p>sin(4π/3) = sin(240°) = <strong>-√3/2 ≈ -0.866</strong></p>
+                                <p><small>Quadrant III, reference angle 60°, sine is negative</small></p>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <p><strong>b)</strong> cos(7π/6) = ?</p>
+                            <button class="btn" onclick="showSolution('solB')">Show Answer</button>
+                            <div id="solB" class="result-box">
+                                <p>cos(7π/6) = cos(210°) = <strong>-√3/2 ≈ -0.866</strong></p>
+                                <p><small>Quadrant III, reference angle 30°, cosine is negative</small></p>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <p><strong>c)</strong> tan(2π/3) = ?</p>
+                            <button class="btn" onclick="showSolution('solC')">Show Answer</button>
+                            <div id="solC" class="result-box">
+                                <p>tan(2π/3) = tan(120°) = <strong>-√3 ≈ -1.732</strong></p>
+                                <p><small>Quadrant II, reference angle 60°, tangent is negative</small></p>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <p><strong>d)</strong> sec(5π/4) = ?</p>
+                            <button class="btn" onclick="showSolution('solD')">Show Answer</button>
+                            <div id="solD" class="result-box">
+                                <p>sec(5π/4) = sec(225°) = <strong>-√2 ≈ -1.414</strong></p>
+                                <p><small>Quadrant III, cos(225°) = -√2/2, sec = 1/cos</small></p>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <p><strong>e)</strong> cot(3π/2) = ?</p>
+                            <button class="btn" onclick="showSolution('solE')">Show Answer</button>
+                            <div id="solE" class="result-box">
+                                <p>cot(3π/2) = cot(270°) = <strong>0</strong></p>
+                                <p><small>At 270°: sin = -1, cos = 0, cot = cos/sin = 0</small></p>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <p><strong>f)</strong> sin(11π/6) = ?</p>
+                            <button class="btn" onclick="showSolution('solF')">Show Answer</button>
+                            <div id="solF" class="result-box">
+                                <p>sin(11π/6) = sin(330°) = <strong>-1/2 = -0.5</strong></p>
+                                <p><small>Quadrant IV, reference angle 30°, sine is negative</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge Problems -->
+            <h3>🏆 Challenge Problems</h3>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Challenge 1: Simplify sin²(5π/3) + cos²(5π/3)</div>
+                <div class="problem-solver" style="background: white; padding: 20px;">
+                    <button class="btn" onclick="showSolution('challenge1')">Show Solution</button>
+                    <div id="challenge1" class="result-box">
+                        <h4>Solution:</h4>
+                        <p>This is a direct application of the Pythagorean identity!</p>
+                        <p><strong>For any angle θ:</strong> sin²θ + cos²θ = 1</p>
+                        <p>This identity holds for ALL angles, including 5π/3</p>
+                        <p><strong>Answer: 1</strong></p>
+                        <p><em>You don't even need to evaluate sin(5π/3) or cos(5π/3) separately!</em></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Challenge 2: If sin θ = -0.6 and tan θ > 0, find the exact value of cos θ</div>
+                <div class="problem-solver" style="background: white; padding: 20px;">
+                    <button class="btn" onclick="showSolution('challenge2')">Show Solution</button>
+                    <div id="challenge2" class="result-box">
+                        <h4>Solution:</h4>
+                        <p><strong>Step 1:</strong> Determine the quadrant</p>
+                        <p>sin θ < 0 means Quadrant III or IV</p>
+                        <p>tan θ > 0 means Quadrant I or III</p>
+                        <p>Therefore, θ is in <strong>Quadrant III</strong></p>
+                        <p><strong>Step 2:</strong> Use Pythagorean identity</p>
+                        <p>sin²θ + cos²θ = 1</p>
+                        <p>(-0.6)² + cos²θ = 1</p>
+                        <p>0.36 + cos²θ = 1</p>
+                        <p>cos²θ = 0.64</p>
+                        <p>cos θ = ±0.8</p>
+                        <p><strong>Step 3:</strong> Apply quadrant rule</p>
+                        <p>In Quadrant III, cosine is negative</p>
+                        <p><strong>Answer: cos θ = -0.8 or -4/5</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Challenge 3: A surveyor stands 250 feet from a building. The angles of elevation to the top and bottom of a flagpole on top of the building are 42° and 38° respectively. Find the height of the flagpole.</div>
+                <div class="problem-solver" style="background: white; padding: 20px;">
+                    <button class="btn" onclick="showSolution('challenge3')">Show Solution</button>
+                    <div id="challenge3" class="result-box">
+                        <h4>Solution:</h4>
+                        <p><strong>Step 1:</strong> Find height to top of flagpole</p>
+                        <p>tan(42°) = h₁ / 250</p>
+                        <p>h₁ = 250 × tan(42°) = 250 × 0.9004 ≈ 225.1 feet</p>
+                        <p><strong>Step 2:</strong> Find height to bottom of flagpole (top of building)</p>
+                        <p>tan(38°) = h₂ / 250</p>
+                        <p>h₂ = 250 × tan(38°) = 250 × 0.7813 ≈ 195.3 feet</p>
+                        <p><strong>Step 3:</strong> Find flagpole height</p>
+                        <p>Flagpole height = h₁ - h₂ = 225.1 - 195.3</p>
+                        <p><strong>Answer: The flagpole is approximately 29.8 feet tall</strong></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Show/Hide Solution function for practice problems
+        function showSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.classList.contains('show')) {
+                solution.classList.remove('show');
+                event.target.textContent = 'Show Solution';
+            } else {
+                solution.classList.add('show');
+                event.target.textContent = 'Hide Solution';
+            }
+        }
+
+        // Navigation
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            const buttons = document.querySelectorAll('.nav-btn');
+            
+            sections.forEach(section => section.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Draw canvases when section becomes active
+            if (sectionId === 'unit-circle') {
+                drawUnitCircle();
+            } else if (sectionId === 'trig-functions') {
+                drawRightTriangle();
+            } else if (sectionId === 'right-triangles') {
+                drawSolveTriangle();
+            } else if (sectionId === 'applications') {
+                drawElevationDiagram();
+            }
+        }
+
+        // Unit Circle Interactive
+        function drawUnitCircle() {
+            const canvas = document.getElementById('unitCircleCanvas');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 200;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw axes
+            ctx.strokeStyle = '#999';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(canvas.width, centerY);
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, canvas.height);
+            ctx.stroke();
+            
+            // Draw circle
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            // Get current angle
+            const degrees = parseFloat(document.getElementById('angleSlider').value);
+            const radians = degrees * Math.PI / 180;
+            
+            // Calculate point on circle
+            const x = Math.cos(radians);
+            const y = Math.sin(radians);
+            const pointX = centerX + x * radius;
+            const pointY = centerY - y * radius;
+            
+            // Draw angle arc
+            ctx.strokeStyle = '#ff6b6b';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 50, 0, -radians, true);
+            ctx.stroke();
+            
+            // Draw radius line
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(pointX, pointY);
+            ctx.stroke();
+            
+            // Draw point
+            ctx.fillStyle = '#ff6b6b';
+            ctx.beginPath();
+            ctx.arc(pointX, pointY, 8, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw projection lines
+            ctx.strokeStyle = '#52c41a';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(pointX, pointY);
+            ctx.lineTo(pointX, centerY);
+            ctx.moveTo(pointX, pointY);
+            ctx.lineTo(centerX, pointY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Draw common angles
+            const commonAngles = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330];
+            ctx.fillStyle = '#764ba2';
+            ctx.font = '12px Arial';
+            commonAngles.forEach(angle => {
+                const rad = angle * Math.PI / 180;
+                const px = centerX + Math.cos(rad) * (radius + 30);
+                const py = centerY - Math.sin(rad) * (radius + 30);
+                ctx.fillText(angle + '°', px - 10, py + 5);
+            });
+            
+            // Update display values
+            document.getElementById('degreeValue').textContent = degrees + '°';
+            document.getElementById('radianValue').textContent = (radians).toFixed(4);
+            document.getElementById('coordX').textContent = x.toFixed(4);
+            document.getElementById('coordY').textContent = y.toFixed(4);
+            document.getElementById('sinValue').textContent = y.toFixed(4);
+            document.getElementById('cosValue').textContent = x.toFixed(4);
+            document.getElementById('tanValue').textContent = x !== 0 ? (y/x).toFixed(4) : 'undefined';
+        }
+
+        document.getElementById('angleSlider').addEventListener('input', drawUnitCircle);
+
+        // Draw Right Triangle
+        function drawRightTriangle() {
+            const canvas = document.getElementById('triangleCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Triangle coordinates
+            const x1 = 100, y1 = 300;
+            const x2 = 400, y2 = 300;
+            const x3 = 400, y3 = 100;
+            
+            // Draw triangle
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.lineTo(x3, y3);
+            ctx.closePath();
+            ctx.stroke();
+            
+            // Draw right angle marker
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(x2 - 20, y2);
+            ctx.lineTo(x2 - 20, y2 - 20);
+            ctx.lineTo(x2, y2 - 20);
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText('θ', x1 + 20, y1 - 10);
+            ctx.fillText('opposite (a)', 420, 200);
+            ctx.fillText('adjacent (b)', 240, 320);
+            ctx.fillText('hypotenuse (c)', 200, 180);
+            
+            // Angle arc
+            ctx.strokeStyle = '#ff6b6b';
+            ctx.beginPath();
+            ctx.arc(x1, y1, 40, 0, -Math.PI/4, true);
+            ctx.stroke();
+        }
+
+        // Draw Solve Triangle Diagram
+        function drawSolveTriangle() {
+            const canvas = document.getElementById('solveTriangleCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const x1 = 80, y1 = 320;
+            const x2 = 420, y2 = 320;
+            const x3 = 420, y3 = 80;
+            
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.lineTo(x3, y3);
+            ctx.closePath();
+            ctx.stroke();
+            
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(x2 - 20, y2);
+            ctx.lineTo(x2 - 20, y2 - 20);
+            ctx.lineTo(x2, y2 - 20);
+            ctx.stroke();
+            
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 18px Arial';
+            ctx.fillText('A', x1 - 20, y1 + 10);
+            ctx.fillText('B', x2 + 10, y2 + 10);
+            ctx.fillText('C', x3 + 10, y3 - 10);
+            ctx.fillText('a', 440, 200);
+            ctx.fillText('b', 250, 340);
+            ctx.fillText('c', 200, 180);
+        }
+
+        // Draw Elevation/Depression Diagram
+        function drawElevationDiagram() {
+            const canvas = document.getElementById('elevationCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Horizon line
+            ctx.strokeStyle = '#999';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(50, 200);
+            ctx.lineTo(550, 200);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Observer
+            ctx.fillStyle = '#667eea';
+            ctx.beginPath();
+            ctx.arc(100, 200, 10, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Building (elevation)
+            ctx.fillStyle = '#764ba2';
+            ctx.fillRect(400, 80, 80, 120);
+            
+            // Line of sight (elevation)
+            ctx.strokeStyle = '#ff6b6b';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(100, 200);
+            ctx.lineTo(400, 80);
+            ctx.stroke();
+            
+            // Angle arc (elevation)
+            ctx.strokeStyle = '#ff6b6b';
+            ctx.beginPath();
+            ctx.arc(100, 200, 60, 0, -0.4, true);
+            ctx.stroke();
+            
+            // Boat (depression)
+            ctx.fillStyle = '#52c41a';
+            ctx.beginPath();
+            ctx.moveTo(250, 320);
+            ctx.lineTo(280, 320);
+            ctx.lineTo(265, 310);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Line of sight (depression) - from top of building
+            ctx.strokeStyle = '#1890ff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(440, 80);
+            ctx.lineTo(265, 310);
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText('Angle of Elevation', 110, 170);
+            ctx.fillText('Angle of Depression', 320, 120);
+            ctx.fillText('Observer', 70, 230);
+            ctx.fillText('Building', 410, 210);
+            ctx.fillText('Boat', 240, 340);
+            ctx.fillText('Horizon', 480, 195);
+        }
+
+        // Conversion Functions
+        function convertDegToRad() {
+            const deg = parseFloat(document.getElementById('degInput').value);
+            if (isNaN(deg)) {
+                alert('Please enter a valid number');
+                return;
+            }
+            const rad = deg * Math.PI / 180;
+            const radPi = deg / 180;
+            const result = document.getElementById('conversionResult');
+            result.innerHTML = `<h3>Result</h3>
+                <p><strong>${deg}°</strong> = <strong>${rad.toFixed(4)}</strong> radians</p>
+                <p>= <strong>${radPi.toFixed(4)}π</strong> radians</p>`;
+            result.classList.add('show');
+        }
+
+        function convertRadToDeg() {
+            let input = document.getElementById('radInput').value.toLowerCase();
+            let rad;
+            
+            if (input.includes('pi')) {
+                input = input.replace(/pi|π/g, String(Math.PI));
+                rad = eval(input);
+            } else {
+                rad = parseFloat(input);
+            }
+            
+            if (isNaN(rad)) {
+                alert('Please enter a valid number or expression with π');
+                return;
+            }
+            
+            const deg = rad * 180 / Math.PI;
+            const result = document.getElementById('conversionResult');
+            result.innerHTML = `<h3>Result</h3>
+                <p><strong>${rad.toFixed(4)}</strong> radians = <strong>${deg.toFixed(2)}°</strong></p>`;
+            result.classList.add('show');
+        }
+
+        // Triangle Solver
+        function solveTriangle() {
+            const angleA = parseFloat(document.getElementById('angleA').value);
+            const sideA = parseFloat(document.getElementById('sideA').value);
+            const sideB = parseFloat(document.getElementById('sideB').value);
+            const sideC = parseFloat(document.getElementById('sideC').value);
+            
+            let result = '<h3>Solution</h3>';
+            
+            // Check what we have and solve accordingly
+            if (!isNaN(angleA) && !isNaN(sideC)) {
+                // Have angle and hypotenuse
+                const radA = angleA * Math.PI / 180;
+                const a = sideC * Math.sin(radA);
+                const b = sideC * Math.cos(radA);
+                const angleB = 90 - angleA;
+                
+                result += `<p><strong>Angle A:</strong> ${angleA}°</p>
+                           <p><strong>Angle B:</strong> ${angleB.toFixed(2)}°</p>
+                           <p><strong>Side a:</strong> ${a.toFixed(2)}</p>
+                           <p><strong>Side b:</strong> ${b.toFixed(2)}</p>
+                           <p><strong>Hypotenuse c:</strong> ${sideC}</p>`;
+            } else if (!isNaN(sideA) && !isNaN(sideB)) {
+                // Have two legs
+                const c = Math.sqrt(sideA * sideA + sideB * sideB);
+                const angleArad = Math.atan(sideA / sideB);
+                const angleAdeg = angleArad * 180 / Math.PI;
+                const angleBdeg = 90 - angleAdeg;
+                
+                result += `<p><strong>Angle A:</strong> ${angleAdeg.toFixed(2)}°</p>
+                           <p><strong>Angle B:</strong> ${angleBdeg.toFixed(2)}°</p>
+                           <p><strong>Side a:</strong> ${sideA}</p>
+                           <p><strong>Side b:</strong> ${sideB}</p>
+                           <p><strong>Hypotenuse c:</strong> ${c.toFixed(2)}</p>`;
+            } else if (!isNaN(angleA) && !isNaN(sideA)) {
+                // Have angle and opposite side
+                const radA = angleA * Math.PI / 180;
+                const c = sideA / Math.sin(radA);
+                const b = sideA / Math.tan(radA);
+                const angleB = 90 - angleA;
+                
+                result += `<p><strong>Angle A:</strong> ${angleA}°</p>
+                           <p><strong>Angle B:</strong> ${angleB.toFixed(2)}°</p>
+                           <p><strong>Side a:</strong> ${sideA}</p>
+                           <p><strong>Side b:</strong> ${b.toFixed(2)}</p>
+                           <p><strong>Hypotenuse c:</strong> ${c.toFixed(2)}</p>`;
+            } else {
+                result += '<p>Please provide at least two values (one angle and one side, or two sides)</p>';
+            }
+            
+            const resultBox = document.getElementById('triangleResult');
+            resultBox.innerHTML = result;
+            resultBox.classList.add('show');
+        }
+
+        // Identity Verifier
+        function verifyIdentity() {
+            const sinVal = parseFloat(document.getElementById('sinInput').value);
+            
+            if (isNaN(sinVal) || sinVal < -1 || sinVal > 1) {
+                alert('Please enter a value between -1 and 1');
+                return;
+            }
+            
+            const cosSquared = 1 - sinVal * sinVal;
+            const cosVal = Math.sqrt(cosSquared);
+            
+            const result = document.getElementById('identityResult');
+            result.innerHTML = `<h3>Using sin²θ + cos²θ = 1</h3>
+                <p><strong>Given:</strong> sin θ = ${sinVal}</p>
+                <p><strong>Calculation:</strong></p>
+                <ul style="margin-left: 20px;">
+                    <li>sin²θ = ${sinVal}² = ${(sinVal * sinVal).toFixed(4)}</li>
+                    <li>cos²θ = 1 - sin²θ = 1 - ${(sinVal * sinVal).toFixed(4)} = ${cosSquared.toFixed(4)}</li>
+                    <li>cos θ = ±√${cosSquared.toFixed(4)} = ±${cosVal.toFixed(4)}</li>
+                </ul>
+                <p><strong>Result:</strong> cos θ = ±${cosVal.toFixed(4)}</p>
+                <p><em>Note: The sign depends on which quadrant θ is in.</em></p>`;
+            result.classList.add('show');
+        }
+
+        // Application Solver
+        function solveApplication() {
+            const type = document.getElementById('problemType').value;
+            const angle = parseFloat(document.getElementById('appAngle').value);
+            const distance = parseFloat(document.getElementById('appDistance').value);
+            
+            if (isNaN(angle) || isNaN(distance)) {
+                alert('Please enter valid numbers');
+                return;
+            }
+            
+            const radAngle = angle * Math.PI / 180;
+            const result = document.getElementById('applicationResult');
+            
+            if (type === 'elevation') {
+                const height = distance * Math.tan(radAngle);
+                result.innerHTML = `<h3>Solution</h3>
+                    <p><strong>Problem:</strong> Find height with angle of elevation ${angle}° and horizontal distance ${distance}</p>
+                    <p><strong>Formula:</strong> tan(${angle}°) = height / ${distance}</p>
+                    <p><strong>Calculation:</strong> height = ${distance} × tan(${angle}°) = ${distance} × ${Math.tan(radAngle).toFixed(4)}</p>
+                    <p><strong>Answer:</strong> Height = ${height.toFixed(2)} units</p>`;
+            } else {
+                const horizontalDist = distance / Math.tan(radAngle);
+                result.innerHTML = `<h3>Solution</h3>
+                    <p><strong>Problem:</strong> Find horizontal distance with angle of depression ${angle}° and vertical height ${distance}</p>
+                    <p><strong>Formula:</strong> tan(${angle}°) = ${distance} / distance</p>
+                    <p><strong>Calculation:</strong> distance = ${distance} / tan(${angle}°) = ${distance} / ${Math.tan(radAngle).toFixed(4)}</p>
+                    <p><strong>Answer:</strong> Horizontal Distance = ${horizontalDist.toFixed(2)} units</p>`;
+            }
+            result.classList.add('show');
+        }
+
+        // Any Angle Calculator
+        function calculateAnyAngle() {
+            const angle = parseFloat(document.getElementById('anyAngle').value);
+            
+            if (isNaN(angle)) {
+                alert('Please enter a valid angle');
+                return;
+            }
+            
+            // Normalize angle to 0-360
+            let normAngle = angle % 360;
+            if (normAngle < 0) normAngle += 360;
+            
+            // Determine quadrant
+            let quadrant;
+            let refAngle;
+            if (normAngle >= 0 && normAngle <= 90) {
+                quadrant = 'I';
+                refAngle = normAngle;
+            } else if (normAngle > 90 && normAngle <= 180) {
+                quadrant = 'II';
+                refAngle = 180 - normAngle;
+            } else if (normAngle > 180 && normAngle <= 270) {
+                quadrant = 'III';
+                refAngle = normAngle - 180;
+            } else {
+                quadrant = 'IV';
+                refAngle = 360 - normAngle;
+            }
+            
+            const radAngle = normAngle * Math.PI / 180;
+            const sinVal = Math.sin(radAngle);
+            const cosVal = Math.cos(radAngle);
+            const tanVal = Math.tan(radAngle);
+            
+            const result = document.getElementById('anyAngleResult');
+            result.innerHTML = `<h3>Results for ${angle}° (${normAngle}°)</h3>
+                <p><strong>Quadrant:</strong> ${quadrant}</p>
+                <p><strong>Reference Angle:</strong> ${refAngle.toFixed(2)}°</p>
+                <p><strong>Radians:</strong> ${radAngle.toFixed(4)}</p>
+                <hr>
+                <p><strong>sin(${normAngle}°)</strong> = ${sinVal.toFixed(4)}</p>
+                <p><strong>cos(${normAngle}°)</strong> = ${cosVal.toFixed(4)}</p>
+                <p><strong>tan(${normAngle}°)</strong> = ${Math.abs(tanVal) > 1000 ? 'undefined' : tanVal.toFixed(4)}</p>
+                <p><strong>csc(${normAngle}°)</strong> = ${Math.abs(sinVal) < 0.0001 ? 'undefined' : (1/sinVal).toFixed(4)}</p>
+                <p><strong>sec(${normAngle}°)</strong> = ${Math.abs(cosVal) < 0.0001 ? 'undefined' : (1/cosVal).toFixed(4)}</p>
+                <p><strong>cot(${normAngle}°)</strong> = ${Math.abs(tanVal) > 1000 ? 'undefined' : (1/tanVal).toFixed(4)}</p>`;
+            result.classList.add('show');
+        }
+
+        // Initialize
+        window.onload = function() {
+            drawUnitCircle();
+            drawRightTriangle();
+            drawSolveTriangle();
+            drawElevationDiagram();
+        };
+    </script>
+</body>
+</html>
