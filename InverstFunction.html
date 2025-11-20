@@ -1,0 +1,1760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inverse Functions - Interactive Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .navigation {
+            display: flex;
+            background: #f8f9fa;
+            padding: 10px;
+            border-bottom: 2px solid #dee2e6;
+            overflow-x: auto;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 20px;
+            margin: 5px;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .concept-box {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .definition {
+            background: #e7f3ff;
+            border-left: 5px solid #2196F3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .example {
+            background: #f0f7ff;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            border: 2px solid #667eea;
+        }
+
+        .example-title {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .math {
+            font-family: 'Courier New', monospace;
+            background: #fff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            font-size: 1.1em;
+            overflow-x: auto;
+        }
+
+        .steps {
+            margin: 20px 0;
+        }
+
+        .step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+
+        .step-number {
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .practice-section {
+            background: #fff8e1;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 12px;
+            border: 3px solid #ffc107;
+        }
+
+        .practice-title {
+            color: #f57c00;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 2px solid #ffc107;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            padding: 12px 25px;
+            margin: 10px 5px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .hint-btn {
+            background: #17a2b8;
+        }
+
+        .hint-btn:hover {
+            background: #138496;
+        }
+
+        .feedback {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+            display: block;
+        }
+
+        .hint {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #17a2b8;
+            display: none;
+        }
+
+        .canvas-container {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        canvas {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .graph-controls {
+            margin: 15px 0;
+        }
+
+        .graph-controls label {
+            margin-right: 10px;
+            font-weight: 500;
+        }
+
+        .graph-controls select {
+            padding: 8px;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .key-point {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .warning {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            color: #721c24;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 2px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .score-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background:;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .nav-btn {
+                padding: 10px 15px;
+                font-size: 0.85em;
+            }
+
+            .score-display {
+                position: static;
+                margin: 10px;
+                text-align: center;
+            }
+        }
+
+        .interactive-demo {
+            background: #f0f7ff;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 12px;
+            border: 2px solid #2196F3;
+        }
+
+        .slider-container {
+            margin: 20px 0;
+        }
+
+        .slider-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            margin: 10px 0;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="score-display" id="scoreDisplay"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🔄 Inverse Functions</h1>
+            <p>From One-to-One Functions to Finding Inverses</p>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn active" onclick="showSection('intro')">Introduction</button>
+            <button class="nav-btn" onclick="showSection('onetoone')">One-to-One Functions</button>
+            <button class="nav-btn" onclick="showSection('horizontal')">Horizontal Line Test</button>
+            <button class="nav-btn" onclick="showSection('linear')">Linear Inverses</button>
+            <button class="nav-btn" onclick="showSection('power')">Power Functions</button>
+            <button class="nav-btn" onclick="showSection('rational')">Rational Functions</button>
+            <button class="nav-btn" onclick="showSection('practice')">Practice Problems</button>
+            <button class="nav-btn" onclick="showSection('summary')">Summary</button>
+        </div>
+
+        <div class="content">
+            <!-- Introduction Section -->
+            <div id="intro" class="section active">
+                <h2>Introduction to Inverse Functions</h2>
+                
+                <div class="definition">
+                    <h3>What is an Inverse Function?</h3>
+                    <p>An inverse function "undoes" what the original function does. If a function f takes an input x and produces output y, then the inverse function f⁻¹ takes y as input and produces x as output.</p>
+                    <div class="math">
+                        If f(x) = y, then f⁻¹(y) = x
+                    </div>
+                </div>
+
+                <div class="concept-box">
+                    <h3>Real-World Analogy</h3>
+                    <p>Think of a function as a machine that converts Celsius to Fahrenheit:</p>
+                    <ul style="margin-left: 30px; margin-top: 10px;">
+                        <li><strong>Function:</strong> You put in 0°C and get 32°F</li>
+                        <li><strong>Inverse:</strong> You put in 32°F and get back 0°C</li>
+                    </ul>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example 1: Simple Function Pairs</div>
+                    <p>Consider the function f(x) = x + 3</p>
+                    <div class="math">
+                        f(2) = 2 + 3 = 5
+                    </div>
+                    <p>The inverse function f⁻¹(x) = x - 3 "undoes" this:</p>
+                    <div class="math">
+                        f⁻¹(5) = 5 - 3 = 2
+                    </div>
+                    <p>Notice: f⁻¹(f(2)) = f⁻¹(5) = 2 ✓</p>
+                </div>
+
+                <div class="key-point">
+                    <strong>Key Property:</strong> For a function and its inverse:
+                    <div class="math">
+                        f(f⁻¹(x)) = x   AND   f⁻¹(f(x)) = x
+                    </div>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>Interactive Demo: Function and Inverse</h3>
+                    <div class="canvas-container">
+                        <canvas id="introCanvas" width="600" height="400"></canvas>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px; color: #666;">
+                        The graph shows f(x) = 2x + 1 (blue) and its inverse f⁻¹(x) = (x-1)/2 (red), along with the line y = x (green dashed).
+                    </p>
+                </div>
+            </div>
+
+            <!-- One-to-One Functions Section -->
+            <div id="onetoone" class="section">
+                <h2>One-to-One Functions</h2>
+
+                <div class="definition">
+                    <h3>Definition</h3>
+                    <p>A function is <strong>one-to-one</strong> (injective) if different inputs always produce different outputs.</p>
+                    <div class="math">
+                        If x₁ ≠ x₂, then f(x₁) ≠ f(x₂)
+                    </div>
+                    <p style="margin-top: 10px;"><strong>Equivalently:</strong> If f(x₁) = f(x₂), then x₁ = x₂</p>
+                </div>
+
+                <div class="concept-box">
+                    <h3>Why Do We Need One-to-One Functions?</h3>
+                    <p>Only one-to-one functions have inverses! If two different inputs produce the same output, the inverse wouldn't know which input to return.</p>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example 2: One-to-One Function</div>
+                    <p><strong>Function:</strong> f(x) = 2x + 1</p>
+                    <p><strong>Test:</strong> Let's check if it's one-to-one</p>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-number">Step 1:</span>
+                            Assume f(x₁) = f(x₂)
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 2:</span>
+                            <div class="math">2x₁ + 1 = 2x₂ + 1</div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 3:</span>
+                            <div class="math">2x₁ = 2x₂</div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 4:</span>
+                            <div class="math">x₁ = x₂</div>
+                        </div>
+                    </div>
+                    <p><strong>Conclusion:</strong> Since f(x₁) = f(x₂) implies x₁ = x₂, the function IS one-to-one! ✓</p>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example 3: NOT One-to-One</div>
+                    <p><strong>Function:</strong> f(x) = x²</p>
+                    <p><strong>Test:</strong> Let's check different inputs</p>
+                    <div class="math">
+                        f(2) = 2² = 4<br>
+                        f(-2) = (-2)² = 4
+                    </div>
+                    <p><strong>Conclusion:</strong> Different inputs (2 and -2) produce the same output (4), so this is NOT one-to-one! ✗</p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>Interactive: Compare One-to-One and Not One-to-One</h3>
+                    <div class="canvas-container">
+                        <canvas id="oneToOneCanvas" width="600" height="400"></canvas>
+                    </div>
+                    <div class="graph-controls">
+                        <label>Select Function:</label>
+                        <select id="oneToOneSelect" onchange="drawOneToOne()">
+                            <option value="linear">f(x) = 2x + 1 (One-to-One)</option>
+                            <option value="quadratic">f(x) = x² (NOT One-to-One)</option>
+                            <option value="cubic">f(x) = x³ (One-to-One)</option>
+                            <option value="absolute">f(x) = |x| (NOT One-to-One)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Horizontal Line Test Section -->
+            <div id="horizontal" class="section">
+                <h2>Horizontal Line Test</h2>
+
+                <div class="definition">
+                    <h3>The Horizontal Line Test</h3>
+                    <p>A function is one-to-one if and only if no horizontal line intersects its graph more than once.</p>
+                </div>
+
+                <div class="concept-box">
+                    <h3>How to Use the Horizontal Line Test</h3>
+                    <ol style="margin-left: 30px; margin-top: 10px;">
+                        <li>Draw the graph of the function</li>
+                        <li>Imagine drawing horizontal lines across the graph at various y-values</li>
+                        <li>If ANY horizontal line touches the graph more than once, it's NOT one-to-one</li>
+                        <li>If EVERY horizontal line touches at most once, it IS one-to-one</li>
+                    </ol>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example 4: Applying the Horizontal Line Test</div>
+                    <p><strong>Function:</strong> f(x) = x³ - 3x</p>
+                    <div class="interactive-demo">
+                        <div class="canvas-container">
+                            <canvas id="hltCanvas" width="600" height="400"></canvas>
+                        </div>
+                        <div class="slider-container">
+                            <div class="slider-label">Move the horizontal line: y = <span id="hltValue">0</span></div>
+                            <input type="range" id="hltSlider" min="-5" max="5" step="0.1" value="0" oninput="drawHLT()">
+                        </div>
+                        <p style="text-align: center; color: #721c24; font-weight: 600; margin-top: 15px;">
+                            Notice: Some horizontal lines cross the graph multiple times! This function is NOT one-to-one.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example 5: One-to-One by HLT</div>
+                    <p><strong>Function:</strong> f(x) = 2x + 3</p>
+                    <div class="interactive-demo">
+                        <div class="canvas-container">
+                            <canvas id="hltCanvas2" width="600" height="400"></canvas>
+                        </div>
+                        <div class="slider-container">
+                            <div class="slider-label">Move the horizontal line: y = <span id="hltValue2">0</span></div>
+                            <input type="range" id="hltSlider2" min="-10" max="10" step="0.5" value="0" oninput="drawHLT2()">
+                        </div>
+                        <p style="text-align: center; color: #155724; font-weight: 600; margin-top: 15px;">
+                            Every horizontal line crosses exactly once! This function IS one-to-one. ✓
+                        </p>
+                    </div>
+                </div>
+
+                <div class="key-point">
+                    <strong>Remember:</strong>
+                    <ul style="margin-left: 25px; margin-top: 10px;">
+                        <li>Horizontal Line Test checks if a function is one-to-one</li>
+                        <li>Vertical Line Test checks if a relation is a function</li>
+                        <li>A function must pass BOTH tests to have an inverse that is also a function</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Linear Inverses Section -->
+            <div id="linear" class="section">
+                <h2>Finding Inverses: Linear Functions</h2>
+
+                <div class="concept-box">
+                    <h3>General Steps to Find an Inverse</h3>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-number">Step 1:</span>
+                            Replace f(x) with y
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 2:</span>
+                            Swap x and y
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 3:</span>
+                            Solve for y
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 4:</span>
+                            Replace y with f⁻¹(x)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example 6: Simple Linear Function</div>
+                    <p><strong>Find the inverse of:</strong> f(x) = 3x + 2</p>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-number">Step 1:</span>
+                            Write as y = 3x + 2
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 2:</span>
+                            Swap x and y: x = 3y + 2
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 3:</span>
+                            Solve for y:
+                            <div class="math">
+                                x = 3y + 2<br>
+                                x - 2 = 3y<br>
+                                y = (x - 2)/3
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 4:</span>
+                            The inverse is: <strong>f⁻¹(x) = (x - 2)/3</strong>
+                        </div>
+                    </div>
+                    <div class="key-point" style="margin-top: 20px;">
+                        <strong>Verification:</strong> Let's check f(f⁻¹(x)) = x
+                        <div class="math">
+                            f(f⁻¹(x)) = f((x-2)/3) = 3·((x-2)/3) + 2 = (x-2) + 2 = x ✓
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example 7: Linear with Fraction</div>
+                    <p><strong>Find the inverse of:</strong> f(x) = (2x - 5)/4</p>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-number">Step 1:</span>
+                            Write as y = (2x - 5)/4
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 2:</span>
+                            Swap x and y: x = (2y - 5)/4
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 3:</span>
+                            Solve for y:
+                            <div class="math">
+                                x = (2y - 5)/4<br>
+                                4x = 2y - 5<br>
+                                4x + 5 = 2y<br>
+                                y = (4x + 5)/2
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 4:</span>
+                            The inverse is: <strong>f⁻¹(x) = (4x + 5)/2</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example 8: Negative Slope</div>
+                    <p><strong>Find the inverse of:</strong> f(x) = -2x + 7</p>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-number">Step 1:</span>
+                            y = -2x + 7
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 2:</span>
+                            x = -2y + 7
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 3:</span>
+                            <div class="math">
+                                x = -2y + 7<br>
+                                x - 7 = -2y<br>
+                                y = (7 - x)/2  or  y = -x/2 + 7/2
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 4:</span>
+                            The inverse is: <strong>f⁻¹(x) = (7 - x)/2</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>Visual: Function and Its Inverse</h3>
+                    <div class="canvas-container">
+                        <canvas id="linearInverseCanvas" width="600" height="400"></canvas>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px; color: #666;">
+                        f(x) = 3x + 2 (blue) and f⁻¹(x) = (x-2)/3 (red) are reflections across y = x (green dashed)
+                    </p>
+                </div>
+            </div>
+
+            <!-- Power Functions Section -->
+            <div id="power" class="section">
+                <h2>Finding Inverses: Odd Power Functions</h2>
+
+                <div class="definition">
+                    <h3>Why Odd Powers?</h3>
+                    <p>Functions with odd powers (x³, x⁵, x⁷, etc.) are one-to-one across all real numbers because they maintain the same sign as their input.</p>
+                    <div class="math">
+                        (-2)³ = -8  and  (2)³ = 8  (different outputs!)
+                    </div>
+                </div>
+
+                <div class="warning">
+                    <strong>⚠️ Even Powers:</strong> Functions like f(x) = x² are NOT one-to-one over all reals because f(-2) = f(2) = 4. We need to restrict the domain to make them one-to-one.
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example 9: Cube Function</div>
+                    <p><strong>Find the inverse of:</strong> f(x) = x³</p>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-number">Step 1:</span>
+                            y = x³
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 2:</span>
+                            x = y³
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 3:</span>
+                            <div class="math">
+                                x = y³<br>
+                                ³√x = y    (take the cube root of both sides)
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 4:</span>
+                            The inverse is: <strong>f⁻¹(x) = ³√x = x^(1/3)</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example 10: Scaled Cube Function</div>
+                    <p><strong>Find the inverse of:</strong> f(x) = 2x³ + 3</p>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-number">Step 1:</span>
+                            y = 2x³ + 3
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 2:</span>
+                            x = 2y³ + 3
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 3:</span>
+                            <div class="math">
+                                x = 2y³ + 3<br>
+                                x - 3 = 2y³<br>
+                                (x - 3)/2 = y³<br>
+                                y = ³√((x - 3)/2)
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 4:</span>
+                            The inverse is: <strong>f⁻¹(x) = ³√((x - 3)/2)</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example 11: Fifth Power</div>
+                    <p><strong>Find the inverse of:</strong> f(x) = (x - 1)⁵ + 4</p>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-number">Step 1:</span>
+                            y = (x - 1)⁵ + 4
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 2:</span>
+                            x = (y - 1)⁵ + 4
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 3:</span>
+                            <div class="math">
+                                x = (y - 1)⁵ + 4<br>
+                                x - 4 = (y - 1)⁵<br>
+                                ⁵√(x - 4) = y - 1<br>
+                                y = ⁵√(x - 4) + 1
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 4:</span>
+                            The inverse is: <strong>f⁻¹(x) = ⁵√(x - 4) + 1</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>Interactive: Odd Power Functions and Their Inverses</h3>
+                    <div class="canvas-container">
+                        <canvas id="powerCanvas" width="600" height="400"></canvas>
+                    </div>
+                    <div class="graph-controls">
+                        <label>Select Function:</label>
+                        <select id="powerSelect" onchange="drawPower()">
+                            <option value="cube">f(x) = x³</option>
+                            <option value="fifth">f(x) = x⁵</option>
+                            <option value="scaled">f(x) = 2x³ + 1</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="key-point">
+                    <strong>General Pattern for f(x) = axⁿ + b (where n is odd):</strong>
+                    <div class="math">
+                        f⁻¹(x) = ⁿ√((x - b)/a)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rational Functions Section -->
+            <div id="rational" class="section">
+                <h2>Finding Inverses: Rational Functions</h2>
+
+                <div class="definition">
+                    <h3>Rational Functions</h3>
+                    <p>A rational function where both numerator and denominator are linear has the form:</p>
+                    <div class="math">
+                        f(x) = (ax + b)/(cx + d)
+                    </div>
+                    <p>These require careful algebraic manipulation to find inverses.</p>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example 12: Simple Rational</div>
+                    <p><strong>Find the inverse of:</strong> f(x) = (x + 1)/(x - 2)</p>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-number">Step 1:</span>
+                            y = (x + 1)/(x - 2)
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 2:</span>
+                            x = (y + 1)/(y - 2)
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 3:</span>
+                            Solve for y (multiply both sides by (y - 2)):
+                            <div class="math">
+                                x(y - 2) = y + 1<br>
+                                xy - 2x = y + 1<br>
+                                xy - y = 2x + 1<br>
+                                y(x - 1) = 2x + 1<br>
+                                y = (2x + 1)/(x - 1)
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 4:</span>
+                            The inverse is: <strong>f⁻¹(x) = (2x + 1)/(x - 1)</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example 13: Rational with Coefficients</div>
+                    <p><strong>Find the inverse of:</strong> f(x) = (3x - 2)/(x + 4)</p>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-number">Step 1:</span>
+                            y = (3x - 2)/(x + 4)
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 2:</span>
+                            x = (3y - 2)/(y + 4)
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 3:</span>
+                            <div class="math">
+                                x(y + 4) = 3y - 2<br>
+                                xy + 4x = 3y - 2<br>
+                                xy - 3y = -4x - 2<br>
+                                y(x - 3) = -4x - 2<br>
+                                y = (-4x - 2)/(x - 3)<br>
+                                y = -(4x + 2)/(x - 3)
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 4:</span>
+                            The inverse is: <strong>f⁻¹(x) = -(4x + 2)/(x - 3)</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example 14: Another Rational</div>
+                    <p><strong>Find the inverse of:</strong> f(x) = (2x + 5)/(3x - 1)</p>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-number">Step 1:</span>
+                            y = (2x + 5)/(3x - 1)
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 2:</span>
+                            x = (2y + 5)/(3y - 1)
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 3:</span>
+                            <div class="math">
+                                x(3y - 1) = 2y + 5<br>
+                                3xy - x = 2y + 5<br>
+                                3xy - 2y = x + 5<br>
+                                y(3x - 2) = x + 5<br>
+                                y = (x + 5)/(3x - 2)
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">Step 4:</span>
+                            The inverse is: <strong>f⁻¹(x) = (x + 5)/(3x - 2)</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="concept-box">
+                    <h3>Key Strategy for Rational Functions</h3>
+                    <ol style="margin-left: 30px; margin-top: 10px;">
+                        <li>After swapping x and y, multiply both sides by the denominator</li>
+                        <li>Distribute to eliminate parentheses</li>
+                        <li>Collect all terms with y on one side</li>
+                        <li>Factor out y</li>
+                        <li>Divide to isolate y</li>
+                    </ol>
+                </div>
+
+                <div class="warning">
+                    <strong>Domain Restrictions:</strong> For rational functions, always note:
+                    <ul style="margin-left: 25px; margin-top: 10px;">
+                        <li>The denominator cannot equal zero</li>
+                        <li>Values that make the denominator zero are excluded from the domain</li>
+                        <li>For f(x) = (3x-2)/(x+4), the domain is all reals except x = -4</li>
+                    </ul>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>Visualizing Rational Functions and Inverses</h3>
+                    <div class="canvas-container">
+                        <canvas id="rationalCanvas" width="600" height="400"></canvas>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px; color: #666;">
+                        f(x) = (x+1)/(x-2) (blue) and its inverse (red) with asymptotes shown
+                    </p>
+                </div>
+            </div>
+
+            <!-- Practice Section -->
+            <div id="practice" class="section">
+                <h2>Practice Problems</h2>
+
+                <div class="practice-section">
+                    <div class="practice-title">🎯 Test Your Skills!</div>
+
+                    <!-- Question 1 -->
+                    <div class="question">
+                        <div class="question-text"><strong>Problem 1:</strong> Find the inverse of f(x) = 4x - 7</div>
+                        <input type="text" id="q1" placeholder="Enter your answer (e.g., (x+7)/4)">
+                        <div>
+                            <button onclick="checkAnswer(1, '(x+7)/4', 'q1')">Check Answer</button>
+                            <button class="hint-btn" onclick="showHint(1)">Show Hint</button>
+                        </div>
+                        <div id="hint1" class="hint">
+                            <strong>Hint:</strong> Start with y = 4x - 7, swap to get x = 4y - 7, then solve for y. Add 7 to both sides, then divide by 4.
+                        </div>
+                        <div id="feedback1" class="feedback"></div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="question">
+                        <div class="question-text"><strong>Problem 2:</strong> Find the inverse of f(x) = (x - 3)/5</div>
+                        <input type="text" id="q2" placeholder="Enter your answer">
+                        <div>
+                            <button onclick="checkAnswer(2, '5x+3', 'q2')">Check Answer</button>
+                            <button class="hint-btn" onclick="showHint(2)">Show Hint</button>
+                        </div>
+                        <div id="hint2" class="hint">
+                            <strong>Hint:</strong> After swapping: x = (y - 3)/5. Multiply both sides by 5, then add 3.
+                        </div>
+                        <div id="feedback2" class="feedback"></div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="question">
+                        <div class="question-text"><strong>Problem 3:</strong> Find the inverse of f(x) = x³ - 5</div>
+                        <input type="text" id="q3" placeholder="Enter your answer (use ^ for exponents)">
+                        <div>
+                            <button onclick="checkAnswer(3, '(x+5)^(1/3)', 'q3')">Check Answer</button>
+                            <button class="hint-btn" onclick="showHint(3)">Show Hint</button>
+                        </div>
+                        <div id="hint3" class="hint">
+                            <strong>Hint:</strong> After swapping: x = y³ - 5. Add 5 to both sides, then take the cube root.
+                        </div>
+                        <div id="feedback3" class="feedback"></div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="question">
+                        <div class="question-text"><strong>Problem 4:</strong> Is f(x) = x² + 4 one-to-one over all real numbers? (yes/no)</div>
+                        <input type="text" id="q4" placeholder="Enter yes or no">
+                        <div>
+                            <button onclick="checkAnswer(4, 'no', 'q4')">Check Answer</button>
+                            <button class="hint-btn" onclick="showHint(4)">Show Hint</button>
+                        </div>
+                        <div id="hint4" class="hint">
+                            <strong>Hint:</strong> Think about f(2) and f(-2). Do they give the same output?
+                        </div>
+                        <div id="feedback4" class="feedback"></div>
+                    </div>
+
+                    <!-- Question 5 -->
+                    <div class="question">
+                        <div class="question-text"><strong>Problem 5:</strong> Find the inverse of f(x) = (2x + 1)/(x - 3)</div>
+                        <input type="text" id="q5" placeholder="Enter your answer">
+                        <div>
+                            <button onclick="checkAnswer(5, '(3x+1)/(x-2)', 'q5')">Check Answer</button>
+                            <button class="hint-btn" onclick="showHint(5)">Show Hint</button>
+                        </div>
+                        <div id="hint5" class="hint">
+                            <strong>Hint:</strong> After swapping: x = (2y + 1)/(y - 3). Multiply both sides by (y - 3), expand, collect y terms on one side, and factor.
+                        </div>
+                        <div id="feedback5" class="feedback"></div>
+                    </div>
+
+                    <!-- Question 6 -->
+                    <div class="question">
+                        <div class="question-text"><strong>Problem 6:</strong> Find the inverse of f(x) = 3x³ + 2</div>
+                        <input type="text" id="q6" placeholder="Enter your answer">
+                        <div>
+                            <button onclick="checkAnswer(6, '((x-2)/3)^(1/3)', 'q6')">Check Answer</button>
+                            <button class="hint-btn" onclick="showHint(6)">Show Hint</button>
+                        </div>
+                        <div id="hint6" class="hint">
+                            <strong>Hint:</strong> Subtract 2, divide by 3, then take the cube root.
+                        </div>
+                        <div id="feedback6" class="feedback"></div>
+                    </div>
+
+                    <!-- Question 7 -->
+                    <div class="question">
+                        <div class="question-text"><strong>Problem 7:</strong> If f(x) = 2x - 5 and g(x) is the inverse of f, what is g(7)?</div>
+                        <input type="text" id="q7" placeholder="Enter your answer">
+                        <div>
+                            <button onclick="checkAnswer(7, '6', 'q7')">Check Answer</button>
+                            <button class="hint-btn" onclick="showHint(7)">Show Hint</button>
+                        </div>
+                        <div id="hint7" class="hint">
+                            <strong>Hint:</strong> First find the inverse: g(x) = (x + 5)/2. Then calculate g(7).
+                        </div>
+                        <div id="feedback7" class="feedback"></div>
+                    </div>
+
+                    <!-- Question 8 -->
+                    <div class="question">
+                        <div class="question-text"><strong>Problem 8:</strong> Find the inverse of f(x) = -3x + 9</div>
+                        <input type="text" id="q8" placeholder="Enter your answer">
+                        <div>
+                            <button onclick="checkAnswer(8, '(9-x)/3', 'q8')">Check Answer</button>
+                            <button class="hint-btn" onclick="showHint(8)">Show Hint</button>
+                        </div>
+                        <div id="hint8" class="hint">
+                            <strong>Hint:</strong> After swapping: x = -3y + 9. Subtract 9, then divide by -3. Can also write as -x/3 + 3.
+                        </div>
+                        <div id="feedback8" class="feedback"></div>
+                    </div>
+
+                    <!-- Question 9 -->
+                    <div class="question">
+                        <div class="question-text"><strong>Problem 9:</strong> Find the inverse of f(x) = (x + 2)⁵ - 1</div>
+                        <input type="text" id="q9" placeholder="Enter your answer">
+                        <div>
+                            <button onclick="checkAnswer(9, '(x+1)^(1/5)-2', 'q9')">Check Answer</button>
+                            <button class="hint-btn" onclick="showHint(9)">Show Hint</button>
+                        </div>
+                        <div id="hint9" class="hint">
+                            <strong>Hint:</strong> Add 1, take the fifth root, then subtract 2.
+                        </div>
+                        <div id="feedback9" class="feedback"></div>
+                    </div>
+
+                    <!-- Question 10 -->
+                    <div class="question">
+                        <div class="question-text"><strong>Problem 10:</strong> Find the inverse of f(x) = (5x - 3)/(2x + 1)</div>
+                        <input type="text" id="q10" placeholder="Enter your answer">
+                        <div>
+                            <button onclick="checkAnswer(10, '(-x-3)/(2x-5)', 'q10')">Check Answer</button>
+                            <button class="hint-btn" onclick="showHint(10)">Show Hint</button>
+                        </div>
+                        <div id="hint10" class="hint">
+                            <strong>Hint:</strong> After x(2y + 1) = 5y - 3, expand and collect y terms: 2xy - 5y = -x - 3, then factor and divide.
+                        </div>
+                        <div id="feedback10" class="feedback"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Summary Section -->
+            <div id="summary" class="section">
+                <h2>Summary & Key Takeaways</h2>
+
+                <div class="definition">
+                    <h3>Essential Concepts</h3>
+                    <table>
+                        <tr>
+                            <th>Concept</th>
+                            <th>Definition</th>
+                            <th>Test/Method</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Inverse Function</strong></td>
+                            <td>f⁻¹ "undoes" f: if f(a) = b, then f⁻¹(b) = a</td>
+                            <td>f(f⁻¹(x)) = x and f⁻¹(f(x)) = x</td>
+                        </tr>
+                        <tr>
+                            <td><strong>One-to-One</strong></td>
+                            <td>Different inputs → different outputs</td>
+                            <td>If f(x₁) = f(x₂), then x₁ = x₂</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Horizontal Line Test</strong></td>
+                            <td>Visual check for one-to-one</td>
+                            <td>Each horizontal line crosses at most once</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="concept-box">
+                    <h3>Steps to Find an Inverse</h3>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-number">1.</span>
+                            Replace f(x) with y
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2.</span>
+                            Swap x and y
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3.</span>
+                            Solve for y
+                        </div>
+                        <div class="step">
+                            <span class="step-number">4.</span>
+                            Replace y with f⁻¹(x)
+                        </div>
+                        <div class="step">
+                            <span class="step-number">5.</span>
+                            Verify (optional but recommended)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Quick Reference: Common Inverses</div>
+                    <table>
+                        <tr>
+                            <th>Function Type</th>
+                            <th>Example</th>
+                            <th>Inverse</th>
+                        </tr>
+                        <tr>
+                            <td>Linear</td>
+                            <td>f(x) = ax + b</td>
+                            <td>f⁻¹(x) = (x - b)/a</td>
+                        </tr>
+                        <tr>
+                            <td>Cube</td>
+                            <td>f(x) = x³</td>
+                            <td>f⁻¹(x) = ³√x</td>
+                        </tr>
+                        <tr>
+                            <td>Scaled Cube</td>
+                            <td>f(x) = ax³ + b</td>
+                            <td>f⁻¹(x) = ³√((x-b)/a)</td>
+                        </tr>
+                        <tr>
+                            <td>Simple Rational</td>
+                            <td>f(x) = a/x</td>
+                            <td>f⁻¹(x) = a/x (self-inverse!)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="key-point">
+                    <h3>Important Properties</h3>
+                    <ul style="margin-left: 25px; margin-top: 10px;">
+                        <li><strong>Composition:</strong> (f ∘ f⁻¹)(x) = (f⁻¹ ∘ f)(x) = x</li>
+                        <li><strong>Domain & Range:</strong> Domain of f = Range of f⁻¹, and vice versa</li>
+                        <li><strong>Graphs:</strong> f and f⁻¹ are reflections across the line y = x</li>
+                        <li><strong>Uniqueness:</strong> If an inverse exists, it's unique</li>
+                    </ul>
+                </div>
+
+                <div class="concept-box">
+                    <h3>Common Mistakes to Avoid</h3>
+                    <ol style="margin-left: 30px; margin-top: 10px;">
+                        <li>Forgetting to swap x and y</li>
+                        <li>Not checking if the function is one-to-one first</li>
+                        <li>Arithmetic errors when solving for y</li>
+                        <li>Confusing f⁻¹(x) with 1/f(x)</li>
+                        <li>For rational functions: errors when multiplying by the denominator</li>
+                    </ol>
+                </div>
+
+                <div class="warning">
+                    <strong>Remember:</strong> f⁻¹(x) ≠ 1/f(x)
+                    <p style="margin-top: 10px;">The notation f⁻¹(x) means the inverse function, NOT the reciprocal!</p>
+                    <div class="math">
+                        If f(x) = 2x, then:<br>
+                        • f⁻¹(x) = x/2 (inverse function)<br>
+                        • 1/f(x) = 1/(2x) (reciprocal)
+                    </div>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Practice Makes Perfect!</div>
+                    <p>You've completed the presentation! Here are ways to continue practicing:</p>
+                    <ul style="margin-left: 30px; margin-top: 10px;">
+                        <li>Revisit the practice problems section</li>
+                        <li>Create your own functions and find their inverses</li>
+                        <li>Verify your inverses using composition</li>
+                        <li>Graph functions and their inverses to see the symmetry</li>
+                        <li>Challenge yourself with more complex rational functions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Score tracking
+        let score = 0;
+        let totalQuestions = 0;
+
+        // Show section functionality
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Normalize answer for comparison
+        function normalizeAnswer(answer) {
+            return answer.toLowerCase()
+                .replace(/\s+/g, '')
+                .replace(/\*\*/g, '^')
+                .replace(/cuberoot/g, '^(1/3)')
+                .replace(/cbrt/g, '^(1/3)')
+                .replace(/sqrt/g, '^(1/2)')
+                .replace(/\^1\/3/g, '^(1/3)')
+                .replace(/\^1\/5/g, '^(1/5)')
+                .replace(/\(-/g, '(-')
+                .replace(/\)\//g, ')/')
+                .trim();
+        }
+
+        // Check if two expressions are equivalent
+        function areEquivalent(answer, correct) {
+            const normalized1 = normalizeAnswer(answer);
+            const normalized2 = normalizeAnswer(correct);
+            
+            // Direct match
+            if (normalized1 === normalized2) return true;
+            
+            // Alternative forms
+            const alternatives = {
+                '(x+7)/4': ['x/4+7/4', '0.25x+1.75'],
+                '5x+3': ['5x+3'],
+                '(x+5)^(1/3)': ['(x+5)^(1/3)', 'cbrt(x+5)'],
+                'no': ['no', 'false'],
+                '(3x+1)/(x-2)': ['(3x+1)/(x-2)', '(1+3x)/(x-2)'],
+                '((x-2)/3)^(1/3)': ['((x-2)/3)^(1/3)', '(x-2)^(1/3)/3^(1/3)'],
+                '6': ['6', '6.0'],
+                '(9-x)/3': ['(9-x)/3', '-x/3+3', '3-x/3'],
+                '(x+1)^(1/5)-2': ['(x+1)^(1/5)-2'],
+                '(-x-3)/(2x-5)': ['(-x-3)/(2x-5)', '-(x+3)/(2x-5)', '(-3-x)/(2x-5)']
+            };
+
+            // Check alternatives
+            for (let key in alternatives) {
+                if (normalizeAnswer(correct) === normalizeAnswer(key)) {
+                    return alternatives[key].some(alt => normalizeAnswer(alt) === normalized1);
+                }
+            }
+
+            return false;
+        }
+
+        // Check answer
+        function checkAnswer(questionNum, correctAnswer, inputId) {
+            const userAnswer = document.getElementById(inputId).value.trim();
+            const feedback = document.getElementById('feedback' + questionNum);
+            
+            if (!userAnswer) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Please enter an answer.';
+                return;
+            }
+
+            const isCorrect = areEquivalent(userAnswer, correctAnswer);
+            
+            if (isCorrect) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = '✓ Correct! Well done!';
+                if (!feedback.dataset.counted) {
+                    score++;
+                    feedback.dataset.counted = 'true';
+                }
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `✗ Not quite. The correct answer is: ${correctAnswer}`;
+            }
+            
+            if (!feedback.dataset.attempted) {
+                totalQuestions++;
+                feedback.dataset.attempted = 'true';
+            }
+            
+            updateScore();
+        }
+
+        // Show hint
+        function showHint(questionNum) {
+            const hint = document.getElementById('hint' + questionNum);
+            hint.style.display = hint.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Update score display
+        function updateScore() {
+            document.getElementById('scoreDisplay').textContent = `Score: ${score}/${totalQuestions}`;
+        }
+
+        // Canvas drawing functions
+        function drawAxes(ctx, width, height, scale = 40) {
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1;
+            
+            // X-axis
+            ctx.beginPath();
+            ctx.moveTo(0, height/2);
+            ctx.lineTo(width, height/2);
+            ctx.stroke();
+            
+            // Y-axis
+            ctx.beginPath();
+            ctx.moveTo(width/2, 0);
+            ctx.lineTo(width/2, height);
+            ctx.stroke();
+            
+            // Grid
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 0.5;
+            for (let i = -10; i <= 10; i++) {
+                if (i !== 0) {
+                    // Vertical lines
+                    ctx.beginPath();
+                    ctx.moveTo(width/2 + i * scale, 0);
+                    ctx.lineTo(width/2 + i * scale, height);
+                    ctx.stroke();
+                    
+                    // Horizontal lines
+                    ctx.beginPath();
+                    ctx.moveTo(0, height/2 - i * scale);
+                    ctx.lineTo(width, height/2 - i * scale);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function plotFunction(ctx, func, width, height, color, scale = 40, lineWidth = 2) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = lineWidth;
+            ctx.beginPath();
+            
+            let started = false;
+            for (let px = 0; px < width; px++) {
+                const x = (px - width/2) / scale;
+                const y = func(x);
+                
+                if (isFinite(y)) {
+                    const py = height/2 - y * scale;
+                    if (py >= 0 && py <= height) {
+                        if (!started) {
+                            ctx.moveTo(px, py);
+                            started = true;
+                        } else {
+                            ctx.lineTo(px, py);
+                        }
+                    } else {
+                        started = false;
+                    }
+                } else {
+                    started = false;
+                }
+            }
+            ctx.stroke();
+        }
+
+        // Initialize intro canvas
+        function drawIntro() {
+            const canvas = document.getElementById('introCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            ctx.clearRect(0, 0, width, height);
+            drawAxes(ctx, width, height);
+            
+            // y = x line (dashed)
+            ctx.strokeStyle = '#28a745';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(0, height);
+            ctx.lineTo(width, 0);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // f(x) = 2x + 1
+            plotFunction(ctx, x => 2*x + 1, width, height, '#667eea');
+            
+            // f^-1(x) = (x-1)/2
+            plotFunction(ctx, x => (x-1)/2, width, height, '#dc3545');
+            
+            // Legend
+            ctx.fillStyle = '#667eea';
+            ctx.fillRect(20, 20, 20, 3);
+            ctx.fillStyle = '#333';
+            ctx.font = '14px sans-serif';
+            ctx.fillText('f(x) = 2x + 1', 45, 25);
+            
+            ctx.fillStyle = '#dc3545';
+            ctx.fillRect(20, 40, 20, 3);
+            ctx.fillText('f⁻¹(x) = (x-1)/2', 45, 45);
+            
+            ctx.strokeStyle = '#28a745';
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(20, 60);
+            ctx.lineTo(40, 60);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.fillText('y = x', 45, 65);
+        }
+
+        // One-to-one comparison
+        function drawOneToOne() {
+            const canvas = document.getElementById('oneToOneCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const select = document.getElementById('oneToOneSelect');
+            
+            ctx.clearRect(0, 0, width, height);
+            drawAxes(ctx, width, height);
+            
+            let func;
+            switch(select.value) {
+                case 'linear':
+                    func = x => 2*x + 1;
+                    break;
+                case 'quadratic':
+                    func = x => x*x;
+                    break;
+                case 'cubic':
+                    func = x => x*x*x;
+                    break;
+                case 'absolute':
+                    func = x => Math.abs(x);
+                    break;
+            }
+            
+            plotFunction(ctx, func, width, height, '#667eea', 40, 3);
+        }
+
+        // Horizontal Line Test
+        function drawHLT() {
+            const canvas = document.getElementById('hltCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const slider = document.getElementById('hltSlider');
+            const yValue = parseFloat(slider.value);
+            
+            document.getElementById('hltValue').textContent = yValue.toFixed(1);
+            
+            ctx.clearRect(0, 0, width, height);
+            drawAxes(ctx, width, height);
+            
+            // f(x) = x³ - 3x
+            plotFunction(ctx, x => x*x*x - 3*x, width, height, '#667eea', 40, 3);
+            
+            // Horizontal line
+            const py = height/2 - yValue * 40;
+            ctx.strokeStyle = '#dc3545';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, py);
+            ctx.lineTo(width, py);
+            ctx.stroke();
+            
+            // Mark intersections
+            ctx.fillStyle = '#ffc107';
+            for (let px = 0; px < width; px++) {
+                const x = (px - width/2) / 40;
+                const y = x*x*x - 3*x;
+                if (Math.abs(y - yValue) < 0.1) {
+                    ctx.beginPath();
+                    ctx.arc(px, py, 5, 0, 2*Math.PI);
+                    ctx.fill();
+                }
+            }
+        }
+
+        function drawHLT2() {
+            const canvas = document.getElementById('hltCanvas2');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const slider = document.getElementById('hltSlider2');
+            const yValue = parseFloat(slider.value);
+            
+            document.getElementById('hltValue2').textContent = yValue.toFixed(1);
+            
+            ctx.clearRect(0, 0, width, height);
+            drawAxes(ctx, width, height);
+            
+            // f(x) = 2x + 3
+            plotFunction(ctx, x => 2*x + 3, width, height, '#667eea', 40, 3);
+            
+            // Horizontal line
+            const py = height/2 - yValue * 40;
+            ctx.strokeStyle = '#28a745';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, py);
+            ctx.lineTo(width, py);
+            ctx.stroke();
+            
+            // Mark intersection
+            const x = (yValue - 3) / 2;
+            const px = width/2 + x * 40;
+            if (px >= 0 && px <= width) {
+                ctx.fillStyle = '#ffc107';
+                ctx.beginPath();
+                ctx.arc(px, py, 6, 0, 2*Math.PI);
+                ctx.fill();
+            }
+        }
+
+        // Linear inverse visualization
+        function drawLinearInverse() {
+            const canvas = document.getElementById('linearInverseCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            ctx.clearRect(0, 0, width, height);
+            drawAxes(ctx, width, height);
+            
+            // y = x line
+            ctx.strokeStyle = '#28a745';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(0, height);
+            ctx.lineTo(width, 0);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // f(x) = 3x + 2
+            plotFunction(ctx, x => 3*x + 2, width, height, '#667eea', 40, 3);
+            
+            // f^-1(x) = (x-2)/3
+            plotFunction(ctx, x => (x-2)/3, width, height, '#dc3545', 40, 3);
+        }
+
+        // Power functions
+        function drawPower() {
+            const canvas = document.getElementById('powerCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const select = document.getElementById('powerSelect');
+            
+            ctx.clearRect(0, 0, width, height);
+            drawAxes(ctx, width, height);
+            
+            // y = x line
+            ctx.strokeStyle = '#28a745';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(0, height);
+            ctx.lineTo(width, 0);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            let func, inverse;
+            switch(select.value) {
+                case 'cube':
+                    func = x => x*x*x;
+                    inverse = x => Math.cbrt(x);
+                    break;
+                case 'fifth':
+                    func = x => Math.pow(x, 5);
+                    inverse = x => Math.pow(x, 1/5);
+                    break;
+                case 'scaled':
+                    func = x => 2*x*x*x + 1;
+                    inverse = x => Math.cbrt((x-1)/2);
+                    break;
+            }
+            
+            plotFunction(ctx, func, width, height, '#667eea', 40, 3);
+            plotFunction(ctx, inverse, width, height, '#dc3545', 40, 3);
+        }
+
+        // Rational functions
+        function drawRational() {
+            const canvas = document.getElementById('rationalCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            ctx.clearRect(0, 0, width, height);
+            drawAxes(ctx, width, height);
+            
+            // Draw asymptotes
+            ctx.strokeStyle = '#999';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([3, 3]);
+            
+            // Vertical asymptote x = 2
+            ctx.beginPath();
+            ctx.moveTo(width/2 + 2*40, 0);
+            ctx.lineTo(width/2 + 2*40, height);
+            ctx.stroke();
+            
+            // Horizontal asymptote y = 1
+            ctx.beginPath();
+            ctx.moveTo(0, height/2 - 1*40);
+            ctx.lineTo(width, height/2 - 1*40);
+            ctx.stroke();
+            
+            ctx.setLineDash([]);
+            
+            // y = x line
+            ctx.strokeStyle = '#28a745';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(0, height);
+            ctx.lineTo(width, 0);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // f(x) = (x+1)/(x-2)
+            plotFunction(ctx, x => (x+1)/(x-2), width, height, '#667eea', 40, 3);
+            
+            // f^-1(x) = (2x+1)/(x-1)
+            plotFunction(ctx, x => (2*x+1)/(x-1), width, height, '#dc3545', 40, 3);
+        }
+
+        // Initialize all canvases
+        window.onload = function() {
+            drawIntro();
+            drawOneToOne();
+            drawHLT();
+            drawHLT2();
+            drawLinearInverse();
+            drawPower();
+            drawRational();
+        };
+    </script>
+</body>
+</html>
