@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exponential and Logarithmic Functions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column, sticky part-nav, each part = idea -> live figure -> key facts -> graded examples -> practice.
+   Identity: exponential, logarithm and key numbers each keep one color everywhere on the page. */
+:root{
+  --bg:#F2F5FA; --surface:#FFFFFF; --sunk:#E7ECF5; --ink:#15213A; --muted:#566684; --line:#D0D9E7;
+  --accent:#2947C9; --on-accent:#FFFFFF;
+  --sin:#C2255C; --cos:#087F86; --tan:#A86200;
+  --easy:#1B7548; --mid:#A86200; --hard:#B3261E;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0E1524; --surface:#172036; --sunk:#101A2E; --ink:#E7ECF6; --muted:#9BA9C4; --line:#2C3A59;
+  --accent:#93A9FF; --on-accent:#0E1524;
+  --sin:#FF7FAB; --cos:#56D3D8; --tan:#FFB957;
+  --easy:#5FD39A; --mid:#FFB957; --hard:#FF8A80; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0E1524; --surface:#172036; --sunk:#101A2E; --ink:#E7ECF6; --muted:#9BA9C4; --line:#2C3A59;
+  --accent:#93A9FF; --on-accent:#0E1524;
+  --sin:#FF7FAB; --cos:#56D3D8; --tan:#FFB957;
+  --easy:#5FD39A; --mid:#FFB957; --hard:#FF8A80; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--body)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+.wrap{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:8px}
+.nav a{flex:none;font:600 14px var(--body);color:var(--muted);text-decoration:none;padding:7px 12px;border-radius:999px;white-space:nowrap}
+.nav a:hover{color:var(--ink);background:var(--sunk)}
+.nav a b{font:600 12px var(--mono);color:var(--accent);margin-right:6px}
+.nav a[aria-current="page"],.nav a[aria-current="page"]:hover{background:var(--accent);color:var(--on-accent)}
+.nav a[aria-current="page"] b{color:inherit}
+.pager{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px;padding-top:20px;border-top:1px solid var(--line)}
+.pager span{flex:1}
+
+/* hero */
+.hero{padding-block:36px 8px}
+.hero h1{font:700 clamp(34px,6vw,56px)/1.04 var(--display);letter-spacing:-.02em;margin:0 0 14px;text-wrap:balance}
+.hero p{max-width:62ch;margin:0 0 10px;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:18px;font:600 14px var(--body)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:22px;height:4px;border-radius:2px;background:currentColor}
+.sin{color:var(--sin);font-weight:600}.cos{color:var(--cos);font-weight:600}.tan{color:var(--tan);font-weight:600}
+
+/* topics */
+.topic{padding-block:28px 40px;scroll-margin-top:calc(56px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;gap:22px}
+.topic > *{margin:0;min-width:0}
+.part{font:600 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.topic h2{font:700 clamp(26px,4.4vw,38px)/1.1 var(--display);letter-spacing:-.015em;text-wrap:balance;margin-top:-14px}
+.topic h3{font:700 21px/1.2 var(--display);margin-top:10px}
+.prose{max-width:66ch;display:flex;flex-direction:column;gap:12px}
+.prose p{margin:0}
+.note{max-width:66ch;border-left:3px solid var(--accent);padding:2px 0 2px 14px;color:var(--muted)}
+.note b{color:var(--ink)}
+
+/* math */
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.86em;line-height:1.2;margin:0 .12em}
+.fr > span:first-child{border-bottom:1.5px solid currentColor;padding:0 .25em 1px}
+.fr > span:last-child{padding:1px .25em 0}
+.rt{white-space:nowrap}.rt > span{border-top:1.5px solid currentColor;padding:0 1px}
+
+/* labs */
+.lab{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:18px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:720px){.lab.split{grid-template-columns:minmax(0,5fr) minmax(0,6fr);align-items:center}}
+.lab svg{display:block;width:100%;height:auto;max-width:100%}
+.lab-t{font:600 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+.panel{display:flex;flex-direction:column;gap:14px;min-width:0}
+.read{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 14px;margin:0;align-items:center}
+.read dt{color:var(--muted);font-size:14px}
+.read dd{margin:0;font:600 16px var(--mono);font-variant-numeric:tabular-nums}
+.ctl{display:flex;flex-direction:column;gap:4px}
+.ctl label{font-size:14px;color:var(--muted);display:flex;justify-content:space-between;gap:10px}
+.ctl label b{font:600 14px var(--mono);color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--accent);margin:0}
+.row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.num{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted)}
+.num input{width:6.2em;font:600 15px var(--mono);padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.chk{display:flex;align-items:center;gap:7px;font-size:14px;color:var(--muted)}
+.work{font:500 15px var(--mono);background:var(--sunk);border-radius:8px;padding:10px 12px;overflow-x:auto}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px 22px}
+.ratios{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 16px}
+.ratio{display:flex;align-items:center;gap:8px;font:500 14px var(--mono);font-variant-numeric:tabular-nums}
+.ratio .rn{width:3.6em;flex:none;font-weight:600}
+.astc{display:grid;grid-template-columns:1fr 1fr;gap:4px;max-width:230px}
+.astc span{font:600 12px/1.3 var(--mono);text-align:center;padding:6px 4px;border-radius:6px;background:var(--sunk);color:var(--muted)}
+.astc span.on{background:var(--accent);color:var(--on-accent)}
+
+/* svg ink */
+.g-ring{fill:none;stroke:var(--line);stroke-width:2}
+.g-grid{fill:none;stroke:var(--line);stroke-width:1}
+.g-axis{fill:none;stroke:var(--muted);stroke-width:1.2}
+.g-ink{fill:none;stroke:var(--ink);stroke-width:2.5;stroke-linecap:round}
+.g-acc{fill:none;stroke:var(--accent);stroke-width:5;stroke-linecap:round}
+.g-sin{fill:none;stroke:var(--sin);stroke-width:4;stroke-linecap:round}
+.g-cos{fill:none;stroke:var(--cos);stroke-width:4;stroke-linecap:round}
+.g-tan{fill:none;stroke:var(--tan);stroke-width:3;stroke-linecap:round}
+.g-dash{fill:none;stroke:var(--muted);stroke-width:1.2;stroke-dasharray:4 4}
+.g-faint{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:2 5;opacity:.7}
+.g-wedge{fill:var(--accent);opacity:.18;stroke:none}
+.g-tri{fill:var(--accent);opacity:.08;stroke:none}
+.g-dot{fill:var(--accent);stroke:var(--surface);stroke-width:3}
+.g-sp{fill:var(--muted);stroke:none}
+.g-hit{fill:transparent;stroke:none;touch-action:none;cursor:grab}
+.g-t{fill:var(--muted);stroke:none;font:500 11px var(--mono)}
+.g-tb{fill:var(--ink);stroke:none;font:600 13px var(--mono)}
+.f-sin{fill:var(--sin)}.f-cos{fill:var(--cos)}.f-tan{fill:var(--tan)}
+
+/* facts + tables */
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.fact{background:var(--sunk);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.fact small{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.fact span{font:600 16px var(--mono)}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;font:500 15px var(--mono);font-variant-numeric:tabular-nums}
+th,td{padding:9px 16px;text-align:center;border-bottom:1px solid var(--line)}
+th{font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+td:first-child,th:first-child{text-align:left;padding-left:0}
+
+/* examples */
+.examples{display:flex;flex-direction:column}
+.ex{padding:18px 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.ex:first-child{border-top:0;padding-top:0}
+.ex > *{margin:0}
+.ex-h{display:flex;align-items:center;gap:12px}
+.tag{font:600 12px var(--mono);letter-spacing:.04em;padding:3px 9px;border-radius:999px;border:1.5px solid currentColor}
+.tag.l0{color:var(--easy)}.tag.l1{color:var(--mid)}.tag.l2{color:var(--hard)}
+.ex-n{font:500 13px var(--mono);color:var(--muted)}
+.ex-q{font-weight:600;font-size:18px;max-width:64ch}
+.steps{padding-left:1.4em;display:flex;flex-direction:column;gap:8px;max-width:64ch}
+.steps:not(:has(li:not([hidden]))){display:none}
+.ans{background:var(--sunk);border-radius:8px;padding:10px 14px;max-width:64ch;font-weight:600}
+.ans b{font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-right:10px}
+.ex-ctl{display:flex;flex-wrap:wrap;gap:8px}
+.btn{font:600 14px var(--body);padding:8px 14px;border-radius:8px;border:1.5px solid var(--accent);background:var(--accent);color:var(--on-accent);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:default}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* quiz */
+.quiz{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.quiz > *{margin:0}
+.q-top{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}
+.seg{display:inline-flex;background:var(--sunk);border-radius:9px;padding:3px;gap:2px}
+.seg button{font:600 13px var(--body);border:0;background:transparent;color:var(--muted);padding:6px 12px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.score{font:500 13px var(--mono);color:var(--muted)}
+.qq{font-weight:600;font-size:18px;max-width:64ch}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.opt{font:600 16px var(--mono);text-align:left;padding:12px 14px;min-height:54px;border-radius:9px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--easy);color:var(--easy)}
+.opt.no{border-color:var(--hard);color:var(--hard)}
+.fb{max-width:64ch;min-height:1.6em}
+.fb b.ok{color:var(--easy)}.fb b.no{color:var(--hard)}
+footer{padding-block:28px 40px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+sup,sub{line-height:0;font-size:.72em}
+.b-sin{fill:var(--sin)}.b-cos{fill:var(--cos)}.b-acc{fill:var(--accent)}
+.work{line-height:1.9}
+</style>
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
+
+
+<nav class="nav" aria-label="Lecture parts"><div class="wrap">
+  <a href="#exponential" data-tab="exponential"><b>1</b>Exponential functions</a>
+  <a href="#number-e" data-tab="number-e"><b>2</b>The number e</a>
+  <a href="#logs" data-tab="logs"><b>3</b>Logarithms</a>
+  <a href="#properties" data-tab="properties"><b>4</b>Log properties</a>
+  <a href="#solving" data-tab="solving"><b>5</b>Solving equations</a>
+</div></nav>
+
+<main class="wrap">
+<header class="hero">
+  <h1>Exponential and Logarithmic Functions</h1>
+  <p>An exponential function answers "how big does it get?" A logarithm answers the reverse question, "how long did it take?" This lecture builds both ideas, introduces the number e, and ends with solving equations that contain e<sup>x</sup>, log x and ln x.</p>
+  <p>Use the tabs to move between parts. In each one, play with the figure first, reveal the worked examples one step at a time, then try the practice at three levels.</p>
+  <div class="legend" aria-label="Color key">
+    <span class="sin"><i></i>exponential</span><span class="cos"><i></i>logarithm</span><span class="tan"><i></i>key numbers and the mirror line y = x</span>
+  </div>
+</header>
+
+<!-- ============ PART 1 ============ -->
+<section class="topic" id="exponential">
+  <p class="part">Part 1</p>
+  <h2>Exponential functions</h2>
+  <div class="prose">
+    <p>A linear function <b>adds</b> the same amount at every step: 3, 5, 7, 9. An <span class="sin">exponential function</span> <b>multiplies</b> by the same amount at every step: 3, 6, 12, 24. That one change is the difference between a salary that rises by $2,000 a year and one that rises by 5% a year.</p>
+    <p>The formula is f(x) = a · b<sup>x</sup>. The number a is the starting value, which is where the graph crosses the y-axis. The number b is the <b>growth factor</b>, the number you multiply by each time x goes up by 1. If b is greater than 1 the function grows. If b is between 0 and 1 it decays.</p>
+  </div>
+
+  <div class="lab">
+    <div>
+      <p class="lab-t">Change the starting value and the growth factor</p>
+      <svg id="ex-svg" viewBox="0 0 640 310" role="img" aria-label="Graph of y equals a times b to the x, controlled by the sliders below.">
+        <g class="grid"></g>
+        <g class="curves"><path id="ex-curve" class="g-sin" d="" style="stroke-width:3"/><g id="ex-dots"></g></g>
+      </svg>
+    </div>
+    <div class="work" id="ex-eq"></div>
+    <div class="grid2">
+      <div class="ctl"><label for="ex-a">a: starting value <b id="ex-av"></b></label><input type="range" id="ex-a" min="0.5" max="4" step="0.5" value="1"></div>
+      <div class="ctl"><label for="ex-b">b: growth factor <b id="ex-bv"></b></label><input type="range" id="ex-b" min="0.2" max="4" step="0.1" value="2"></div>
+    </div>
+    <dl class="read">
+      <dt>Behavior</dt><dd id="ex-r1"></dd>
+      <dt>Each step right</dt><dd id="ex-r2"></dd>
+      <dt>y-intercept</dt><dd id="ex-r3"></dd>
+    </dl>
+    <div class="tbl"><table id="ex-tbl"></table></div>
+    <p class="lab-t">Read the table left to right: every output is the one before it times b. The graph gets close to the x-axis but never touches it.</p>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><small>Exponential function</small><span>f(x) = a · b<sup>x</sup></span></div>
+    <div class="fact"><small>Growth and decay</small><span>b &gt; 1 grows<br>0 &lt; b &lt; 1 decays</span></div>
+    <div class="fact"><small>Percent change r per step</small><span>b = 1 + r &nbsp;or&nbsp; 1 − r</span></div>
+    <div class="fact"><small>Shape</small><span>range y &gt; 0<br>asymptote y = 0</span></div>
+  </div>
+  <p class="note"><b>Exponent rules you will need.</b> b<sup>m</sup> · b<sup>n</sup> = b<sup>m + n</sup>, (b<sup>m</sup>)<sup>n</sup> = b<sup>mn</sup>, b<sup>0</sup> = 1 and b<sup>−n</sup> = {{1|b<sup>n</sup>}}. If two powers of the same base are equal, their exponents are equal.</p>
+
+  <h3>Worked examples</h3>
+  <div class="examples" data-ex="exponential"></div>
+  <h3>Practice</h3>
+  <div class="quiz" data-quiz="exponential"></div>
+</section>
+
+<!-- ============ PART 2 ============ -->
+<section class="topic" id="number-e">
+  <p class="part">Part 2</p>
+  <h2>The number e and the function e<sup>x</sup></h2>
+  <div class="prose">
+    <p>Put $1 in a bank that pays 100% interest per year. If the interest is added once, you end the year with $2. If the bank pays 50% twice, you get 1.5 × 1.5 = $2.25, because the second payment earns interest on the first. Paying more often keeps helping, but less and less each time.</p>
+    <p>The balance never passes a certain ceiling. That ceiling is the number <span class="tan">e ≈ 2.71828</span>. Like π, it is irrational, and it shows up whenever something grows continuously in proportion to its own size: money, populations, radioactive decay, cooling coffee.</p>
+    <p>The function f(x) = e<sup>x</sup> is called the <b>natural exponential function</b>. It is an ordinary exponential function whose base happens to be e, so everything from Part 1 still applies.</p>
+  </div>
+
+  <div class="lab split">
+    <div>
+      <p class="lab-t">$1 at 100% interest for one year</p>
+      <svg id="e-svg" viewBox="0 0 640 310" role="img" aria-label="The balance of one dollar over a year as interest is added more and more often, approaching e.">
+        <g class="grid"></g>
+        <g class="curves">
+          <line id="e-line" class="g-tan" x1="0" y1="0" x2="0" y2="0" style="stroke-dasharray:6 5;stroke-width:2"/>
+          <path id="e-lim" class="g-faint" d=""/>
+          <path id="e-path" class="g-sin" d="" style="stroke-width:2.5;stroke-linejoin:round"/>
+          <circle id="e-dot" class="g-dot" r="7" cx="0" cy="0"/>
+        </g>
+        <text id="e-lab" class="g-tb f-tan" x="50" y="0">e ≈ 2.718</text>
+      </svg>
+    </div>
+    <div class="panel">
+      <div class="ctl"><label for="e-n">How often interest is added <b id="e-nv"></b></label><input type="range" id="e-n" min="0" max="8" step="1" value="3"></div>
+      <dl class="read">
+        <dt>Times per year, n</dt><dd id="e-r1"></dd>
+        <dt>Balance after a year</dt><dd id="e-r2"></dd>
+        <dt>Still short of e by</dt><dd id="e-r3"></dd>
+      </dl>
+      <div class="work" id="e-work"></div>
+      <p class="lab-t">Dotted curve: continuous growth, y = e<sup>t</sup>. The steps climb toward it as n grows.</p>
+    </div>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><small>The number e</small><span>e ≈ 2.71828</span></div>
+    <div class="fact"><small>Compounded n times a year</small><span>A = P(1 + {{r|n}})<sup>nt</sup></span></div>
+    <div class="fact"><small>Compounded continuously</small><span>A = Pe<sup>rt</sup></span></div>
+    <div class="fact"><small>Continuous growth or decay</small><span>y = y<sub>0</sub>e<sup>kt</sup><br>k &gt; 0 grows, k &lt; 0 decays</span></div>
+  </div>
+  <p class="note"><b>Reading the formulas.</b> P is the starting amount, r is the yearly rate written as a decimal (6% is 0.06), t is the time in years, and n is how many times a year interest is added. On a calculator, e<sup>x</sup> is usually the second function of the ln key.</p>
+
+  <h3>Worked examples</h3>
+  <div class="examples" data-ex="e"></div>
+  <h3>Practice</h3>
+  <div class="quiz" data-quiz="e"></div>
+</section>
+
+<!-- ============ PART 3 ============ -->
+<section class="topic" id="logs">
+  <p class="part">Part 3</p>
+  <h2>Logarithms: log and ln</h2>
+  <div class="prose">
+    <p>An exponential asks "2 to the 3rd power is what?" A <span class="cos">logarithm</span> asks the question backwards: "2 to <b>what power</b> is 8?" The answer is 3, and we write log<sub>2</sub> 8 = 3. A logarithm is an exponent.</p>
+    <p>In general, <span class="cos">log<sub>b</sub> x = y</span> means the same thing as <span class="sin">b<sup>y</sup> = x</span>. Two bases are used so often that they get short names. <b>log x</b> with no base written means base 10. <b>ln x</b> means base e, and is called the natural logarithm.</p>
+    <p>Because the logarithm undoes the exponential, the two are inverse functions. Their graphs are mirror images across the line y = x, and their x and y roles are swapped: the exponential takes any x and gives a positive output, so the logarithm only accepts positive inputs and gives any output.</p>
+  </div>
+
+  <div class="lab split">
+    <div>
+      <p class="lab-t">One fact, written two ways</p>
+      <svg id="lg-svg" viewBox="0 0 420 420" role="img" aria-label="An exponential curve and its logarithm, mirrored across the line y equals x, with a matching point on each.">
+        <g class="grid"></g>
+        <g class="curves">
+          <line id="lg-yx" class="g-tan" x1="0" y1="0" x2="0" y2="0" style="stroke-dasharray:5 5;stroke-width:1.5"/>
+          <path id="lg-exp" class="g-sin" d="" style="stroke-width:3"/>
+          <path id="lg-log" class="g-cos" d="" style="stroke-width:3"/>
+          <line id="lg-link" class="g-dash" x1="0" y1="0" x2="0" y2="0"/>
+          <circle id="lg-p" class="g-dot" r="7" cx="0" cy="0"/>
+          <circle id="lg-q" class="g-dot" r="7" cx="0" cy="0"/>
+        </g>
+      </svg>
+    </div>
+    <div class="panel">
+      <div class="seg" role="group" aria-label="Base" id="lg-base"><button type="button" data-b="2" aria-pressed="true">base 2</button><button type="button" data-b="e" aria-pressed="false">base e</button><button type="button" data-b="10" aria-pressed="false">base 10</button></div>
+      <div class="ctl"><label for="lg-s">The exponent <b id="lg-sv"></b></label><input type="range" id="lg-s" min="-2" max="3" step="0.25" value="2"></div>
+      <dl class="read">
+        <dt class="sin">Exponential form</dt><dd id="lg-r1"></dd>
+        <dt class="cos">Logarithmic form</dt><dd id="lg-r2"></dd>
+        <dt class="sin">Point on the exponential</dt><dd id="lg-r3"></dd>
+        <dt class="cos">Point on the logarithm</dt><dd id="lg-r4"></dd>
+      </dl>
+      <p class="lab-t" id="lg-note">The two points have their coordinates swapped, so they mirror each other across y = x.</p>
+    </div>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><small>Definition</small><span>log<sub>b</sub> x = y &nbsp;⇔&nbsp; b<sup>y</sup> = x</span></div>
+    <div class="fact"><small>Two special bases</small><span>log x = log<sub>10</sub> x<br>ln x = log<sub>e</sub> x</span></div>
+    <div class="fact"><small>They undo each other</small><span>ln(e<sup>x</sup>) = x<br>e<sup>ln x</sup> = x</span></div>
+    <div class="fact"><small>Always true</small><span>log<sub>b</sub> 1 = 0<br>log<sub>b</sub> b = 1</span></div>
+  </div>
+  <p class="note"><b>What you cannot do.</b> No power of a positive base is ever zero or negative, so log 0 and log(−5) are undefined. The inside of a logarithm must be positive. The graph has a vertical asymptote at x = 0 and always passes through (1, 0).</p>
+
+  <h3>Worked examples</h3>
+  <div class="examples" data-ex="logs"></div>
+  <h3>Practice</h3>
+  <div class="quiz" data-quiz="logs"></div>
+</section>
+
+<!-- ============ PART 4 ============ -->
+<section class="topic" id="properties">
+  <p class="part">Part 4</p>
+  <h2>Properties of logarithms</h2>
+  <div class="prose">
+    <p>Logarithms are exponents, so they follow the exponent rules. When you multiply powers of the same base you add the exponents, which means the log of a product is the <b>sum</b> of the logs. Division becomes subtraction, and a power becomes multiplication.</p>
+    <p>This is why logarithms were invented. Before calculators, people multiplied huge numbers by adding their logs. You will use the same rules to pull a variable out of an exponent.</p>
+  </div>
+
+  <div class="lab">
+    <div>
+      <p class="lab-t">Multiplying numbers adds their logs</p>
+      <svg id="pr-svg" viewBox="0 0 640 190" role="img" aria-label="Two bars with lengths log M and log N laid end to end, matching one bar of length log of M times N.">
+        <g id="pr-axis"></g>
+        <rect id="pr-m" class="b-sin" x="40" y="34" width="0" height="26" rx="3"/>
+        <rect id="pr-n" class="b-cos" x="40" y="34" width="0" height="26" rx="3"/>
+        <rect id="pr-mn" class="b-acc" x="40" y="86" width="0" height="26" rx="3"/>
+        <text id="pr-t1" class="g-tb" x="40" y="26"></text>
+        <text id="pr-t2" class="g-tb" x="40" y="80"></text>
+      </svg>
+    </div>
+    <div class="grid2">
+      <div class="ctl"><label for="pr-M">M <b id="pr-Mv"></b></label><input type="range" id="pr-M" min="1" max="100" step="1" value="8"></div>
+      <div class="ctl"><label for="pr-N">N <b id="pr-Nv"></b></label><input type="range" id="pr-N" min="1" max="100" step="1" value="25"></div>
+      <div class="ctl"><label for="pr-P">p, a power <b id="pr-Pv"></b></label><input type="range" id="pr-P" min="2" max="5" step="1" value="3"></div>
+    </div>
+    <dl class="read">
+      <dt>Product</dt><dd id="pr-r1"></dd>
+      <dt>Quotient</dt><dd id="pr-r2"></dd>
+      <dt>Power</dt><dd id="pr-r3"></dd>
+    </dl>
+  </div>
+
+  <div class="tbl"><table>
+    <tr><th>Rule</th><th>Logarithm form</th><th>The exponent rule behind it</th></tr>
+    <tr><td>Product</td><td>log<sub>b</sub>(MN) = log<sub>b</sub> M + log<sub>b</sub> N</td><td>b<sup>m</sup> · b<sup>n</sup> = b<sup>m + n</sup></td></tr>
+    <tr><td>Quotient</td><td>log<sub>b</sub>({{M|N}}) = log<sub>b</sub> M − log<sub>b</sub> N</td><td>b<sup>m</sup> ÷ b<sup>n</sup> = b<sup>m − n</sup></td></tr>
+    <tr><td>Power</td><td>log<sub>b</sub>(M<sup>p</sup>) = p · log<sub>b</sub> M</td><td>(b<sup>m</sup>)<sup>p</sup> = b<sup>mp</sup></td></tr>
+    <tr><td>Change of base</td><td>log<sub>b</sub> x = {{ln x|ln b}} = {{log x|log b}}</td><td>lets a calculator handle any base</td></tr>
+  </table></div>
+  <p class="note"><b>Two common mistakes.</b> log(M + N) is not log M + log N. There is no rule for the log of a sum. Also, {{log M|log N}} is not log({{M|N}}). The quotient rule is about the log of a fraction, not a fraction of logs.</p>
+
+  <h3>Worked examples</h3>
+  <div class="examples" data-ex="properties"></div>
+  <h3>Practice</h3>
+  <div class="quiz" data-quiz="properties"></div>
+</section>
+
+<!-- ============ PART 5 ============ -->
+<section class="topic" id="solving">
+  <p class="part">Part 5</p>
+  <h2>Solving exponential and logarithmic equations</h2>
+  <div class="prose">
+    <p>Exponentials and logarithms undo each other, and that is the whole method. If the unknown is stuck in an exponent, take a logarithm of both sides to bring it down. If the unknown is stuck inside a logarithm, rewrite the equation as a power to get it out.</p>
+    <p><span class="sin"><b>Exponential equations.</b></span> First isolate the exponential part. Then take ln of both sides (or log, either works). Then solve what is left.</p>
+    <p><span class="cos"><b>Logarithmic equations.</b></span> First combine everything into a single logarithm. Then rewrite in exponential form. Then solve, and check every answer in the original equation, because the inside of a logarithm must be positive.</p>
+  </div>
+
+  <div class="lab split">
+    <div>
+      <p class="lab-t">The solution is where the curve meets the line</p>
+      <svg id="sv-svg" viewBox="0 0 640 310" role="img" aria-label="A curve and a horizontal line. Their intersection is the solution of the equation.">
+        <g class="grid"></g>
+        <g class="curves">
+          <line id="sv-h" class="g-tan" x1="0" y1="0" x2="0" y2="0" style="stroke-width:2.5"/>
+          <path id="sv-curve" class="g-sin" d="" style="stroke-width:3"/>
+          <line id="sv-drop" class="g-dash" x1="0" y1="0" x2="0" y2="0"/>
+          <circle id="sv-dot" class="g-dot" r="8" cx="0" cy="0"/>
+        </g>
+      </svg>
+    </div>
+    <div class="panel">
+      <div class="seg" role="group" aria-label="Equation type" id="sv-mode"><button type="button" data-m="exp" aria-pressed="true">a · e<sup>kx</sup> = c</button><button type="button" data-m="log" aria-pressed="false">a · ln x + d = c</button></div>
+      <div class="ctl"><label for="sv-1"><span id="sv-l1"></span> <b id="sv-v1"></b></label><input type="range" id="sv-1" min="0.5" max="5" step="0.5" value="2"></div>
+      <div class="ctl"><label for="sv-2"><span id="sv-l2"></span> <b id="sv-v2"></b></label><input type="range" id="sv-2" min="-1" max="1.5" step="0.1" value="0.5"></div>
+      <div class="ctl"><label for="sv-3"><span id="sv-l3"></span> <b id="sv-v3"></b></label><input type="range" id="sv-3" min="1" max="20" step="1" value="12"></div>
+      <div class="work" id="sv-work"></div>
+    </div>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><small>Undo an exponential</small><span>e<sup>x</sup> = c &nbsp;→&nbsp; x = ln c</span></div>
+    <div class="fact"><small>Undo a logarithm</small><span>ln x = c &nbsp;→&nbsp; x = e<sup>c</sup></span></div>
+    <div class="fact"><small>Any base</small><span>b<sup>x</sup> = c &nbsp;→&nbsp; x = {{ln c|ln b}}</span></div>
+    <div class="fact"><small>One-to-one</small><span>log A = log B &nbsp;→&nbsp; A = B</span></div>
+  </div>
+  <p class="note"><b>Before you reach for a calculator.</b> If both sides can be written as powers of the same base, set the exponents equal and skip the logarithm. And an equation like e<sup>x</sup> = −3 has no solution, because e<sup>x</sup> is always positive.</p>
+
+  <h3>Worked examples</h3>
+  <div class="examples" data-ex="solving"></div>
+  <h3>Practice</h3>
+  <div class="quiz" data-quiz="solving"></div>
+</section>
+
+<footer>Practice questions are generated fresh each time, so you can keep going until a level feels easy. Scores reset when the page reloads.</footer>
+</main>
+
+<script>
+/* ---------- helpers (pure) ---------- */
+const E=Math.E, LN=Math.log;
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[ri(0,a.length-1)];
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+const num=x=>(x<0?"−":"")+Math.abs(x);
+const n3=v=>num(+v.toFixed(3));
+const int=v=>Math.round(v).toLocaleString("en-US");
+const money=v=>"$"+v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const sup=(b,e)=>`${b}<sup>${e}</sup>`;
+const logb=(b,x)=>b===10?`log ${x}`:b==="e"?`ln ${x}`:`log<sub>${b}</sub> ${x}`;
+const fmt=s=>s.replace(/\{\{([^{}|]+)\|([^{}]+)\}\}/g,'<span class="fr"><span>$1</span><span>$2</span></span>').replace(/√\(([^()]*)\)/g,'<span class="rt">√<span>$1</span></span>');
+function frac(n,d){ const g=gcd(n,d); n/=g; d/=g; return d===1?""+n:`{{${n}|${d}}}`; }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a[j],a[i]]} return a; }
+function mcq(q,correct,cands,fill,explain){ const o=[correct]; for(const c of [...cands,...fill]) if(o.length<4&&c!=null&&!o.includes(c)) o.push(c); return {q,opts:shuffle(o),correct,explain}; }
+
+/* ---------- worked examples ---------- */
+const LV=["Easy","Intermediate","Hard"];
+const EX={
+exponential:[
+ {l:0,q:"For f(x) = 2<sup>x</sup>, find f(3), f(0) and f(−2).",s:["f(3) = 2<sup>3</sup> = 2 · 2 · 2 = 8","f(0) = 2<sup>0</sup> = 1. Any nonzero base to the power 0 is 1.","f(−2) = 2<sup>−2</sup> = {{1|2<sup>2</sup>}} = {{1|4}}. A negative exponent means one over the positive power, not a negative number."],a:"f(3) = 8, f(0) = 1, f(−2) = {{1|4}}"},
+ {l:0,q:"For f(x) = 3 · 2<sup>x</sup>, find f(4).",s:["Order of operations: the exponent comes before the multiplication.","2<sup>4</sup> = 16","3 · 16 = 48. A common mistake is to multiply first and compute 6<sup>4</sup>."],a:"f(4) = 48"},
+ {l:1,q:"A town of 5,000 people grows by 4% per year. Write a model for its population, then predict the population after 10 years.",s:["Growing by 4% means keeping 100% and adding 4%, so each year you multiply by 1.04. That is the growth factor b.","The starting value is a = 5,000, so P(t) = 5000(1.04)<sup>t</sup>.","P(10) = 5000(1.04)<sup>10</sup> ≈ 5000 · 1.4802","≈ 7,401"],a:"P(t) = 5000(1.04)<sup>t</sup>, about 7,401 people after 10 years"},
+ {l:1,q:"A car bought for $24,000 loses 15% of its value each year. What is it worth after 5 years?",s:["Losing 15% means keeping 85%, so the factor is b = 1 − 0.15 = 0.85. This is decay because b is less than 1.","V(t) = 24000(0.85)<sup>t</sup>","V(5) = 24000(0.85)<sup>5</sup> ≈ 24000 · 0.4437"],a:"About $10,648.93"},
+ {l:1,q:"Solve 2<sup>x + 1</sup> = 32.",s:["Try to write both sides with the same base: 32 = 2<sup>5</sup>.","2<sup>x + 1</sup> = 2<sup>5</sup>","Equal bases mean equal exponents: x + 1 = 5."],a:"x = 4"},
+ {l:2,q:"Find the exponential function f(x) = a · b<sup>x</sup> whose graph passes through (1, 6) and (3, 54).",s:["Plug in each point: a · b<sup>1</sup> = 6 and a · b<sup>3</sup> = 54.","Divide the second equation by the first so that a cancels: {{a · b<sup>3</sup>|a · b}} = {{54|6}}, which gives b<sup>2</sup> = 9.","The base must be positive, so b = 3.","Go back to a · b = 6: a · 3 = 6, so a = 2.","Check with the other point: 2 · 3<sup>3</sup> = 2 · 27 = 54. Correct."],a:"f(x) = 2 · 3<sup>x</sup>"},
+ {l:2,q:"Solve 9<sup>x</sup> = 27<sup>x − 1</sup>.",s:["9 and 27 are both powers of 3: 9 = 3<sup>2</sup> and 27 = 3<sup>3</sup>.","(3<sup>2</sup>)<sup>x</sup> = (3<sup>3</sup>)<sup>x − 1</sup> becomes 3<sup>2x</sup> = 3<sup>3x − 3</sup>. Remember to multiply the 3 through both terms.","Equal bases mean equal exponents: 2x = 3x − 3.","x = 3. Check: 9<sup>3</sup> = 729 and 27<sup>2</sup> = 729."],a:"x = 3"}
+],
+e:[
+ {l:0,q:"Use a calculator to find e<sup>2</sup>, e<sup>−1</sup> and e<sup>0.5</sup> to three decimal places.",s:["e<sup>2</sup> ≈ 7.389. This is about 2.718 · 2.718.","e<sup>−1</sup> = {{1|e}} ≈ 0.368","e<sup>0.5</sup> = √(e) ≈ 1.649"],a:"7.389, 0.368 and 1.649"},
+ {l:0,q:"Simplify e<sup>3</sup> · e<sup>4</sup>, (e<sup>2</sup>)<sup>5</sup> and {{e<sup>7</sup>|e<sup>2</sup>}}.",s:["e is just a number, so the usual exponent rules apply.","Multiplying: add the exponents. e<sup>3</sup> · e<sup>4</sup> = e<sup>7</sup>","Power of a power: multiply the exponents. (e<sup>2</sup>)<sup>5</sup> = e<sup>10</sup>","Dividing: subtract the exponents. {{e<sup>7</sup>|e<sup>2</sup>}} = e<sup>5</sup>"],a:"e<sup>7</sup>, e<sup>10</sup> and e<sup>5</sup>"},
+ {l:1,q:"You invest $2,000 at 6% interest compounded monthly. How much do you have after 5 years?",s:["Use A = P(1 + {{r|n}})<sup>nt</sup> with P = 2000, r = 0.06, n = 12 and t = 5.","A = 2000(1 + {{0.06|12}})<sup>12 · 5</sup> = 2000(1.005)<sup>60</sup>","(1.005)<sup>60</sup> ≈ 1.34885","A ≈ 2000 · 1.34885"],a:"About $2,697.70"},
+ {l:1,q:"Same investment, $2,000 at 6% for 5 years, but compounded continuously. How much now?",s:["Continuous compounding uses A = Pe<sup>rt</sup>.","A = 2000e<sup>0.06 · 5</sup> = 2000e<sup>0.3</sup>","e<sup>0.3</sup> ≈ 1.34986","A ≈ 2000 · 1.34986 ≈ 2699.72. That is only about $2 more than monthly compounding, which is the ceiling from the figure in action."],a:"About $2,699.72"},
+ {l:2,q:"A culture of bacteria follows N(t) = 500e<sup>0.4t</sup>, with t in hours. How many bacteria are there at the start, and after 6 hours?",s:["At the start, t = 0: N(0) = 500e<sup>0</sup> = 500 · 1 = 500. The number in front is always the starting amount.","N(6) = 500e<sup>0.4 · 6</sup> = 500e<sup>2.4</sup>","e<sup>2.4</sup> ≈ 11.023","N(6) ≈ 500 · 11.023 ≈ 5,512"],a:"500 at the start and about 5,512 after 6 hours"},
+ {l:2,q:"The amount of a drug in the bloodstream is A(t) = 200e<sup>−0.25t</sup> milligrams, t hours after a 200 mg dose. How much remains after 8 hours, and what percent of the dose is that?",s:["The negative exponent tells you this is decay.","A(8) = 200e<sup>−0.25 · 8</sup> = 200e<sup>−2</sup>","e<sup>−2</sup> ≈ 0.13534, so A(8) ≈ 200 · 0.13534 ≈ 27.07 mg.","As a percent of the dose: {{27.07|200}} ≈ 0.135, which is the same number as e<sup>−2</sup>. The factor e<sup>kt</sup> is always the fraction that remains."],a:"About 27.07 mg, which is 13.5% of the dose"}
+],
+logs:[
+ {l:0,q:"Write 2<sup>5</sup> = 32 in logarithmic form, and write log<sub>3</sub> 81 = 4 in exponential form.",s:["The base stays the base. The logarithm equals the exponent.","2<sup>5</sup> = 32: base 2, exponent 5, result 32. So log<sub>2</sub> 32 = 5.","log<sub>3</sub> 81 = 4: base 3, exponent 4, result 81. So 3<sup>4</sup> = 81."],a:"log<sub>2</sub> 32 = 5 and 3<sup>4</sup> = 81"},
+ {l:0,q:"Evaluate log<sub>2</sub> 8, log 1000 and ln e without a calculator.",s:["log<sub>2</sub> 8 asks: 2 to what power is 8? Since 2<sup>3</sup> = 8, the answer is 3.","log 1000 has base 10: 10 to what power is 1000? Since 10<sup>3</sup> = 1000, the answer is 3.","ln e has base e: e to what power is e? Since e<sup>1</sup> = e, the answer is 1."],a:"3, 3 and 1"},
+ {l:1,q:"Evaluate log<sub>5</sub>({{1|25}}), log<sub>9</sub> 3 and log 0.001.",s:["log<sub>5</sub>({{1|25}}): 25 = 5<sup>2</sup>, so {{1|25}} = 5<sup>−2</sup>. The answer is −2. A fraction less than 1 gives a negative logarithm.","log<sub>9</sub> 3: 9 to what power is 3? 3 is the square root of 9, and a square root is the {{1|2}} power. The answer is {{1|2}}.","log 0.001: 0.001 = {{1|1000}} = 10<sup>−3</sup>. The answer is −3."],a:"−2, {{1|2}} and −3"},
+ {l:1,q:"Simplify ln(e<sup>7</sup>), e<sup>ln 4</sup>, 10<sup>log 6</sup> and ln √(e).",s:["A logarithm and an exponential with the same base cancel each other.","ln(e<sup>7</sup>) = 7. It asks: e to what power is e<sup>7</sup>?","e<sup>ln 4</sup> = 4 and 10<sup>log 6</sup> = 6. Raising the base to its own logarithm gives back the number.","ln √(e) = ln(e<sup>1/2</sup>) = {{1|2}}"],a:"7, 4, 6 and {{1|2}}"},
+ {l:2,q:"Find the domain and the vertical asymptote of f(x) = log(5 − 2x).",s:["The inside of a logarithm must be positive: 5 − 2x &gt; 0.","−2x &gt; −5. Dividing by a negative number flips the inequality: x &lt; {{5|2}}.","The asymptote is where the inside equals zero: 5 − 2x = 0, so x = {{5|2}}."],a:"Domain x &lt; {{5|2}}, vertical asymptote x = {{5|2}}"},
+ {l:2,q:"Solve for x: log<sub>4</sub> x = {{3|2}}, and then log<sub>x</sub> 64 = 3.",s:["Rewrite each one in exponential form.","log<sub>4</sub> x = {{3|2}} means x = 4<sup>3/2</sup>. Take the square root first, then cube: (√(4))<sup>3</sup> = 2<sup>3</sup> = 8.","log<sub>x</sub> 64 = 3 means x<sup>3</sup> = 64. Take the cube root: x = 4."],a:"x = 8, and x = 4"},
+ {l:2,q:"The pH of a solution is pH = −log[H<sup>+</sup>], where [H<sup>+</sup>] is the hydrogen ion concentration. Find the pH of a juice with [H<sup>+</sup>] = 3.2 × 10<sup>−4</sup>.",s:["pH = −log(3.2 × 10<sup>−4</sup>)","Estimate first: 10<sup>−4</sup> has log −4 and 10<sup>−3</sup> has log −3, and our number is between them, so the pH is between 3 and 4.","Calculator: log(3.2 × 10<sup>−4</sup>) ≈ −3.495","pH ≈ −(−3.495)"],a:"pH ≈ 3.49, which is acidic"}
+],
+properties:[
+ {l:0,q:"Expand log<sub>2</sub>(8x).",s:["8x is a product, so use the product rule: the log of a product is the sum of the logs.","log<sub>2</sub>(8x) = log<sub>2</sub> 8 + log<sub>2</sub> x","log<sub>2</sub> 8 = 3 because 2<sup>3</sup> = 8."],a:"3 + log<sub>2</sub> x"},
+ {l:0,q:"Write log 4 + log 25 as a single logarithm and evaluate it.",s:["A sum of logs with the same base is the log of the product.","log 4 + log 25 = log(4 · 25) = log 100","10<sup>2</sup> = 100, so log 100 = 2."],a:"log 100 = 2"},
+ {l:1,q:"Expand ln({{x<sup>3</sup>y|z}}).",s:["Deal with the fraction first: ln(top) − ln(bottom) = ln(x<sup>3</sup>y) − ln z.","The top is a product: ln(x<sup>3</sup>) + ln y − ln z.","Bring the exponent down with the power rule: 3 ln x + ln y − ln z."],a:"3 ln x + ln y − ln z"},
+ {l:1,q:"Write 2 log x − 3 log y + log z as a single logarithm.",s:["Work backwards. First turn each coefficient into an exponent: log(x<sup>2</sup>) − log(y<sup>3</sup>) + log z.","Terms that are added go in the numerator, and terms that are subtracted go in the denominator.","log({{x<sup>2</sup>z|y<sup>3</sup>}})"],a:"log({{x<sup>2</sup>z|y<sup>3</sup>}})"},
+ {l:1,q:"Use a calculator to find log<sub>2</sub> 10 to four decimal places.",s:["Calculators only have log and ln, so use the change of base formula: log<sub>2</sub> 10 = {{ln 10|ln 2}}.","ln 10 ≈ 2.302585 and ln 2 ≈ 0.693147","2.302585 ÷ 0.693147 ≈ 3.3219","Check: 2<sup>3</sup> = 8 and 2<sup>4</sup> = 16, so the power that gives 10 should be a bit more than 3."],a:"log<sub>2</sub> 10 ≈ 3.3219"},
+ {l:2,q:"Expand ln({{e<sup>2</sup>√(x)|y<sup>4</sup>}}) as far as possible.",s:["Quotient rule: ln(e<sup>2</sup>√(x)) − ln(y<sup>4</sup>).","Product rule on the first part: ln(e<sup>2</sup>) + ln √(x) − ln(y<sup>4</sup>).","Write the root as a power, √(x) = x<sup>1/2</sup>, then use the power rule on each term: 2 ln e + {{1|2}} ln x − 4 ln y.","ln e = 1, so 2 ln e = 2."],a:"2 + {{1|2}} ln x − 4 ln y"},
+ {l:2,q:"Suppose log<sub>b</sub> 2 ≈ 0.43 and log<sub>b</sub> 3 ≈ 0.68. Find log<sub>b</sub> 12 and log<sub>b</sub>({{9|2}}) without knowing b.",s:["Build each number out of 2s and 3s: 12 = 2<sup>2</sup> · 3 and {{9|2}} = {{3<sup>2</sup>|2}}.","log<sub>b</sub> 12 = log<sub>b</sub>(2<sup>2</sup>) + log<sub>b</sub> 3 = 2(0.43) + 0.68 = 1.54","log<sub>b</sub>({{9|2}}) = log<sub>b</sub>(3<sup>2</sup>) − log<sub>b</sub> 2 = 2(0.68) − 0.43 = 0.93"],a:"log<sub>b</sub> 12 ≈ 1.54 and log<sub>b</sub>({{9|2}}) ≈ 0.93"},
+ {l:2,q:"Evaluate 2 log<sub>6</sub> 3 + log<sub>6</sub> 4 without a calculator.",s:["Neither log<sub>6</sub> 3 nor log<sub>6</sub> 4 is a nice number alone, so combine them first.","Power rule: 2 log<sub>6</sub> 3 = log<sub>6</sub>(3<sup>2</sup>) = log<sub>6</sub> 9.","Product rule: log<sub>6</sub> 9 + log<sub>6</sub> 4 = log<sub>6</sub> 36.","6<sup>2</sup> = 36."],a:"2"}
+],
+solving:[
+ {l:0,q:"Solve e<sup>x</sup> = 5.",s:["The unknown is in the exponent, so take ln of both sides: ln(e<sup>x</sup>) = ln 5.","ln and e cancel on the left: x = ln 5. This is the exact answer.","Calculator: ln 5 ≈ 1.609"],a:"x = ln 5 ≈ 1.609"},
+ {l:0,q:"Solve ln x = 2.",s:["The unknown is inside a logarithm, so rewrite in exponential form. ln has base e.","ln x = 2 means x = e<sup>2</sup>.","Calculator: e<sup>2</sup> ≈ 7.389"],a:"x = e<sup>2</sup> ≈ 7.389"},
+ {l:0,q:"Solve 10<sup>x</sup> = 50.",s:["The base is 10, so the matching logarithm is log. Take log of both sides.","log(10<sup>x</sup>) = log 50, so x = log 50.","Calculator: log 50 ≈ 1.699. That makes sense, since 10<sup>1</sup> = 10 and 10<sup>2</sup> = 100."],a:"x = log 50 ≈ 1.699"},
+ {l:1,q:"Solve 3e<sup>2x</sup> = 12.",s:["Isolate the exponential first. Divide both sides by 3: e<sup>2x</sup> = 4.","Take ln of both sides: 2x = ln 4.","Divide by 2: x = {{ln 4|2}}.","Calculator: {{1.3863|2}} ≈ 0.693"],a:"x = {{ln 4|2}} ≈ 0.693"},
+ {l:1,q:"Solve 5<sup>x</sup> = 20.",s:["20 is not a power of 5, so take ln of both sides: ln(5<sup>x</sup>) = ln 20.","Power rule: the exponent comes down in front. x · ln 5 = ln 20.","Divide by ln 5: x = {{ln 20|ln 5}}. You cannot cancel the ln's or simplify this to ln 4.","Calculator: {{2.9957|1.6094}} ≈ 1.861"],a:"x = {{ln 20|ln 5}} ≈ 1.861"},
+ {l:1,q:"Solve 2 ln x + 1 = 7.",s:["Isolate the logarithm. Subtract 1: 2 ln x = 6.","Divide by 2: ln x = 3.","Rewrite in exponential form: x = e<sup>3</sup>.","Calculator: e<sup>3</sup> ≈ 20.086"],a:"x = e<sup>3</sup> ≈ 20.086"},
+ {l:1,q:"Solve log<sub>2</sub>(x − 1) = 3.",s:["Rewrite in exponential form with base 2: x − 1 = 2<sup>3</sup>.","x − 1 = 8","x = 9. Check: log<sub>2</sub>(9 − 1) = log<sub>2</sub> 8 = 3."],a:"x = 9"},
+ {l:2,q:"Solve log x + log(x − 3) = 1.",s:["Combine into one logarithm with the product rule: log(x(x − 3)) = 1.","Rewrite in exponential form with base 10: x(x − 3) = 10<sup>1</sup> = 10.","x<sup>2</sup> − 3x − 10 = 0 factors as (x − 5)(x + 2) = 0, so x = 5 or x = −2.","Check both in the original equation. x = 5 gives log 5 + log 2 = log 10 = 1, which works. x = −2 gives log(−2), which is undefined, so reject it."],a:"x = 5 only. x = −2 is extraneous"},
+ {l:2,q:"Solve e<sup>2x</sup> − 5e<sup>x</sup> + 6 = 0.",s:["Notice that e<sup>2x</sup> = (e<sup>x</sup>)<sup>2</sup>, so this is a quadratic in disguise. Let u = e<sup>x</sup>.","u<sup>2</sup> − 5u + 6 = 0 factors as (u − 2)(u − 3) = 0, so u = 2 or u = 3.","Go back to x: e<sup>x</sup> = 2 gives x = ln 2, and e<sup>x</sup> = 3 gives x = ln 3.","Both are fine, because e<sup>x</sup> can equal any positive number."],a:"x = ln 2 ≈ 0.693 or x = ln 3 ≈ 1.099"},
+ {l:2,q:"Solve 2<sup>x + 1</sup> = 3<sup>x</sup>.",s:["The bases are different and cannot be matched, so take ln of both sides: (x + 1) ln 2 = x ln 3.","Distribute: x ln 2 + ln 2 = x ln 3.","Collect the x terms on one side: ln 2 = x ln 3 − x ln 2 = x(ln 3 − ln 2).","Divide: x = {{ln 2|ln 3 − ln 2}} ≈ {{0.6931|0.4055}} ≈ 1.710"],a:"x = {{ln 2|ln 3 − ln 2}} ≈ 1.710"},
+ {l:2,q:"You invest $5,000 at 4% interest compounded continuously. How long does it take for the money to double?",s:["Doubling means A = 10,000. Use A = Pe<sup>rt</sup>: 10000 = 5000e<sup>0.04t</sup>.","Divide by 5000: 2 = e<sup>0.04t</sup>. The starting amount cancels, so the doubling time is the same for any amount.","Take ln of both sides: ln 2 = 0.04t.","t = {{ln 2|0.04}} ≈ {{0.6931|0.04}} ≈ 17.33"],a:"About 17.3 years"}
+]};
+
+/* ---------- practice generators ---------- */
+const LOGEQ=[[10,1,3,5,2],[2,3,2,4,2],[2,4,6,8,2],[3,2,8,9,1],[6,1,1,3,2],[10,2,15,20,5],[2,5,4,8,4],[12,1,4,6,2]];
+const SUMS=[[10,4,25,2],[10,2,50,2],[10,5,20,2],[10,8,125,3],[6,4,9,2],[6,2,18,2],[6,3,12,2],[2,4,8,5],[12,3,48,2],[4,2,32,3]];
+const DIFS=[[2,48,3,4],[3,54,2,3],[10,5000,5,3],[5,50,2,2],[2,80,5,4],[6,72,2,2]];
+const COMP=[["12",[2,1,0],"2<sup>2</sup> · 3"],["18",[1,2,0],"2 · 3<sup>2</sup>"],["20",[2,0,1],"2<sup>2</sup> · 5"],["45",[0,2,1],"3<sup>2</sup> · 5"],["50",[1,0,2],"2 · 5<sup>2</sup>"],["75",[0,1,2],"3 · 5<sup>2</sup>"],["24",[3,1,0],"2<sup>3</sup> · 3"],["{{9|5}}",[0,2,-1],"3<sup>2</sup> ÷ 5"],["{{25|3}}",[0,-1,2],"5<sup>2</sup> ÷ 3"],["{{8|3}}",[3,-1,0],"2<sup>3</sup> ÷ 3"]];
+const GEN={
+exponential:[
+ ()=>{ if(ri(0,1)){const b=pick([2,3,4,5,10]),n=pick([2,3]);
+     return mcq(`Evaluate ${sup(b,"−"+n)}.`,`{{1|${b**n}}}`,[`−${b**n}`,`−${b*n}`,`{{1|${b*n}}}`],["0",""+b**n],`A negative exponent means "one over": ${sup(b,"−"+n)} = {{1|${sup(b,n)}}} = {{1|${b**n}}}.`)}
+   const a=ri(2,5),b=pick([2,3,4,5]),x=ri(2,3),c=a*b**x;
+   return mcq(`If f(x) = ${a} · ${sup(b,"x")}, find f(${x}).`,""+c,[""+(a*b)**x,""+a*b*x,""+(a+b**x),""+a*b**(x+1)],[""+(c+a),""+(c+b)],`Do the power first: ${sup(b,x)} = ${b**x}. Then multiply: ${a} · ${b**x} = ${c}.`)},
+ ()=>{const P=pick([800,1200,2500,5000,12000,40000]),r=pick([2,3,4,5,6,8,10,12]),t=ri(3,12),up=ri(0,1),f=up?1+r/100:1-r/100,c=int(P*f**t);
+   const q=up?`A population of ${int(P)} grows by ${r}% per year. To the nearest whole number, what is it after ${t} years?`:`A lake has ${int(P)} fish, and the number drops by ${r}% per year. To the nearest whole number, how many are left after ${t} years?`;
+   return mcq(q,c,[int(P*(1+(up?1:-1)*r*t/100)),int(P*(2-f)**t),int(P*f**(t+1)),int(P*f**(t-1))],[],`${up?"Growing":"Dropping"} by ${r}% means multiplying by ${f.toFixed(2)} each year: ${int(P)} · ${sup("("+f.toFixed(2)+")",t)} ≈ ${c}. Adding or subtracting ${r}% of the original each year would be linear, not exponential.`)},
+ ()=>{ const b=pick([2,3,5]);
+   if(ri(0,1)){const d=ri(1,4);
+     return mcq(`Solve ${sup(b*b,"x")} = ${sup(b**3,"x − "+d)}.`,`x = ${3*d}`,[`x = ${d}`,`x = ${2*d}`,`x = −${3*d}`,`x = ${6*d}`],[],`Write both sides with base ${b}: ${sup(b,"2x")} = ${sup(b,"3(x − "+d+")")}. Equal bases mean equal exponents: 2x = 3x − ${3*d}, so x = ${3*d}.`)}
+   const k=pick([3,4,5]),c=k%2?pick([1,3,5]):pick([2,4]),x=(k+c)/2;
+   return mcq(`Solve ${sup(b,"2x − "+c)} = ${b**k}.`,`x = ${x}`,[`x = ${k}`,`x = ${k+c}`,`x = ${frac(Math.abs(k-c),2)}`,`x = ${x+1}`],[`x = ${x+2}`],`${b**k} = ${sup(b,k)}, so the exponents must match: 2x − ${c} = ${k}. Then 2x = ${k+c} and x = ${x}.`)}
+],
+e:[
+ ()=>{const a=ri(3,6),b=ri(2,a-1),k=ri(0,2),all=[sup("e",a+b),sup("e",a*b),sup("e",a-b),"2"+sup("e",a+b)];
+   if(k===0) return mcq(`Simplify ${sup("e",a)} · ${sup("e",b)}.`,all[0],all,[],`When you multiply powers of the same base, add the exponents: ${a} + ${b} = ${a+b}.`);
+   if(k===1) return mcq(`Simplify (${sup("e",a)})<sup>${b}</sup>.`,all[1],all,[],`A power raised to a power: multiply the exponents. ${a} · ${b} = ${a*b}.`);
+   return mcq(`Simplify {{${sup("e",a)}|${sup("e",b)}}}.`,all[2],all,[],`When you divide powers of the same base, subtract the exponents: ${a} − ${b} = ${a-b}.`)},
+ ()=>{const P=pick([500,1000,2000,5000]),r=ri(2,8),t=ri(3,15),c=money(P*Math.exp(r*t/100));
+   return mcq(`You invest ${money(P)} at ${r}% interest compounded continuously. How much do you have after ${t} years?`,c,[money(P*(1+r/100)**t),money(P*(1+r*t/100)),money(P*Math.exp(r/100)*t)],[money(P*Math.exp(r*t/100)*1.1)],`A = Pe<sup>rt</sup> = ${P} · ${sup("e",(r/100).toFixed(2)+" · "+t)} = ${P} · ${sup("e",(r*t/100).toFixed(2))} ≈ ${c}.`)},
+ ()=>{ if(ri(0,1)){const P=pick([500,1000,2000,5000]),r=ri(2,8),t=ri(3,15),[n,w]=pick([[4,"quarterly"],[12,"monthly"]]),c=money(P*(1+r/100/n)**(n*t));
+     return mcq(`You invest ${money(P)} at ${r}% interest compounded ${w}. How much do you have after ${t} years?`,c,[money(P*(1+r/100)**t),money(P*(1+r/100/n)**t),money(P*Math.exp(r*t/100)),money(P*(1+r/100)**(n*t))],[],`A = P(1 + {{r|n}})<sup>nt</sup> = ${P}(1 + {{${(r/100).toFixed(2)}|${n}}})${"<sup>"+n+" · "+t+"</sup>"} ≈ ${c}. Both the rate and the exponent use n = ${n}.`)}
+   const m=pick([80,120,200,500]),k=pick([0.05,0.1,0.2,0.25]),t=ri(2,12),g=v=>num(+v.toFixed(2))+" g",c=g(m*Math.exp(-k*t));
+   return mcq(`A radioactive sample decays according to A(t) = ${m}${sup("e","−"+k+"t")} grams, with t in days. How much is left after ${t} days?`,c,[g(m*Math.exp(k*t)),g(m*(1-k*t)),g(m*(1-k)**t)],[g(m*Math.exp(-k*t)/2)],`A(${t}) = ${m}${sup("e","−"+k+" · "+t)} = ${m}${sup("e","−"+(+(k*t).toFixed(2)))} ≈ ${c}.`)}
+],
+logs:[
+ ()=>{const b=pick([2,3,4,5,10]),n=ri(2,b===2?6:b===3||b===10?4:3),v=b**n;
+   return mcq(`Evaluate ${logb(b,int(v))}.`,""+n,[""+(n+1),""+(n-1),""+b*n,""+v/b],[],`Ask: ${b} to what power gives ${int(v)}? ${sup(b,n)} = ${int(v)}, so the answer is ${n}.`)},
+ ()=>{const k=ri(0,3);
+   if(k===0){const b=pick([2,3,5,10]),n=pick([2,3]);
+     return mcq(`Evaluate ${logb(b,`({{1|${b**n}}})`)}.`,"−"+n,[""+n,`{{1|${n}}}`,`−{{1|${n}}}`],["0"],`{{1|${b**n}}} = ${sup(b,"−"+n)}, so the exponent is −${n}. A number between 0 and 1 always has a negative logarithm.`)}
+   if(k===1){const r=pick([2,3,4,5,7]);
+     return mcq(`Evaluate log<sub>${r*r}</sub> ${r}.`,"{{1|2}}",["2",""+r,"−2","−{{1|2}}"],[],`${r} is the square root of ${r*r}, and a square root is the {{1|2}} power: ${sup(r*r,"1/2")} = ${r}.`)}
+   if(k===2){const n=pick([-4,-3,-2,2,3,5,7]);
+     return mcq(`Simplify ln(${sup("e",num(n))}).`,num(n),[sup("e",num(n)),num(-n),"1","0"],[],`ln asks "e to what power?" The power is already showing: ${num(n)}.`)}
+   const v=ri(2,9);
+   return mcq(`Simplify ${sup("e","ln "+v)}.`,""+v,[sup("e",v),"ln "+v,"1",""+2*v],[],`ln ${v} is the power of e that gives ${v}. Raising e to that power gives ${v} back.`)},
+ ()=>{ if(ri(0,1)){const b=pick([2,3,4,5]);
+     return mcq(`Solve log<sub>${b*b}</sub> x = {{3|2}}.`,`x = ${b**3}`,[`x = ${1.5*b*b}`,`x = ${b*b}`,`x = ${b**6}`,`x = ${b**4}`],[],`Rewrite as a power: x = ${sup(b*b,"3/2")}. Take the square root first, then cube: ${sup(b,3)} = ${b**3}.`)}
+   const a=pick([2,3,4,5]),c=ri(1,9),f=frac(c,a);
+   return mcq(`What is the domain of f(x) = ln(${c} − ${a}x)?`,`x &lt; ${f}`,[`x &gt; ${f}`,`x &lt; −${f}`,`x ≤ ${f}`,"all real numbers"],[],`The inside of a logarithm must be positive: ${c} − ${a}x &gt; 0, so ${a}x &lt; ${c} and x &lt; ${f}.`)}
+],
+properties:[
+ ()=>{ if(ri(0,1)){const [b,m,n,k]=pick(SUMS);
+     return mcq(`Evaluate ${logb(b,m)} + ${logb(b,n)}.`,""+k,[logb(b,m+n),""+m*n,""+(k+1),""+(k-1)],[],`A sum of logs is the log of the product: ${logb(b,int(m*n))} = ${k}, because ${sup(b,k)} = ${int(m*n)}.`)}
+   const [b,m,n,k]=pick(DIFS);
+   return mcq(`Evaluate ${logb(b,int(m))} − ${logb(b,n)}.`,""+k,[logb(b,int(m-n)),""+m/n,""+(k+1),""+(k-1)],[],`A difference of logs is the log of the quotient: ${logb(b,m/n)} = ${k}, because ${sup(b,k)} = ${m/n}.`)},
+ ()=>{const [a,b,c]=shuffle([2,3,4,5]);
+   if(ri(0,1)) return mcq(`Expand ln({{${sup("x",a)}${sup("y",b)}|${sup("z",c)}}}).`,`${a} ln x + ${b} ln y − ${c} ln z`,[`${a} ln x + ${b} ln y + ${c} ln z`,`(${a} ln x)(${b} ln y) ÷ (${c} ln z)`,`${a*b} ln(xy) − ${c} ln z`],[],`The top is a product, so its logs add. The bottom is divided, so its log subtracts. Each exponent comes down in front.`);
+   return mcq(`Write ${a} log x − ${b} log y as a single logarithm.`,`log({{${sup("x",a)}|${sup("y",b)}}})`,[`log(${a}x − ${b}y)`,`log(${sup("x",a)}${sup("y",b)})`,`{{log ${sup("x",a)}|log ${sup("y",b)}}}`],[],`Move each coefficient up as an exponent: log ${sup("x",a)} − log ${sup("y",b)}. A difference of logs is the log of a quotient.`)},
+ ()=>{const [name,e,fact]=pick(COMP),L=[0.301,0.477,0.699],val=e.reduce((s,x,i)=>s+x*L[i],0);
+   const terms=e.map((x,i)=>x?[x<0?"−":"+",(Math.abs(x)>1?Math.abs(x)+"("+L[i]+")":""+L[i])]:null).filter(Boolean).map((t,i)=>(i?` ${t[0]} `:(t[0]==="−"?"−":""))+t[1]).join("");
+   const f=v=>num(+v.toFixed(3));
+   return mcq(`Given log 2 ≈ 0.301, log 3 ≈ 0.477 and log 5 ≈ 0.699, find log ${name} without a calculator.`,f(val),[f(e.reduce((s,x,i)=>s+Math.sign(x)*L[i],0)),f(e.reduce((s,x,i)=>s+Math.abs(x)*L[i],0)),f(e.reduce((s,x,i)=>s*(x?L[i]**Math.abs(x):1),1))],[f(val+0.301),f(val+0.477)],`${name} = ${fact}, so log ${name} = ${terms} ≈ ${f(val)}.`)}
+],
+solving:[
+ ()=>{const k=ri(0,2),X=v=>"x ≈ "+n3(v);
+   if(k===0){const c=ri(2,12);
+     return mcq(`Solve ${sup("e","x")} = ${c}.`,X(LN(c)),[X(Math.log10(c)),X(c/E),X(Math.exp(c))],[],`Take ln of both sides: x = ln ${c} ≈ ${n3(LN(c))}.`)}
+   if(k===1){const c=pick([1,2,3,4,-1,0.5]);
+     return mcq(`Solve ln x = ${num(c)}.`,X(Math.exp(c)),[X(LN(Math.abs(c))),X(10**c),X(c*E),X(c/E)],[],`ln has base e, so rewrite as a power: x = ${sup("e",num(c))} ≈ ${n3(Math.exp(c))}.`)}
+   const c=pick([1,2,3,4,-1,-2]);
+   return mcq(`Solve log x = ${num(c)}.`,"x = "+num(10**c),["x = "+num(10*c),X(Math.exp(c)),"x = "+n3(c/10),X(Math.log10(Math.abs(c)))],[],`log has base 10, so rewrite as a power: x = ${sup(10,num(c))} = ${10**c}.`)},
+ ()=>{const X=v=>"x ≈ "+n3(v);
+   if(ri(0,1)){const a=pick([2,3,4,5]),k=pick([2,3,0.5,-1,-2]),m=pick([2,3,4,5,6,8]),c=a*m,ks=k===-1?"−":num(k),x=LN(m)/k;
+     return mcq(`Solve ${a}${sup("e",ks+"x")} = ${c}.`,X(x),[X(LN(c)/(a*k)),X(LN(m)*k),X(m/k),X(LN(c)/k)],[X(x+1)],`Divide by ${a}: ${sup("e",ks+"x")} = ${m}. Take ln of both sides: ${ks}x = ln ${m} ≈ ${n3(LN(m))}. Divide by ${num(k)}: x ≈ ${n3(x)}.`)}
+   const b=pick([2,3,5,7]),c=pick([6,10,15,20,50,100]),x=LN(c)/LN(b);
+   return mcq(`Solve ${sup(b,"x")} = ${c}.`,X(x),[X(c/b),X(LN(c/b)),X(LN(b)/LN(c)),X(LN(c)*LN(b))],[],`Take ln of both sides and bring the exponent down: x · ln ${b} = ln ${c}, so x = {{ln ${c}|ln ${b}}} ≈ ${n3(x)}.`)},
+ ()=>{ if(ri(0,1)){const [b,k,d,r,s]=pick(LOGEQ);
+     return mcq(`Solve ${logb(b,"x")} + ${logb(b,"(x − "+d+")")} = ${k}.`,`x = ${r}`,[`x = ${r} or x = −${s}`,`x = −${s}`,`x = ${frac(b**k+d,2)}`,`x = ${b**k}`],[],`Combine: ${logb(b,"(x(x − "+d+"))")} = ${k}, so x(x − ${d}) = ${sup(b,k)} = ${b**k}. Then x<sup>2</sup> − ${d===1?"":d}x − ${b**k} = 0 factors as (x − ${r})(x + ${s}) = 0. x = −${s} would put a negative number inside a logarithm, so reject it.`)}
+   const r=pick([2,3,4,5,6,8]),[m,w]=pick([[2,"double"],[3,"triple"]]),y=v=>v.toFixed(1)+" years",t=LN(m)/(r/100),rs=(r/100).toFixed(2);
+   return mcq(`Money is invested at ${r}% interest compounded continuously. To the nearest tenth of a year, how long does it take to ${w}?`,y(t),[y(m/(r/100)),y(100/r),y(Math.log10(m)/(r/100)),y(LN(m)*r)],[],`Set ${m}P = P${sup("e",rs+"t")} and divide by P: ${sup("e",rs+"t")} = ${m}. Take ln: ${rs}t = ln ${m}, so t = {{ln ${m}|${rs}}} ≈ ${t.toFixed(1)} years.`)}
+]};
+
+/* ---------- page setup (skipped when no DOM) ---------- */
+if(typeof document!=="undefined"){
+const main=document.querySelector("main"); main.innerHTML=fmt(main.innerHTML);
+const $=id=>document.getElementById(id);
+const NS="http://www.w3.org/2000/svg";
+const el=(tag,attrs,text)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;return e};
+const set=(e,a)=>{for(const k in a)e.setAttribute(k,typeof a[k]==="number"?a[k].toFixed(1):a[k])};
+
+function mkPlot(svg,o){ const B=o.box||{x0:40,x1:620,y0:15,y1:285};
+  const X=x=>B.x0+(x-o.xmin)/(o.xmax-o.xmin)*(B.x1-B.x0),Y=y=>B.y1-(y-o.ymin)/(o.ymax-o.ymin)*(B.y1-B.y0);
+  const g=svg.querySelector(".grid"); g.innerHTML=""; const eps=1e-9,lab=v=>num(+v.toFixed(2));
+  for(let i=Math.ceil(o.xmin/o.xs-eps);i*o.xs<=o.xmax+eps;i++){const x=i*o.xs,ax=Math.abs(x)<eps||Math.abs(x-o.xmin)<eps&&o.xmin>0;
+    g.append(el("line",{class:ax?"g-axis":"g-grid",x1:X(x),y1:B.y0,x2:X(x),y2:B.y1})); if(i%o.xl===0)g.append(el("text",{class:"g-t","text-anchor":"middle",x:X(x),y:B.y1+15},lab(x)))}
+  for(let i=Math.ceil(o.ymin/o.ys-eps);i*o.ys<=o.ymax+eps;i++){const y=i*o.ys,ax=Math.abs(y)<eps||Math.abs(y-o.ymin)<eps&&o.ymin>0;
+    g.append(el("line",{class:ax?"g-axis":"g-grid",x1:B.x0,y1:Y(y),x2:B.x1,y2:Y(y)})); if(i%o.yl===0)g.append(el("text",{class:"g-t","text-anchor":"end",x:B.x0-6,y:Y(y)+4},lab(y)))}
+  const id=svg.id+"-cp"; if(!$(id)){const d=el("defs",{}),c=el("clipPath",{id});c.append(el("rect",{x:B.x0,y:B.y0,width:B.x1-B.x0,height:B.y1-B.y0}));d.append(c);svg.prepend(d)}
+  svg.querySelector(".curves").setAttribute("clip-path",`url(#${id})`);
+  const span=o.ymax-o.ymin,lo=o.ymin-span,hi=o.ymax+span;
+  const path=(f,a,b,n=300)=>{let d="",pen=false;for(let i=0;i<=n;i++){const x=a+(b-a)*i/n;let y=f(x);if(!isFinite(y)){pen=false;continue}y=Math.max(lo,Math.min(hi,y));d+=(pen?"L":"M")+X(x).toFixed(1)+","+Y(y).toFixed(1);pen=true}return d};
+  return {X,Y,path,B}; }
+
+/* tabs */
+const ORDER=["exponential","number-e","logs","properties","solving"],NAMES=["Exponential functions","The number e","Logarithms","Log properties","Solving equations"];
+ORDER.forEach((id,i)=>{ const d=document.createElement("div"); d.className="pager";
+  d.innerHTML=(i?`<button class="btn ghost" type="button" data-go="${ORDER[i-1]}">← Part ${i}: ${NAMES[i-1]}</button>`:"<span></span>")+(i<ORDER.length-1?`<button class="btn" type="button" data-go="${ORDER[i+1]}">Part ${i+2}: ${NAMES[i+1]} →</button>`:"");
+  $(id).append(d); });
+function showTab(id,scroll){ if(!ORDER.includes(id))id=ORDER[0];
+  ORDER.forEach(k=>{$(k).hidden=k!==id});
+  document.querySelectorAll("[data-tab]").forEach(a=>{ if(a.dataset.tab===id)a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current") });
+  if(scroll)$(id).scrollIntoView(); }
+document.addEventListener("click",e=>{ const t=e.target.closest("[data-tab],[data-go]"); if(!t)return; e.preventDefault();
+  const id=t.dataset.tab||t.dataset.go; showTab(id,true); try{location.hash=id}catch(_){} });
+window.addEventListener("hashchange",()=>{ const id=location.hash.slice(1); if(ORDER.includes(id)&&$(id).hidden)showTab(id,true) });
+showTab(location.hash.slice(1),false);
+
+/* examples */
+document.querySelectorAll("[data-ex]").forEach(box=>{
+  box.innerHTML=EX[box.dataset.ex].map((e,i)=>`<article class="ex"><div class="ex-h"><span class="tag l${e.l}">${"●".repeat(e.l+1)+"○".repeat(2-e.l)} ${LV[e.l]}</span><span class="ex-n">Example ${i+1}</span></div><p class="ex-q">${fmt(e.q)}</p><ol class="steps">${e.s.map(s=>`<li hidden>${fmt(s)}</li>`).join("")}</ol><p class="ans" hidden><b>Answer</b>${fmt(e.a)}</p><div class="ex-ctl"><button class="btn" type="button" data-act="next">Show first step</button><button class="btn ghost" type="button" data-act="all">Show full solution</button></div></article>`).join("");
+});
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-act]"); if(!b)return;
+  const ex=b.closest(".ex"),lis=[...ex.querySelectorAll(".steps li")],ans=ex.querySelector(".ans");
+  const nb=ex.querySelector("[data-act=next]"),ab=ex.querySelector("[data-act=all]");
+  let hid=lis.filter(l=>l.hidden);
+  if(b.dataset.act==="all"){ const show=hid.length>0||ans.hidden; lis.forEach(l=>l.hidden=!show); ans.hidden=!show; }
+  else if(hid.length){ hid[0].hidden=false; if(hid.length===1)ans.hidden=false; }
+  hid=lis.filter(l=>l.hidden);
+  nb.disabled=hid.length===0; nb.textContent=hid.length===lis.length?"Show first step":hid.length?`Next step (${hid.length} left)`:"All steps shown";
+  ab.textContent=hid.length===0?"Hide solution":"Show full solution";
+});
+
+/* quizzes */
+document.querySelectorAll("[data-quiz]").forEach(box=>{
+  const gens=GEN[box.dataset.quiz]; let lvl=0,cur,right=0,tried=0;
+  box.innerHTML=`<div class="q-top"><div class="seg" role="group" aria-label="Difficulty">${LV.map((n,i)=>`<button type="button" data-l="${i}" aria-pressed="${i===0}">${n}</button>`).join("")}</div><span class="score">0 of 0 correct</span></div><p class="qq"></p><div class="opts"></div><p class="fb" aria-live="polite"></p><div><button class="btn" type="button" data-new>New question</button></div>`;
+  const qq=box.querySelector(".qq"),opts=box.querySelector(".opts"),fb=box.querySelector(".fb"),score=box.querySelector(".score");
+  function ask(){ cur=gens[lvl](); qq.innerHTML=fmt(cur.q); fb.innerHTML="Pick an answer.";
+    opts.innerHTML=cur.opts.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${fmt(o)}</button>`).join(""); }
+  box.addEventListener("click",e=>{ const l=e.target.closest("[data-l]"),o=e.target.closest(".opt");
+    if(l){ lvl=+l.dataset.l; box.querySelectorAll("[data-l]").forEach(b=>b.setAttribute("aria-pressed",b===l)); ask(); }
+    else if(e.target.closest("[data-new]")) ask();
+    else if(o&&!o.disabled){ const good=cur.opts[+o.dataset.i]===cur.correct; tried++; if(good)right++;
+      opts.querySelectorAll(".opt").forEach(b=>{b.disabled=true; if(cur.opts[+b.dataset.i]===cur.correct)b.classList.add("ok")});
+      if(!good)o.classList.add("no");
+      fb.innerHTML=`<b class="${good?"ok":"no"}">${good?"Correct.":"Not quite."}</b> `+fmt(cur.explain);
+      score.textContent=`${right} of ${tried} correct`; } });
+  ask();
+});
+
+/* lab 1: a·b^x */
+(()=>{ const P=mkPlot($("ex-svg"),{xmin:-4,xmax:4,ymin:-1,ymax:9,xs:1,ys:1,xl:1,yl:2}),dots=$("ex-dots");
+  function upd(){ const a=+$("ex-a").value,b=+$("ex-b").value,f=x=>a*b**x,v=x=>+f(x).toFixed(3);
+    $("ex-curve").setAttribute("d",P.path(f,-4,4));
+    dots.innerHTML=""; [0,1,2].forEach(x=>dots.append(el("circle",{class:"g-dot",r:6,cx:P.X(x).toFixed(1),cy:P.Y(Math.min(f(x),20)).toFixed(1)})));
+    $("ex-av").textContent=a; $("ex-bv").textContent=b;
+    $("ex-eq").innerHTML=`y = ${a===1?"":a+" · "}${sup(b,"x")}`;
+    const pc=Math.round((b-1)*100);
+    $("ex-r1").textContent=b>1?"Growth, because b is greater than 1":b<1?"Decay, because b is between 0 and 1":"Constant, because multiplying by 1 changes nothing";
+    $("ex-r2").textContent=`multiplies y by ${b}`+(pc?` (${pc>0?"+":"−"}${Math.abs(pc)}%)`:"");
+    $("ex-r3").textContent=`(0, ${a})`;
+    const xs=[-2,-1,0,1,2,3];
+    $("ex-tbl").innerHTML=`<tr><th>x</th>${xs.map(x=>`<td>${num(x)}</td>`).join("")}</tr><tr><th>y</th>${xs.map(x=>`<td>${v(x)}</td>`).join("")}</tr>`;
+  }
+  $("ex-a").addEventListener("input",upd); $("ex-b").addEventListener("input",upd); upd();
+})();
+
+/* lab 2: compounding toward e */
+(()=>{ const P=mkPlot($("e-svg"),{xmin:0,xmax:1,ymin:1,ymax:2.8,xs:0.25,ys:0.2,xl:1,yl:2});
+  const NS_=[[1,"once a year"],[2,"twice a year"],[4,"every quarter"],[12,"every month"],[52,"every week"],[365,"every day"],[8760,"every hour"],[525600,"every minute"],[1e7,"10 million times"]];
+  set($("e-line"),{x1:P.B.x0,x2:P.B.x1,y1:P.Y(E),y2:P.Y(E)}); set($("e-lab"),{y:P.Y(E)-7});
+  $("e-lim").setAttribute("d",P.path(t=>Math.exp(t),0,1));
+  function upd(){ const [n,name]=NS_[+$("e-n").value],val=(1+1/n)**n; let d;
+    if(n<=365){ d=`M${P.X(0).toFixed(1)},${P.Y(1).toFixed(1)}`; let y=1; for(let k=1;k<=n;k++){ d+=`H${P.X(k/n).toFixed(1)}`; y*=1+1/n; d+=`V${P.Y(y).toFixed(1)}`; } }
+    else d=P.path(t=>(1+1/n)**(n*t),0,1);
+    $("e-path").setAttribute("d",d); set($("e-dot"),{cx:P.X(1)-1,cy:P.Y(val)});
+    $("e-nv").textContent=name; $("e-r1").textContent=n.toLocaleString("en-US");
+    $("e-r2").textContent="$"+val.toFixed(6); $("e-r3").textContent="$"+(E-val).toFixed(6);
+    $("e-work").innerHTML=fmt(`(1 + {{1|${n.toLocaleString("en-US")}}})<sup>${n.toLocaleString("en-US")}</sup> = ${val.toFixed(6)}`);
+  }
+  $("e-n").addEventListener("input",upd); upd();
+})();
+
+/* lab 3: exponential and log as mirror images */
+(()=>{ const P=mkPlot($("lg-svg"),{box:{x0:30,x1:410,y0:10,y1:390},xmin:-3,xmax:9,ymin:-3,ymax:9,xs:1,ys:1,xl:3,yl:3});
+  set($("lg-yx"),{x1:P.X(-3),y1:P.Y(-3),x2:P.X(9),y2:P.Y(9)}); let base="2";
+  function upd(){ const b=base==="e"?E:+base,p=+$("lg-s").value,q=b**p,qs=+q.toFixed(3),ps=num(p),on=q<=9.2;
+    $("lg-exp").setAttribute("d",P.path(x=>b**x,-3,9));
+    $("lg-log").setAttribute("d",P.path(x=>LN(x)/LN(b),0.0004,9,700));
+    [["lg-p",p,q],["lg-q",q,p]].forEach(([id,x,y])=>{const c=$(id); c.style.display=on?"":"none"; set(c,{cx:P.X(x),cy:P.Y(y)})});
+    const ln=$("lg-link"); ln.style.display=on?"":"none"; set(ln,{x1:P.X(p),y1:P.Y(q),x2:P.X(q),y2:P.Y(p)});
+    $("lg-sv").textContent=ps;
+    $("lg-r1").innerHTML=`${sup(base,ps)} = ${qs}`;
+    $("lg-r2").innerHTML=`${logb(base==="e"?"e":+base,qs)} = ${ps}`;
+    $("lg-r3").textContent=`(${ps}, ${qs})`; $("lg-r4").textContent=`(${qs}, ${ps})`;
+    $("lg-note").textContent=on?"The two points have their coordinates swapped, so they mirror each other across y = x.":"These points are off the chart, but the two statements are still the same fact.";
+  }
+  $("lg-s").addEventListener("input",upd);
+  $("lg-base").addEventListener("click",e=>{const t=e.target.closest("[data-b]"); if(!t)return; base=t.dataset.b;
+    $("lg-base").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===t)); upd()});
+  upd();
+})();
+
+/* lab 4: logs turn multiplication into addition */
+(()=>{ const X=v=>40+v*145,ax=$("pr-axis"),lg=Math.log10;
+  ax.append(el("line",{class:"g-axis",x1:X(0),y1:138,x2:X(4),y2:138}));
+  ["1","10","100","1,000","10,000"].forEach((s,i)=>ax.append(el("line",{class:"g-axis",x1:X(i),y1:132,x2:X(i),y2:144}),el("text",{class:"g-tb","text-anchor":i===4?"end":i?"middle":"start",x:X(i),y:160},s),el("text",{class:"g-t","text-anchor":i===4?"end":i?"middle":"start",x:X(i),y:176},"log = "+i)));
+  function upd(){ const M=+$("pr-M").value,N=+$("pr-N").value,p=+$("pr-P").value,a=lg(M),b=lg(N),f=v=>num(+v.toFixed(3));
+    set($("pr-m"),{width:Math.max(a*145,0.01)}); set($("pr-n"),{x:X(a),width:Math.max(b*145,0.01)}); set($("pr-mn"),{width:Math.max((a+b)*145,0.01)});
+    $("pr-t1").textContent=`log ${M} + log ${N} = ${f(a)} + ${f(b)}`; $("pr-t2").textContent=`log(${M} · ${N}) = log ${int(M*N)} = ${f(a+b)}`;
+    $("pr-Mv").textContent=M; $("pr-Nv").textContent=N; $("pr-Pv").textContent=p;
+    $("pr-r1").textContent=`log(${M} · ${N}) = ${f(a+b)} = ${f(a)} + ${f(b)}`;
+    $("pr-r2").textContent=`log(${M} ÷ ${N}) = ${f(a-b)} = ${f(a)} − ${b<0?"("+f(b)+")":f(b)}`;
+    $("pr-r3").innerHTML=`log(${sup(M,p)}) = ${f(p*a)} = ${p} · ${f(a)}`;
+  }
+  ["pr-M","pr-N","pr-P"].forEach(i=>$(i).addEventListener("input",upd)); upd();
+})();
+
+/* lab 5: solver */
+(()=>{ let mode="exp",P; const cfg={
+    exp:{plot:{xmin:-4,xmax:6,ymin:0,ymax:20,xs:1,ys:2,xl:2,yl:2},s:[["a",0.5,5,0.5,2],["k",-1,1.5,0.1,0.5],["c",1,20,1,12]]},
+    log:{plot:{xmin:0,xmax:14,ymin:-4,ymax:8,xs:1,ys:1,xl:2,yl:2},s:[["a",0.5,3,0.5,2],["d",-3,3,0.5,1],["c",-2,7,0.5,5]]}};
+  function setup(){ const c=cfg[mode]; P=mkPlot($("sv-svg"),c.plot);
+    c.s.forEach(([n,mn,mx,st,v],i)=>{const s=$("sv-"+(i+1)); s.min=mn; s.max=mx; s.step=st; s.value=v; $("sv-l"+(i+1)).textContent=n});
+    $("sv-curve").setAttribute("class",mode==="exp"?"g-sin":"g-cos"); upd(); }
+  function upd(){ const v=[1,2,3].map(i=>+$("sv-"+i).value),f=x=>num(+x.toFixed(3)); let x,fn,lines; const c=v[2],a=v[0];
+    if(mode==="exp"){ let k=v[1]; if(Math.abs(k)<0.05){k=0.1;$("sv-2").value=k} k=+k.toFixed(1); x=LN(c/a)/k; fn=t=>a*Math.exp(k*t);
+      lines=[`${a===1?"":a}${sup("e",(k===1?"":k===-1?"−":num(k))+"x")} = ${c}`,`Divide by ${a}: &nbsp;${sup("e",num(k)+"x")} = ${f(c/a)}`,`Take ln: &nbsp;${num(k)}x = ln ${f(c/a)} = ${f(LN(c/a))}`,`Divide by ${num(k)}: &nbsp;<b>x ≈ ${f(x)}</b>`];
+      $("sv-v2").textContent=num(k); $("sv-curve").setAttribute("d",P.path(fn,-4,6)); }
+    else{ const d=v[1]; x=Math.exp((c-d)/a); fn=t=>a*LN(t)+d;
+      lines=[`${a===1?"":a+" "}ln x ${d<0?"−":"+"} ${Math.abs(d)} = ${num(c)}`,`Subtract ${d<0?"("+num(d)+")":d}: &nbsp;${a===1?"":a+" "}ln x = ${f(c-d)}`,`Divide by ${a}: &nbsp;ln x = ${f((c-d)/a)}`,`Rewrite as a power: &nbsp;<b>x = ${sup("e",f((c-d)/a))} ≈ ${f(x)}</b>`];
+      $("sv-v2").textContent=num(d); $("sv-curve").setAttribute("d",P.path(fn,0.0005,14,600)); }
+    $("sv-v1").textContent=a; $("sv-v3").textContent=num(c);
+    set($("sv-h"),{x1:P.B.x0,x2:P.B.x1,y1:P.Y(c),y2:P.Y(c)});
+    const on=x>=cfg[mode].plot.xmin&&x<=cfg[mode].plot.xmax; $("sv-dot").style.display=$("sv-drop").style.display=on?"":"none";
+    if(on){ set($("sv-dot"),{cx:P.X(x),cy:P.Y(c)}); set($("sv-drop"),{x1:P.X(x),x2:P.X(x),y1:P.Y(c),y2:P.Y(Math.max(0,cfg[mode].plot.ymin))}); }
+    $("sv-work").innerHTML=lines.join("<br>")+(on?"":"<br>The solution is off the chart.");
+  }
+  [1,2,3].forEach(i=>$("sv-"+i).addEventListener("input",upd));
+  $("sv-mode").addEventListener("click",e=>{const t=e.target.closest("[data-m]"); if(!t)return; mode=t.dataset.m;
+    $("sv-mode").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===t)); setup()});
+  setup();
+})();
+}
+</script>
+
+</body>
+</html>
