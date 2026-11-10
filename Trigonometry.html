@@ -1,0 +1,758 @@
+<title>Introduction to Trigonometry</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column, sticky part-nav, each part = idea -> live figure -> key facts -> graded examples -> practice.
+   Identity: sine, cosine and tangent each keep one color everywhere on the page. */
+:root{
+  --bg:#F2F5FA; --surface:#FFFFFF; --sunk:#E7ECF5; --ink:#15213A; --muted:#566684; --line:#D0D9E7;
+  --accent:#2947C9; --on-accent:#FFFFFF;
+  --sin:#C2255C; --cos:#087F86; --tan:#A86200;
+  --easy:#1B7548; --mid:#A86200; --hard:#B3261E;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0E1524; --surface:#172036; --sunk:#101A2E; --ink:#E7ECF6; --muted:#9BA9C4; --line:#2C3A59;
+  --accent:#93A9FF; --on-accent:#0E1524;
+  --sin:#FF7FAB; --cos:#56D3D8; --tan:#FFB957;
+  --easy:#5FD39A; --mid:#FFB957; --hard:#FF8A80; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0E1524; --surface:#172036; --sunk:#101A2E; --ink:#E7ECF6; --muted:#9BA9C4; --line:#2C3A59;
+  --accent:#93A9FF; --on-accent:#0E1524;
+  --sin:#FF7FAB; --cos:#56D3D8; --tan:#FFB957;
+  --easy:#5FD39A; --mid:#FFB957; --hard:#FF8A80; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--body)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+.wrap{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:8px}
+.nav a{flex:none;font:600 14px var(--body);color:var(--muted);text-decoration:none;padding:7px 12px;border-radius:999px;white-space:nowrap}
+.nav a:hover{color:var(--ink);background:var(--sunk)}
+.nav a b{font:600 12px var(--mono);color:var(--accent);margin-right:6px}
+.nav a[aria-current="page"],.nav a[aria-current="page"]:hover{background:var(--accent);color:var(--on-accent)}
+.nav a[aria-current="page"] b{color:inherit}
+.pager{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px;padding-top:20px;border-top:1px solid var(--line)}
+.pager span{flex:1}
+
+/* hero */
+.hero{padding-block:36px 8px}
+.hero h1{font:700 clamp(34px,6vw,56px)/1.04 var(--display);letter-spacing:-.02em;margin:0 0 14px;text-wrap:balance}
+.hero p{max-width:62ch;margin:0 0 10px;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:18px;font:600 14px var(--body)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:22px;height:4px;border-radius:2px;background:currentColor}
+.sin{color:var(--sin);font-weight:600}.cos{color:var(--cos);font-weight:600}.tan{color:var(--tan);font-weight:600}
+
+/* topics */
+.topic{padding-block:28px 40px;scroll-margin-top:calc(56px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;gap:22px}
+.topic > *{margin:0;min-width:0}
+.part{font:600 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.topic h2{font:700 clamp(26px,4.4vw,38px)/1.1 var(--display);letter-spacing:-.015em;text-wrap:balance;margin-top:-14px}
+.topic h3{font:700 21px/1.2 var(--display);margin-top:10px}
+.prose{max-width:66ch;display:flex;flex-direction:column;gap:12px}
+.prose p{margin:0}
+.note{max-width:66ch;border-left:3px solid var(--accent);padding:2px 0 2px 14px;color:var(--muted)}
+.note b{color:var(--ink)}
+
+/* math */
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.86em;line-height:1.2;margin:0 .12em}
+.fr > span:first-child{border-bottom:1.5px solid currentColor;padding:0 .25em 1px}
+.fr > span:last-child{padding:1px .25em 0}
+.rt{white-space:nowrap}.rt > span{border-top:1.5px solid currentColor;padding:0 1px}
+
+/* labs */
+.lab{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:18px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:720px){.lab.split{grid-template-columns:minmax(0,5fr) minmax(0,6fr);align-items:center}}
+.lab svg{display:block;width:100%;height:auto;max-width:100%}
+.lab-t{font:600 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+.panel{display:flex;flex-direction:column;gap:14px;min-width:0}
+.read{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 14px;margin:0;align-items:center}
+.read dt{color:var(--muted);font-size:14px}
+.read dd{margin:0;font:600 16px var(--mono);font-variant-numeric:tabular-nums}
+.ctl{display:flex;flex-direction:column;gap:4px}
+.ctl label{font-size:14px;color:var(--muted);display:flex;justify-content:space-between;gap:10px}
+.ctl label b{font:600 14px var(--mono);color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--accent);margin:0}
+.row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.num{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted)}
+.num input{width:6.2em;font:600 15px var(--mono);padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.chk{display:flex;align-items:center;gap:7px;font-size:14px;color:var(--muted)}
+.work{font:500 15px var(--mono);background:var(--sunk);border-radius:8px;padding:10px 12px;overflow-x:auto}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px 22px}
+.ratios{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 16px}
+.ratio{display:flex;align-items:center;gap:8px;font:500 14px var(--mono);font-variant-numeric:tabular-nums}
+.ratio .rn{width:3.6em;flex:none;font-weight:600}
+.astc{display:grid;grid-template-columns:1fr 1fr;gap:4px;max-width:230px}
+.astc span{font:600 12px/1.3 var(--mono);text-align:center;padding:6px 4px;border-radius:6px;background:var(--sunk);color:var(--muted)}
+.astc span.on{background:var(--accent);color:var(--on-accent)}
+
+/* svg ink */
+.g-ring{fill:none;stroke:var(--line);stroke-width:2}
+.g-grid{fill:none;stroke:var(--line);stroke-width:1}
+.g-axis{fill:none;stroke:var(--muted);stroke-width:1.2}
+.g-ink{fill:none;stroke:var(--ink);stroke-width:2.5;stroke-linecap:round}
+.g-acc{fill:none;stroke:var(--accent);stroke-width:5;stroke-linecap:round}
+.g-sin{fill:none;stroke:var(--sin);stroke-width:4;stroke-linecap:round}
+.g-cos{fill:none;stroke:var(--cos);stroke-width:4;stroke-linecap:round}
+.g-tan{fill:none;stroke:var(--tan);stroke-width:3;stroke-linecap:round}
+.g-dash{fill:none;stroke:var(--muted);stroke-width:1.2;stroke-dasharray:4 4}
+.g-faint{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:2 5;opacity:.7}
+.g-wedge{fill:var(--accent);opacity:.18;stroke:none}
+.g-tri{fill:var(--accent);opacity:.08;stroke:none}
+.g-dot{fill:var(--accent);stroke:var(--surface);stroke-width:3}
+.g-sp{fill:var(--muted);stroke:none}
+.g-hit{fill:transparent;stroke:none;touch-action:none;cursor:grab}
+.g-t{fill:var(--muted);stroke:none;font:500 11px var(--mono)}
+.g-tb{fill:var(--ink);stroke:none;font:600 13px var(--mono)}
+.f-sin{fill:var(--sin)}.f-cos{fill:var(--cos)}.f-tan{fill:var(--tan)}
+
+/* facts + tables */
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.fact{background:var(--sunk);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.fact small{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.fact span{font:600 16px var(--mono)}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;font:500 15px var(--mono);font-variant-numeric:tabular-nums}
+th,td{padding:9px 16px;text-align:center;border-bottom:1px solid var(--line)}
+th{font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+td:first-child,th:first-child{text-align:left;padding-left:0}
+
+/* examples */
+.examples{display:flex;flex-direction:column}
+.ex{padding:18px 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.ex:first-child{border-top:0;padding-top:0}
+.ex > *{margin:0}
+.ex-h{display:flex;align-items:center;gap:12px}
+.tag{font:600 12px var(--mono);letter-spacing:.04em;padding:3px 9px;border-radius:999px;border:1.5px solid currentColor}
+.tag.l0{color:var(--easy)}.tag.l1{color:var(--mid)}.tag.l2{color:var(--hard)}
+.ex-n{font:500 13px var(--mono);color:var(--muted)}
+.ex-q{font-weight:600;font-size:18px;max-width:64ch}
+.steps{padding-left:1.4em;display:flex;flex-direction:column;gap:8px;max-width:64ch}
+.steps:not(:has(li:not([hidden]))){display:none}
+.ans{background:var(--sunk);border-radius:8px;padding:10px 14px;max-width:64ch;font-weight:600}
+.ans b{font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-right:10px}
+.ex-ctl{display:flex;flex-wrap:wrap;gap:8px}
+.btn{font:600 14px var(--body);padding:8px 14px;border-radius:8px;border:1.5px solid var(--accent);background:var(--accent);color:var(--on-accent);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:default}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* quiz */
+.quiz{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.quiz > *{margin:0}
+.q-top{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}
+.seg{display:inline-flex;background:var(--sunk);border-radius:9px;padding:3px;gap:2px}
+.seg button{font:600 13px var(--body);border:0;background:transparent;color:var(--muted);padding:6px 12px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.score{font:500 13px var(--mono);color:var(--muted)}
+.qq{font-weight:600;font-size:18px;max-width:64ch}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.opt{font:600 16px var(--mono);text-align:left;padding:12px 14px;min-height:54px;border-radius:9px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--easy);color:var(--easy)}
+.opt.no{border-color:var(--hard);color:var(--hard)}
+.fb{max-width:64ch;min-height:1.6em}
+.fb b.ok{color:var(--easy)}.fb b.no{color:var(--hard)}
+footer{padding-block:28px 40px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+</style>
+
+<nav class="nav" aria-label="Lecture parts"><div class="wrap">
+  <a href="#unit-circle" data-tab="unit-circle"><b>1</b>Unit circle</a>
+  <a href="#angles" data-tab="angles"><b>2</b>Angles</a>
+  <a href="#triangles" data-tab="triangles"><b>3</b>Right triangles</a>
+  <a href="#periodic" data-tab="periodic"><b>4</b>Periodic functions</a>
+</div></nav>
+
+<main class="wrap">
+<header class="hero">
+  <h1>Introduction to Trigonometry</h1>
+  <p>Trigonometry starts with one question: if you know how far something has turned, where is it now? This lecture answers it in four parts, from the unit circle to graphing a wave. Use the tabs to move between parts.</p>
+  <p>In every part, drag the figure first. Then reveal the worked examples one step at a time, and finish with practice questions at three levels.</p>
+  <div class="legend" aria-label="Color key">
+    <span class="sin"><i></i>sine</span><span class="cos"><i></i>cosine</span><span class="tan"><i></i>tangent and reference angles</span>
+  </div>
+</header>
+
+<!-- ============ PART 1 ============ -->
+<section class="topic" id="unit-circle">
+  <p class="part">Part 1</p>
+  <h2>The unit circle and reference angles</h2>
+  <div class="prose">
+    <p>Draw a circle of radius 1 centered at the origin. Start at the point (1, 0) and turn counterclockwise through an angle θ. The point where you stop has two coordinates, and those coordinates are the two main trig functions: <span class="cos">cos θ is the x-coordinate</span> and <span class="sin">sin θ is the y-coordinate</span>.</p>
+    <p>The third function is built from those two: tan θ = y ÷ x, which is the slope of the radius. This definition works for every angle, including ones past 90°, past 360°, and negative ones. The signs come free: cosine is negative on the left half of the circle and sine is negative on the bottom half.</p>
+    <p>You only need to memorize the first quadrant. The <span class="tan">reference angle</span> is the acute angle between the terminal side and the x-axis, and every angle has the same trig values as its reference angle, up to a plus or minus sign.</p>
+  </div>
+
+  <div class="lab split">
+    <div>
+      <p class="lab-t">Drag the point through all four quadrants</p>
+      <svg id="uc-svg" viewBox="0 0 360 360" role="img" aria-label="The unit circle with a draggable point. The horizontal segment is cosine and the vertical segment is sine.">
+        <line class="g-axis" x1="20" y1="180" x2="340" y2="180"/>
+        <line class="g-axis" x1="180" y1="20" x2="180" y2="340"/>
+        <circle class="g-ring" cx="180" cy="180" r="130"/>
+        <text class="g-t" x="314" y="196">(1, 0)</text>
+        <text class="g-t" x="186" y="42">(0, 1)</text>
+        <text class="g-t" x="10" y="196">(−1, 0)</text>
+        <text class="g-t" x="186" y="326">(0, −1)</text>
+        <g id="uc-sp"></g>
+        <path id="uc-ref" class="g-tan" d=""/>
+        <line id="uc-rad" class="g-ink" x1="180" y1="180" x2="310" y2="180"/>
+        <line id="uc-cos" class="g-cos" x1="180" y1="180" x2="310" y2="180"/>
+        <line id="uc-sin" class="g-sin" x1="310" y1="180" x2="310" y2="180"/>
+        <circle id="uc-dot" class="g-dot" r="9" cx="310" cy="180"/>
+        <circle id="uc-hit" class="g-hit" r="26" cx="310" cy="180"/>
+      </svg>
+    </div>
+    <div class="panel">
+      <dl class="read">
+        <dt>Angle θ</dt><dd id="uc-ra"></dd>
+        <dt>Quadrant</dt><dd id="uc-rq"></dd>
+        <dt class="tan">Reference angle</dt><dd id="uc-rr"></dd>
+        <dt class="cos">cos θ (x)</dt><dd id="uc-rc"></dd>
+        <dt class="sin">sin θ (y)</dt><dd id="uc-rs"></dd>
+        <dt>tan θ (y ÷ x)</dt><dd id="uc-rt"></dd>
+      </dl>
+      <div class="ctl"><label for="uc-s">Angle</label><input type="range" id="uc-s" min="0" max="360" step="1" value="150"></div>
+      <label class="chk"><input type="checkbox" id="uc-snap" checked> Snap to the special angles</label>
+      <div>
+        <p class="lab-t">Which functions are positive here</p>
+        <div class="astc" id="uc-astc"><span data-q="2">II · sin +</span><span data-q="1">I · all +</span><span data-q="3">III · tan +</span><span data-q="4">IV · cos +</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The five angles to know by heart</h3>
+  <div class="tbl"><table>
+    <tr><th>θ</th><th>Radians</th><th class="sin">sin θ</th><th class="cos">cos θ</th><th class="tan">tan θ</th></tr>
+    <tr><td>0°</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+    <tr><td>30°</td><td>{{π/6}}</td><td>{{1/2}}</td><td>{{√(3)/2}}</td><td>{{√(3)/3}}</td></tr>
+    <tr><td>45°</td><td>{{π/4}}</td><td>{{√(2)/2}}</td><td>{{√(2)/2}}</td><td>1</td></tr>
+    <tr><td>60°</td><td>{{π/3}}</td><td>{{√(3)/2}}</td><td>{{1/2}}</td><td>√(3)</td></tr>
+    <tr><td>90°</td><td>{{π/2}}</td><td>1</td><td>0</td><td>undefined</td></tr>
+  </table></div>
+  <p class="note"><b>A pattern that makes the table easy.</b> Going down the sine column, the values are {{√(0)/2}}, {{√(1)/2}}, {{√(2)/2}}, {{√(3)/2}}, {{√(4)/2}}. Cosine is the same list read from the bottom up, and tangent is sine ÷ cosine. The radians column is explained in Part 2.</p>
+
+  <div class="facts">
+    <div class="fact"><small>Point on the unit circle</small><span>(x, y) = (cos θ, sin θ)</span></div>
+    <div class="fact"><small>Tangent</small><span>tan θ = {{sin θ/cos θ}} = {{y/x}}</span></div>
+    <div class="fact"><small>Pythagorean identity</small><span>sin²θ + cos²θ = 1</span></div>
+    <div class="fact"><small>Reference angle by quadrant</small><span>I: θ &nbsp; II: 180° − θ<br>III: θ − 180° &nbsp; IV: 360° − θ</span></div>
+  </div>
+  <p class="note"><b>Three steps for any exact value.</b> First, add or subtract 360° (or 2π) until the angle is between 0° and 360°. Second, find the quadrant, which gives the sign. Third, find the reference angle, which gives the number.</p>
+
+  <h3>Worked examples</h3>
+  <div class="examples" data-ex="circle"></div>
+  <h3>Practice</h3>
+  <div class="quiz" data-quiz="circle"></div>
+</section>
+
+<!-- ============ PART 2 ============ -->
+<section class="topic" id="angles">
+  <p class="part">Part 2</p>
+  <h2>Angles: degrees and radians</h2>
+  <div class="prose">
+    <p>An angle measures how much something has turned. Start with a ray along the positive x-axis (the <b>initial side</b>) and rotate it about its endpoint. Where it stops is the <b>terminal side</b>. Counterclockwise turns are positive and clockwise turns are negative.</p>
+    <p><b>Degrees</b> cut one full turn into 360 equal pieces. <b>Radians</b> measure the same turn with the circle's own ruler, its radius. Lay one radius along the edge of the circle, and the angle you have swept is 1 radian. The whole edge is 2π radii long, so a full turn is 2π radians.</p>
+  </div>
+
+  <div class="lab split">
+    <div>
+      <p class="lab-t">Drag the point around the circle</p>
+      <svg id="ang-svg" viewBox="0 0 320 320" role="img" aria-label="A circle with a draggable angle. Tick marks show each radius-length of arc.">
+        <circle class="g-ring" cx="160" cy="160" r="110"/>
+        <g id="ang-ticks"></g>
+        <path id="ang-wedge" class="g-wedge" d=""/>
+        <line class="g-axis" x1="160" y1="160" x2="270" y2="160"/>
+        <path id="ang-arc" class="g-acc" d=""/>
+        <line id="ang-ray" class="g-ink" x1="160" y1="160" x2="270" y2="160"/>
+        <circle id="ang-dot" class="g-dot" r="9" cx="270" cy="160"/>
+        <circle id="ang-hit" class="g-hit" r="26" cx="270" cy="160"/>
+      </svg>
+    </div>
+    <div class="panel">
+      <dl class="read">
+        <dt>Degrees</dt><dd id="ang-rd"></dd>
+        <dt>Radians</dt><dd id="ang-rr"></dd>
+        <dt>Arc length</dt><dd id="ang-ra"></dd>
+        <dt>Part of a turn</dt><dd id="ang-rt"></dd>
+      </dl>
+      <div class="ctl"><label for="ang-s">Angle</label><input type="range" id="ang-s" min="0" max="360" step="1" value="120"></div>
+      <div class="row">
+        <label class="num">deg <input type="number" id="ang-deg" min="0" max="360" step="1"></label>
+        <label class="num">rad <input type="number" id="ang-rad" min="0" max="6.2832" step="0.01"></label>
+        <label class="chk"><input type="checkbox" id="ang-snap" checked> Snap to 15°</label>
+      </div>
+      <div class="work" id="ang-work"></div>
+      <p class="lab-t">The numbered ticks mark 1, 2, 3… radius-lengths along the edge. Six fit, with a little left over, because 2π ≈ 6.28.</p>
+    </div>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><small>The one fact to memorize</small><span>180° = π radians</span></div>
+    <div class="fact"><small>Degrees to radians</small><span>multiply by {{π/180}}</span></div>
+    <div class="fact"><small>Radians to degrees</small><span>multiply by {{180/π}}</span></div>
+    <div class="fact"><small>Arc length (θ in radians)</small><span>s = r · θ</span></div>
+  </div>
+  <p class="note"><b>Which fraction do I use?</b> Put the unit you want on top. Want radians, put π on top. Want degrees, put 180 on top. The unit you are leaving cancels.</p>
+  <div class="tbl"><table>
+    <tr><th>Degrees</th><td>30°</td><td>45°</td><td>60°</td><td>90°</td><td>180°</td><td>270°</td><td>360°</td></tr>
+    <tr><th>Radians</th><td>{{π/6}}</td><td>{{π/4}}</td><td>{{π/3}}</td><td>{{π/2}}</td><td>π</td><td>{{3π/2}}</td><td>2π</td></tr>
+  </table></div>
+
+  <h3>Worked examples</h3>
+  <div class="examples" data-ex="angles"></div>
+  <h3>Practice</h3>
+  <div class="quiz" data-quiz="angles"></div>
+</section>
+
+<!-- ============ PART 3 ============ -->
+<section class="topic" id="triangles">
+  <p class="part">Part 3</p>
+  <h2>Right triangles and the six trig functions</h2>
+  <div class="prose">
+    <p>In Part 1, sine and cosine were the coordinates of a point on a circle of radius 1. Drop a vertical line from that point to the x-axis and you get a right triangle with hypotenuse 1. Real triangles come in every size, so this part scales the idea up.</p>
+    <p>Take any right triangle with a 35° angle. Make it bigger or smaller and the sides change, but <span class="sin">opposite ÷ hypotenuse</span> stays the same number. That number depends only on the angle, so it gets a name: sin 35°. The same is true for the other pairs of sides.</p>
+    <p>The names depend on where you stand. The <b>hypotenuse</b> is always across from the right angle. The <span class="sin">opposite</span> side is across from θ, and the <span class="cos">adjacent</span> side touches θ.</p>
+  </div>
+
+  <div class="lab split">
+    <div>
+      <p class="lab-t">Change the angle, then change the size</p>
+      <svg id="tri-svg" viewBox="0 0 460 300" role="img" aria-label="A right triangle with adjustable angle and size.">
+        <polygon id="tri-fill" class="g-tri" points=""/>
+        <path id="tri-arc" class="g-tan" d=""/>
+        <path id="tri-sq" class="g-axis" d=""/>
+        <line id="tri-adj" class="g-cos" x1="0" y1="0" x2="0" y2="0"/>
+        <line id="tri-opp" class="g-sin" x1="0" y1="0" x2="0" y2="0"/>
+        <line id="tri-hyp" class="g-ink" x1="0" y1="0" x2="0" y2="0"/>
+        <text id="tri-lt" class="g-tb" x="0" y="0">θ</text>
+        <text id="tri-la" class="g-tb f-cos" text-anchor="middle" x="0" y="0"></text>
+        <text id="tri-lo" class="g-tb f-sin" x="0" y="0"></text>
+        <text id="tri-lh" class="g-tb" text-anchor="end" x="0" y="0"></text>
+      </svg>
+    </div>
+    <div class="panel">
+      <div class="ctl"><label for="tri-t">Angle θ <b id="tri-tv"></b></label><input type="range" id="tri-t" min="10" max="80" step="1" value="35"></div>
+      <div class="ctl"><label for="tri-h">Hypotenuse (size of the triangle) <b id="tri-hv"></b></label><input type="range" id="tri-h" min="5" max="20" step="0.5" value="14"></div>
+      <div class="ratios" id="tri-r"></div>
+      <p class="lab-t">Slide the size: the side lengths change and the six ratios do not.</p>
+    </div>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><small>SOH</small><span class="sin">sin θ = {{opp/hyp}}</span></div>
+    <div class="fact"><small>CAH</small><span class="cos">cos θ = {{adj/hyp}}</span></div>
+    <div class="fact"><small>TOA</small><span class="tan">tan θ = {{opp/adj}}</span></div>
+    <div class="fact"><small>Reciprocals</small><span>csc = {{1/sin}} &nbsp; sec = {{1/cos}} &nbsp; cot = {{1/tan}}</span></div>
+  </div>
+  <div class="prose">
+    <p>Two triangles explain where the table in Part 1 comes from. Half of a square has sides 1, 1, √(2) and angles 45°-45°-90°. Half of an equilateral triangle has sides 1, √(3), 2 and angles 30°-60°-90°.</p>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>θ</th><th>sin θ</th><th>cos θ</th><th>tan θ</th></tr>
+    <tr><td>30°</td><td>{{1/2}}</td><td>{{√(3)/2}}</td><td>{{√(3)/3}}</td></tr>
+    <tr><td>45°</td><td>{{√(2)/2}}</td><td>{{√(2)/2}}</td><td>1</td></tr>
+    <tr><td>60°</td><td>{{√(3)/2}}</td><td>{{1/2}}</td><td>√(3)</td></tr>
+  </table></div>
+  <p class="note"><b>Solving a word problem.</b> Sketch the right triangle and mark the angle. Name the side you know and the side you want (opp, adj or hyp). Pick the function that uses exactly those two. An <b>angle of elevation</b> is measured up from the horizontal, and an <b>angle of depression</b> is measured down from it.</p>
+
+  <h3>Worked examples</h3>
+  <div class="examples" data-ex="triangles"></div>
+  <h3>Practice</h3>
+  <div class="quiz" data-quiz="triangles"></div>
+</section>
+
+<!-- ============ PART 4 ============ -->
+<section class="topic" id="periodic">
+  <p class="part">Part 4</p>
+  <h2>Periodic functions</h2>
+  <div class="prose">
+    <p>A function is <b>periodic</b> if its outputs repeat on a fixed schedule: f(x + P) = f(x) for every x. The smallest such P is the <b>period</b>. Tides, heartbeats, seasons and the height of a seat on a Ferris wheel all behave this way.</p>
+    <p>Sine is the model example. Follow a point around the unit circle and record only its <span class="sin">height</span>. After one full turn (2π) the heights start over, so sin θ has period 2π.</p>
+  </div>
+
+  <div class="lab">
+    <div>
+      <p class="lab-t">The height of the point, unrolled into a graph</p>
+      <svg id="wv-svg" viewBox="0 0 640 220" role="img" aria-label="A point moving around a circle while its height traces a sine wave.">
+        <line class="g-axis" x1="10" y1="110" x2="630" y2="110"/>
+        <circle class="g-ring" cx="90" cy="110" r="70"/>
+        <g id="wv-ticks"></g>
+        <path id="wv-path" class="g-sin" d="" style="stroke-width:3"/>
+        <line id="wv-link" class="g-dash" x1="0" y1="0" x2="0" y2="0"/>
+        <line id="wv-rad" class="g-ink" x1="90" y1="110" x2="160" y2="110"/>
+        <line id="wv-h1" class="g-sin" x1="0" y1="0" x2="0" y2="0"/>
+        <line id="wv-h2" class="g-sin" x1="0" y1="0" x2="0" y2="0"/>
+        <circle id="wv-d1" class="g-dot" r="7" cx="160" cy="110"/>
+        <circle id="wv-d2" class="g-dot" r="6" cx="200" cy="110"/>
+      </svg>
+    </div>
+    <div class="row">
+      <button class="btn" id="wv-play" type="button">Play</button>
+      <div class="ctl" style="flex:1;min-width:200px"><label for="wv-t">Angle turned <b id="wv-tv"></b></label><input type="range" id="wv-t" min="0" max="720" step="1" value="405"></div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>Every sine or cosine wave has the same four features. The <b>midline</b> is the horizontal line halfway between the top and the bottom. The <b>amplitude</b> is the distance from the midline to the top. The <b>period</b> is the width of one full wave. The <b>phase shift</b> is how far the wave has slid left or right.</p>
+    <p>In y = A sin(B(x − C)) + D, each letter controls one of them. Move one slider at a time and watch which feature responds.</p>
+  </div>
+
+  <div class="lab">
+    <div>
+      <p class="lab-t" id="gr-eq-l">Build your own wave</p>
+      <svg id="gr-svg" viewBox="0 0 640 320" role="img" aria-label="Graph of a sine or cosine function controlled by the sliders below.">
+        <g id="gr-grid"></g>
+        <path id="gr-base" class="g-faint" d=""/>
+        <line id="gr-mid" class="g-dash" x1="40" y1="160" x2="620" y2="160"/>
+        <path id="gr-curve" class="g-sin" d="" style="stroke-width:2.5"/>
+        <path id="gr-one" class="g-sin" d="" style="stroke-width:6;opacity:.45"/>
+      </svg>
+    </div>
+    <div class="work" id="gr-eq"></div>
+    <div class="grid2">
+      <div class="ctl"><label for="gr-a">A: amplitude and flip <b id="gr-av"></b></label><input type="range" id="gr-a" min="-4" max="4" step="0.5" value="2"></div>
+      <div class="ctl"><label for="gr-b">B: squeezes the period <b id="gr-bv"></b></label><input type="range" id="gr-b" min="0.5" max="4" step="0.5" value="2"></div>
+      <div class="ctl"><label for="gr-c">C: phase shift <b id="gr-cv"></b></label><input type="range" id="gr-c" min="-4" max="4" step="1" value="1"></div>
+      <div class="ctl"><label for="gr-d">D: midline <b id="gr-dv"></b></label><input type="range" id="gr-d" min="-2" max="2" step="0.5" value="1"></div>
+    </div>
+    <div class="row">
+      <div class="seg" role="group" aria-label="Function" id="gr-fn"><button type="button" data-fn="sin" aria-pressed="true">sine</button><button type="button" data-fn="cos" aria-pressed="false">cosine</button></div>
+      <span class="lab-t" style="margin:0">Dotted: the parent graph. Thick band: one full period.</span>
+    </div>
+    <dl class="read" id="gr-read">
+      <dt>Amplitude |A|</dt><dd id="gr-ra"></dd>
+      <dt>Period 2π ÷ B</dt><dd id="gr-rp"></dd>
+      <dt>Phase shift C</dt><dd id="gr-rc"></dd>
+      <dt>Midline y = D</dt><dd id="gr-rm"></dd>
+      <dt>Range</dt><dd id="gr-rr"></dd>
+    </dl>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><small>Midline</small><span>y = {{max + min/2}}</span></div>
+    <div class="fact"><small>Amplitude</small><span>{{max − min/2}}</span></div>
+    <div class="fact"><small>Period of sin(Bx), cos(Bx)</small><span>{{2π/|B|}}</span></div>
+    <div class="fact"><small>Range</small><span>[D − |A|, D + |A|]</span></div>
+  </div>
+  <p class="note"><b>Reading a phase shift.</b> Factor out the number in front of x before you read it. In sin(2x − π) = sin(2(x − {{π/2}})), the shift is {{π/2}}, not π.</p>
+
+  <h3>Worked examples</h3>
+  <div class="examples" data-ex="periodic"></div>
+  <h3>Practice</h3>
+  <div class="quiz" data-quiz="periodic"></div>
+</section>
+
+<footer>Practice questions are generated fresh each time, so you can keep going until a level feels easy. Scores reset when the page reloads.</footer>
+</main>
+
+<script>
+/* ---------- helpers (pure) ---------- */
+const PI=Math.PI, rad=d=>d*PI/180;
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[ri(0,a.length-1)];
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+const num=x=>(x<0?"−":"")+Math.abs(x);
+const fmt=s=>s.replace(/\{\{([^{}\/]+)\/([^{}]+)\}\}/g,'<span class="fr"><span>$1</span><span>$2</span></span>').replace(/√\(([^()]*)\)/g,'<span class="rt">√<span>$1</span></span>');
+function fracPi(n,d){ if(n===0)return "0"; const g=gcd(Math.abs(n),d); n/=g; d/=g; const s=n<0?"−":""; n=Math.abs(n); const top=(n===1?"":n)+"π"; return s+(d===1?top:`{{${top}/${d}}}`); }
+function frac(n,d){ const g=gcd(n,d); n/=g; d/=g; return d===1?""+n:`{{${n}/${d}}}`; }
+const norm=d=>((d%360)+360)%360;
+function refOf(d){ d=norm(d); return d<=90?d:d<=180?180-d:d<=270?d-180:360-d; }
+function quad(d){ d=norm(d); return d%90===0?0:Math.floor(d/90)+1; }
+const QN=["","I","II","III","IV"];
+const S={0:"0",30:"{{1/2}}",45:"{{√(2)/2}}",60:"{{√(3)/2}}",90:"1"}, T={0:"0",30:"{{√(3)/3}}",45:"1",60:"√(3)",90:"undefined"};
+function exact(fn,d){ d=norm(d); const r=refOf(d);
+  const sx=(d<90||d>270)?1:(d===90||d===270)?0:-1, sy=(d>0&&d<180)?1:(d===0||d===180)?0:-1;
+  let v,sg; if(fn==="sin"){v=S[r];sg=sy} else if(fn==="cos"){v=S[90-r];sg=sx} else {v=T[r];sg=sx*sy}
+  if(v===undefined) return null; if(v==="0"||v==="undefined") return v; return (sg<0?"−":"")+v; }
+const flip=s=>s.startsWith("−")?s.slice(1):"−"+s;
+const strip=s=>s.startsWith("−")?s.slice(1):s;
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a[j],a[i]]} return a; }
+function mcq(q,correct,cands,fill,explain){ const o=[correct]; for(const c of [...cands,...fill]) if(o.length<4&&c!=null&&!o.includes(c)) o.push(c); return {q,opts:shuffle(o),correct,explain}; }
+
+/* ---------- worked examples ---------- */
+const LV=["Easy","Intermediate","Hard"];
+const EX={
+angles:[
+ {l:0,q:"Convert 60° to radians.",s:["Going from degrees to radians, multiply by {{π/180}} so the degree units cancel.","60° × {{π/180}} = {{60π/180}}","Reduce the fraction: 60 goes into 180 three times."],a:"60° = {{π/3}} radians"},
+ {l:0,q:"Convert {{π/2}} radians to degrees.",s:["Going from radians to degrees, multiply by {{180/π}}.","{{π/2}} × {{180/π}} = {{180/2}}. The π on top cancels the π on the bottom.","180 ÷ 2 = 90."],a:"{{π/2}} radians = 90°, a quarter turn"},
+ {l:1,q:"Convert 225° to radians. Leave the answer in terms of π.",s:["225° × {{π/180}} = {{225π/180}}","Both numbers divide by 45: 225 = 45 · 5 and 180 = 45 · 4.","Sanity check: 225° is a bit more than a half turn (π), and {{5π/4}} = 1.25π. That fits."],a:"225° = {{5π/4}} radians"},
+ {l:1,q:"An angle measures 2 radians, with no π in sight. How many degrees is that?",s:["A radian measure does not need a π in it. The rule is the same: multiply by {{180/π}}.","2 × {{180/π}} = {{360/π}}","Use a calculator: 360 ÷ 3.14159… ≈ 114.59.","Sanity check: 1 radian is about 57.3°, so 2 radians should be about 114.6°."],a:"2 radians ≈ 114.6°"},
+ {l:2,q:"A circle has radius 8 cm. Find the length of the arc cut off by a central angle of 135°.",s:["The formula s = rθ only works when θ is in radians, so convert first.","135° × {{π/180}} = {{3π/4}} radians (divide top and bottom by 45).","s = rθ = 8 · {{3π/4}} = {{24π/4}} = 6π","6π ≈ 18.85"],a:"s = 6π cm ≈ 18.85 cm"},
+ {l:2,q:"Find the angle between 0 and 2π that is coterminal with −{{17π/6}}. Then give it in degrees.",s:["Coterminal angles end in the same place. You get them by adding or subtracting full turns, and one full turn is 2π = {{12π/6}}.","−{{17π/6}} + {{12π/6}} = −{{5π/6}}. Still negative, so add another full turn.","−{{5π/6}} + {{12π/6}} = {{7π/6}}. This is between 0 and 2π, so stop.","Convert: {{7π/6}} × {{180/π}} = 7 · 30° = 210°."],a:"{{7π/6}} radians, which is 210°"}
+],
+triangles:[
+ {l:0,q:"A right triangle has legs 3 and 4 and hypotenuse 5. The angle θ is opposite the side of length 3. Find sin θ, cos θ and tan θ.",s:["Label the sides from θ's point of view: opposite = 3, adjacent = 4, hypotenuse = 5.","SOH: sin θ = {{opposite/hypotenuse}} = {{3/5}}","CAH: cos θ = {{adjacent/hypotenuse}} = {{4/5}}","TOA: tan θ = {{opposite/adjacent}} = {{3/4}}"],a:"sin θ = {{3/5}}, cos θ = {{4/5}}, tan θ = {{3/4}}"},
+ {l:0,q:"Use the 30°-60°-90° triangle with sides 1, √(3), 2 to find sin 30°, cos 30° and tan 30°.",s:["The shortest side, 1, is across from the smallest angle, 30°. The side √(3) touches the 30° angle, and the hypotenuse is 2.","sin 30° = {{opposite/hypotenuse}} = {{1/2}}","cos 30° = {{adjacent/hypotenuse}} = {{√(3)/2}}","tan 30° = {{opposite/adjacent}} = {{1/√(3)}}, which is {{√(3)/3}} after rationalizing."],a:"sin 30° = {{1/2}}, cos 30° = {{√(3)/2}}, tan 30° = {{√(3)/3}}"},
+ {l:1,q:"θ is an acute angle with sin θ = {{5/13}}. Find the other five trigonometric functions.",s:["Draw a right triangle that fits. Since sin θ = {{opposite/hypotenuse}}, use opposite = 5 and hypotenuse = 13.","Find the missing side with the Pythagorean theorem: adjacent² = 13² − 5² = 169 − 25 = 144, so adjacent = 12.","cos θ = {{12/13}} and tan θ = {{5/12}}","The other three are reciprocals: csc θ = {{13/5}}, sec θ = {{13/12}}, cot θ = {{12/5}}"],a:"cos θ = {{12/13}}, tan θ = {{5/12}}, csc θ = {{13/5}}, sec θ = {{13/12}}, cot θ = {{12/5}}"},
+ {l:1,q:"A right triangle has a 35° angle and a hypotenuse of 12. Find the side x opposite the 35° angle and the side y adjacent to it.",s:["x is opposite and you know the hypotenuse, so use sine: sin 35° = {{x/12}}.","x = 12 · sin 35° ≈ 12 · 0.5736 ≈ 6.88","y is adjacent and you know the hypotenuse, so use cosine: cos 35° = {{y/12}}.","y = 12 · cos 35° ≈ 12 · 0.8192 ≈ 9.83","Check with the Pythagorean theorem: 6.88² + 9.83² ≈ 47.3 + 96.6 ≈ 144 = 12²."],a:"x ≈ 6.88 and y ≈ 9.83"},
+ {l:1,q:"A 6 m ladder leans against a wall and reaches 5 m up the wall. What angle does the ladder make with the ground?",s:["Sketch it. The ladder is the hypotenuse (6), and the height on the wall is opposite the angle at the ground (5).","Opposite and hypotenuse means sine: sin θ = {{5/6}}.","You know the ratio and want the angle, so use the inverse function: θ = sin⁻¹({{5/6}}).","With the calculator in degree mode, θ ≈ 56.4°."],a:"θ ≈ 56.4°"},
+ {l:2,q:"From a point on the ground, the angle of elevation to the top of a tower is 30°. After walking 40 m straight toward the tower, the angle of elevation is 60°. How tall is the tower?",s:["Let h be the height and x the distance from the second point to the tower. There are two right triangles, and they share the side h.","Closer triangle: tan 60° = {{h/x}}, so h = x√(3).","Farther triangle: tan 30° = {{h/(x + 40)}}, so h = {{(x + 40)/√(3)}}.","Set them equal: x√(3) = {{(x + 40)/√(3)}}. Multiply both sides by √(3) to get 3x = x + 40, so x = 20.","h = 20√(3) ≈ 34.64"],a:"The tower is 20√(3) m ≈ 34.6 m tall"},
+ {l:2,q:"From the top of a 120 ft lighthouse, the angle of depression to a boat is 18°. A few minutes later it is 32°. How far did the boat travel toward the lighthouse?",s:["An angle of depression is measured down from the horizontal. It equals the angle of elevation from the boat up to the top, so each sighting gives a right triangle whose opposite side is 120.","First sighting: tan 18° = {{120/d₁}}, so d₁ = {{120/tan 18°}} ≈ 369.3 ft.","Second sighting: d₂ = {{120/tan 32°}} ≈ 192.0 ft.","Distance traveled = d₁ − d₂ ≈ 369.3 − 192.0"],a:"About 177.3 ft"}
+],
+circle:[
+ {l:0,q:"Find the reference angle for 150° and for 315°.",s:["The reference angle is the acute angle between the terminal side and the x-axis. It is never measured to the y-axis.","150° is in Quadrant II. The nearest part of the x-axis is at 180°, so the reference angle is 180° − 150° = 30°.","315° is in Quadrant IV. The nearest part of the x-axis is at 360°, so the reference angle is 360° − 315° = 45°."],a:"30° and 45°"},
+ {l:0,q:"Find the exact value of sin 150°.",s:["Quadrant: 150° is in Quadrant II, where y is positive, so sine is positive.","Reference angle: 180° − 150° = 30°.","Value: sin 30° = {{1/2}}. Attach the sign from the first step."],a:"sin 150° = {{1/2}}"},
+ {l:1,q:"Find the exact value of cos 225°.",s:["Quadrant: 225° is in Quadrant III, on the left side of the circle, so x is negative and cosine is negative.","Reference angle: 225° − 180° = 45°.","cos 45° = {{√(2)/2}}. Attach the negative sign."],a:"cos 225° = −{{√(2)/2}}"},
+ {l:1,q:"Find the exact value of tan {{5π/3}}.",s:["Convert if it helps: {{5π/3}} = 5 · 60° = 300°, which is in Quadrant IV.","In Quadrant IV, x is positive and y is negative, so tan θ = {{y/x}} is negative.","Reference angle: 360° − 300° = 60°, and tan 60° = √(3)."],a:"tan {{5π/3}} = −√(3)"},
+ {l:2,q:"Find the exact value of cos(−840°).",s:["Find a coterminal angle between 0° and 360° by adding full turns: −840° + 360° = −480°, then −120°, then 240°.","240° is in Quadrant III, so cosine is negative.","Reference angle: 240° − 180° = 60°, and cos 60° = {{1/2}}."],a:"cos(−840°) = −{{1/2}}"},
+ {l:2,q:"sin θ = −{{3/5}} and θ is in Quadrant III. Find cos θ and tan θ.",s:["Every point on the unit circle satisfies x² + y² = 1, which says cos²θ + sin²θ = 1.","cos²θ = 1 − {{9/25}} = {{16/25}}, so cos θ = {{4/5}} or −{{4/5}}.","Quadrant III is on the left side of the circle, so x is negative: cos θ = −{{4/5}}.","tan θ = {{sin θ/cos θ}} = (−{{3/5}}) ÷ (−{{4/5}}) = {{3/4}}. A negative divided by a negative is positive, which matches Quadrant III."],a:"cos θ = −{{4/5}} and tan θ = {{3/4}}"},
+ {l:2,q:"Find all angles θ with 0° ≤ θ < 360° where sin θ = −{{√(3)/2}}.",s:["Ignore the sign for a moment. Which acute angle has sine {{√(3)/2}}? That is 60°, so the reference angle is 60°.","Sine is negative where y is negative: Quadrants III and IV.","Quadrant III with reference angle 60°: 180° + 60° = 240°.","Quadrant IV with reference angle 60°: 360° − 60° = 300°."],a:"θ = 240° or θ = 300°"}
+],
+periodic:[
+ {l:0,q:"A periodic function has a maximum value of 7 and a minimum value of 1. Find its midline and amplitude.",s:["The midline is halfway between the top and the bottom: y = {{(7 + 1)/2}} = 4.","The amplitude is the distance from the midline to the top: 7 − 4 = 3. The formula {{(7 − 1)/2}} = 3 gives the same thing."],a:"Midline y = 4, amplitude 3"},
+ {l:0,q:"A function f has period 5, and f(2) = 9. Find f(17).",s:["Period 5 means the outputs repeat every 5 units: f(x + 5) = f(x).","Walk from 17 back to 2 in steps of 5: 17 → 12 → 7 → 2. That is exactly 3 periods.","So f(17) = f(2)."],a:"f(17) = 9"},
+ {l:1,q:"Find the amplitude, period, midline and range of y = 3 sin(2x).",s:["Compare with y = A sin(Bx) + D. Here A = 3, B = 2 and D = 0.","Amplitude = |A| = 3. The graph is 3 times as tall as y = sin x.","Period = {{2π/B}} = {{2π/2}} = π. A full wave now fits in π instead of 2π.","The midline is y = 0, so the graph runs from 0 − 3 up to 0 + 3."],a:"Amplitude 3, period π, midline y = 0, range [−3, 3]"},
+ {l:1,q:"Find the amplitude, period, midline and range of y = 4 cos({{πx/3}}) − 1.",s:["A = 4, B = {{π/3}} and D = −1.","Amplitude = 4.","Period = 2π ÷ {{π/3}} = 2π · {{3/π}} = 6. When B contains π, the period comes out as a plain number.","Midline y = −1. The range runs from −1 − 4 up to −1 + 4."],a:"Amplitude 4, period 6, midline y = −1, range [−5, 3]"},
+ {l:2,q:"Rewrite y = 2 sin(3x − π) + 4 so you can read its phase shift. Then give the amplitude, period, midline and range.",s:["The shift only shows once the coefficient of x is factored out: 3x − π = 3(x − {{π/3}}).","So y = 2 sin(3(x − {{π/3}})) + 4. The phase shift is {{π/3}} to the right, not π.","Amplitude = 2 and period = {{2π/3}}.","Midline y = 4, so the range is [4 − 2, 4 + 2]."],a:"Shift {{π/3}} right, amplitude 2, period {{2π/3}}, midline y = 4, range [2, 6]"},
+ {l:2,q:"A Ferris wheel has a diameter of 40 m and its lowest point is 2 m above the ground. It makes one turn every 8 minutes, and you board at the bottom at t = 0. Write a function for your height h(t), then find your height after 3 minutes.",s:["Amplitude = radius = 20. The lowest point is 2 and the highest is 2 + 40 = 42, so the midline is {{(2 + 42)/2}} = 22.","The period is 8 minutes, so B = {{2π/8}} = {{π/4}}.","You start at the minimum. A cosine starts at its maximum, so flip it with a negative sign: h(t) = −20 cos({{πt/4}}) + 22.","Check t = 0: −20 · 1 + 22 = 2. Correct.","At t = 3: cos({{3π/4}}) = −{{√(2)/2}}, so h(3) = 22 + 10√(2) ≈ 36.1."],a:"h(t) = −20 cos({{πt/4}}) + 22, and h(3) ≈ 36.1 m"}
+]};
+
+/* ---------- practice generators ---------- */
+const SPQ=[30,45,60,120,135,150,210,225,240,300,315,330];
+const WORDS={sin:"opposite ÷ hypotenuse",cos:"adjacent ÷ hypotenuse",tan:"opposite ÷ adjacent"};
+function exactQ(big){
+  const d=pick(SPQ), fn=pick(["sin","cos","tan"]), r=refOf(d), c=exact(fn,d);
+  const other=fn==="sin"?S[90-r]:fn==="cos"?S[r]:T[90-r];
+  const D=big?d+360*pick([-2,-1,1,2]):d;
+  const shown=big?`${fn}(${fracPi(D,180)})`:`${fn} ${d}°`;
+  const pos=!c.startsWith("−");
+  const ex=(big?`Add or subtract 2π until the angle is between 0 and 2π: it is coterminal with ${fracPi(d,180)}, which is ${d}°. `:"")+
+    `${d}° is in Quadrant ${QN[quad(d)]}, where ${fn} is ${pos?"positive":"negative"}. The reference angle is ${r}°, and ${fn} ${r}° = ${strip(c)}. So the answer is ${c}.`;
+  return mcq(`Find the exact value of ${shown}.`,c,[flip(c),other,"−"+other],["{{1/2}}","−{{1/2}}","1","−1","{{√(3)/2}}"],ex);
+}
+const PER=[{b:"2x",p:"π",w:["2π","4π","{{π/2}}"]},{b:"3x",p:"{{2π/3}}",w:["3π","6π","{{π/3}}"]},{b:"4x",p:"{{π/2}}",w:["4π","8π","{{π/4}}"]},{b:"{{x/2}}",p:"4π",w:["π","{{π/2}}","2π"]},{b:"πx",p:"2",w:["2π","π","{{1/2}}"]},{b:"{{πx/4}}",p:"8",w:["4","{{π/2}}","8π"]},{b:"{{x/3}}",p:"6π",w:["{{2π/3}}","3π","{{π/3}}"]}];
+const PH=[{i:"2x − π",f:"2(x − {{π/2}})",s:"{{π/2}} right",w:["π right","{{π/2}} left","π left"]},{i:"3x + π",f:"3(x + {{π/3}})",s:"{{π/3}} left",w:["π left","{{π/3}} right","π right"]},{i:"2x − {{π/3}}",f:"2(x − {{π/6}})",s:"{{π/6}} right",w:["{{π/3}} right","{{π/6}} left","{{2π/3}} right"]},{i:"4x + 2π",f:"4(x + {{π/2}})",s:"{{π/2}} left",w:["2π left","{{π/2}} right","2π right"]},{i:"{{x/2}} − π",f:"{{1/2}}(x − 2π)",s:"2π right",w:["π right","{{π/2}} right","2π left"]}];
+const GEN={
+angles:[
+ ()=>{const d=pick([30,45,60,90,120,135,150,180,210,225,270,300,315,330]),c=fracPi(d,180);
+   return mcq(`Convert ${d}° to radians.`,c,[fracPi(d,360),fracPi(d,90),fracPi(d+30,180)],["π","{{π/5}}","{{3π/5}}"],`${d}° × {{π/180}} = ${c}.`)},
+ ()=>{const d=pick([-330,-270,-240,-225,-150,-135,-60,-45,210,240,300,315,330,390,405,420,450,480,495,510,540,600,630,675,690]),r=fracPi(d,180),dg=x=>num(x)+"°";
+   return mcq(`Convert ${r} radians to degrees.`,dg(d),[dg(d+30),dg(d*2),dg(d-45),dg(-d)],[],`${r} × {{180/π}} = ${dg(d)}. The π cancels.`)},
+ ()=>{const r=ri(2,12),d=pick([30,45,60,90,120,135,150,210,225,240,270,300]),c=fracPi(r*d,180)+" cm";
+   return mcq(`A circle has radius ${r} cm. How long is the arc cut off by a central angle of ${d}°?`,c,[`${r*d} cm`,fracPi(d,180)+" cm",fracPi(r*d,90)+" cm",fracPi(r*d,360)+" cm"],[],`Convert first: ${d}° = ${fracPi(d,180)} radians. Then s = rθ = ${r} · ${fracPi(d,180)} = ${c}.`)}
+],
+triangles:[
+ ()=>{let [o,a,h]=pick([[3,4,5],[5,12,13],[8,15,17],[7,24,25],[6,8,10],[9,12,15],[20,21,29]]); if(ri(0,1))[o,a]=[a,o];
+   const fn=pick(["sin","cos","tan"]),v={sin:frac(o,h),cos:frac(a,h),tan:frac(o,a)};
+   return mcq(`In a right triangle, the side opposite θ is ${o}, the side adjacent to θ is ${a}, and the hypotenuse is ${h}. Find ${fn} θ.`,v[fn],shuffle([v.sin,v.cos,v.tan,frac(h,o),frac(a,o),frac(h,a)]),[],`${fn} θ = ${WORDS[fn]} = ${v[fn]}.`)},
+ ()=>{const t=pick([20,25,28,32,35,40,50,55,62,65,70]),k=ri(4,20),s=Math.sin(rad(t)),c=Math.cos(rad(t)),tn=Math.tan(rad(t));
+   const F=[["hypotenuse","side opposite",k*s,`sin ${t}° = {{opp/${k}}}, so opp = ${k} · sin ${t}°`],["hypotenuse","side adjacent to",k*c,`cos ${t}° = {{adj/${k}}}, so adj = ${k} · cos ${t}°`],["side adjacent to the angle","side opposite",k*tn,`tan ${t}° = {{opp/${k}}}, so opp = ${k} · tan ${t}°`],["side opposite the angle","hypotenuse",k/s,`sin ${t}° = {{${k}/hyp}}, so hyp = ${k} ÷ sin ${t}°`],["side adjacent to the angle","hypotenuse",k/c,`cos ${t}° = {{${k}/hyp}}, so hyp = ${k} ÷ cos ${t}°`]];
+   const f=pick(F),all=[k*s,k*c,k*tn,k/s,k/c,k/tn].map(x=>x.toFixed(2)),ans=f[2].toFixed(2);
+   const want=f[1]==="hypotenuse"?"the hypotenuse":`the ${f[1]} the ${t}° angle`;
+   return mcq(`A right triangle has a ${t}° angle. The ${f[0]} is ${k}. Find ${want}.`,ans,shuffle(all),[],`${f[3]} ≈ ${ans}.`)},
+ ()=>{ if(ri(0,1)){const a=ri(2,9),b=a+ri(2,12),g=x=>(x*180/PI).toFixed(1)+"°",c=g(Math.atan(a/b));
+     return mcq(`A ramp rises ${a} m over a horizontal run of ${b} m. What angle does it make with the ground?`,c,[g(Math.atan(b/a)),g(Math.asin(a/b)),g(Math.acos(a/b))],["45.0°"],`The rise is opposite the angle and the run is adjacent, so tan θ = {{${a}/${b}}} and θ = tan⁻¹({{${a}/${b}}}) ≈ ${c}.`)}
+   const d=ri(15,80),t=pick([22,28,35,41,48,56,63]),tn=Math.tan(rad(t)),m=x=>x.toFixed(1)+" m",c=m(d*tn+1.6);
+   return mcq(`You stand ${d} m from a tree. Your eyes are 1.6 m above the ground, and you look up at an angle of elevation of ${t}° to see the top. How tall is the tree?`,c,[m(d*tn),m(d*Math.sin(rad(t))+1.6),m(d/tn+1.6)],[m(d*Math.cos(rad(t))+1.6),m(d*tn+3.2)],`The height above eye level is opposite the angle: ${d} · tan ${t}° ≈ ${(d*tn).toFixed(1)} m. Add your eye height of 1.6 m to get ${c}.`)}
+],
+circle:[
+ ()=>{let d; do{d=5*ri(1,71)}while(d%90===0); const r=refOf(d),q=quad(d),g=x=>Math.abs(x)+"°";
+   const how=["",`the angle itself`,`180° − ${d}°`,`${d}° − 180°`,`360° − ${d}°`][q];
+   return mcq(`What is the reference angle for ${d}°?`,g(r),shuffle([g(180-d),g(360-d),g(d),g(90-r),g(d-90)]),["45°","30°","60°"],`${d}° is in Quadrant ${QN[q]}, so the reference angle is ${how} = ${r}°.`)},
+ ()=>exactQ(false),
+ ()=>exactQ(true)
+],
+periodic:[
+ ()=>{let m; do{m=ri(-6,6)}while(m===0); const a=ri(1,6),M=m+2*a,mid=m+a;
+   if(ri(0,1)) return mcq(`A periodic function has maximum value ${num(M)} and minimum value ${num(m)}. What is its amplitude?`,""+a,[num(mid),num(M-m),num(M+m)],[""+(a+1),""+(2*a+1)],`Amplitude = (max − min) ÷ 2 = (${num(M)} − ${m<0?"("+num(m)+")":m}) ÷ 2 = ${a}.`);
+   return mcq(`A periodic function has maximum value ${num(M)} and minimum value ${num(m)}. What is its midline?`,`y = ${num(mid)}`,[`y = ${a}`,`y = ${num(M-m)}`,`y = ${num(M)}`],[`y = ${num(m)}`,"y = 0"],`Midline = (max + min) ÷ 2 = (${num(M)} + ${m<0?"("+num(m)+")":m}) ÷ 2 = ${num(mid)}.`)},
+ ()=>{let A,D; do{A=pick([2,3,4,5,-2,-3]);D=pick([-3,-2,-1,1,2,3,4])}while(Math.abs(A)===Math.abs(D));
+   const P=pick(PER),fn=pick(["sin","cos"]),a=Math.abs(A),eq=`y = ${num(A)} ${fn}(${P.b}) ${D>0?"+":"−"} ${Math.abs(D)}`,k=ri(0,2);
+   if(k===0) return mcq(`What is the period of ${eq}?`,P.p,P.w,[],`Only the number multiplying x matters. Period = 2π ÷ B = ${P.p}.`);
+   if(k===1) return mcq(`What is the range of ${eq}?`,`[${num(D-a)}, ${num(D+a)}]`,[`[${num(-a)}, ${a}]`,`[${num(D)}, ${num(D+a)}]`,`[${num(a-D)}, ${num(a+D)}]`],[`[${num(D-2*a)}, ${num(D+2*a)}]`],`The midline is y = ${num(D)} and the amplitude is ${a}, so the graph runs from ${num(D)} − ${a} to ${num(D)} + ${a}.`);
+   return mcq(`What is the amplitude of ${eq}?`,""+a,[A<0?num(A):null,""+(a+Math.abs(D)),""+Math.abs(D),""+2*a],[""+(a+1),""+(a+3),""+(a+5)],`Amplitude = |A| = ${a}. It is a distance, so it is never negative.`)},
+ ()=>{ if(ri(0,1)){const P=pick(PH),A=pick([2,3,5]),D=pick([1,2,4]);
+     return mcq(`What is the phase shift of y = ${A} sin(${P.i}) + ${D}?`,P.s,P.w,[],`Factor out the coefficient of x: ${P.i} = ${P.f}. The shift is ${P.s}.`)}
+   const Dia=pick([30,40,50,60,80]),b=pick([2,3,4,5]),Tm=pick([6,8,10,12,20]),R=Dia/2,mid=b+R,k=Tm/2,c=`h(t) = −${R} cos({{πt/${k}}}) + ${mid}`;
+   return mcq(`A Ferris wheel has diameter ${Dia} m, its lowest point is ${b} m above the ground, and it turns once every ${Tm} minutes. You board at the bottom at t = 0. Which function gives your height in meters?`,c,[`h(t) = ${R} cos({{πt/${k}}}) + ${mid}`,`h(t) = −${R} cos(${Tm}t) + ${mid}`,`h(t) = −${Dia} cos({{πt/${k}}}) + ${b}`],[],`Amplitude = radius = ${R}. Midline = ${b} + ${R} = ${mid}. A period of ${Tm} gives B = {{2π/${Tm}}} = {{π/${k}}}. Starting at the lowest point means a flipped cosine.`)}
+]};
+
+/* ---------- page setup (skipped when no DOM) ---------- */
+if(typeof document!=="undefined"){
+const main=document.querySelector("main"); main.innerHTML=fmt(main.innerHTML);
+const $=id=>document.getElementById(id);
+const NS="http://www.w3.org/2000/svg";
+const el=(tag,attrs,text)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;return e};
+const set=(e,a)=>{for(const k in a)e.setAttribute(k,typeof a[k]==="number"?a[k].toFixed(1):a[k])};
+const pt=(cx,cy,r,d)=>[cx+r*Math.cos(rad(d)),cy-r*Math.sin(rad(d))];
+function arc(cx,cy,r,a1,a2){ if(a2-a1<0.05)return ""; a2=Math.min(a2,a1+359.9); const p=pt(cx,cy,r,a1),q=pt(cx,cy,r,a2);
+  return `M${p[0].toFixed(1)},${p[1].toFixed(1)}A${r},${r} 0 ${a2-a1>180?1:0} 0 ${q[0].toFixed(1)},${q[1].toFixed(1)}`; }
+function dragAngle(svg,hit,cx,cy,cb){ let on=false;
+  hit.addEventListener("pointerdown",e=>{on=true;hit.setPointerCapture(e.pointerId);e.preventDefault()});
+  hit.addEventListener("pointermove",e=>{ if(!on)return; const r=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;
+    const x=(e.clientX-r.left)*vb.width/r.width,y=(e.clientY-r.top)*vb.height/r.height; let d=Math.atan2(cy-y,x-cx)*180/PI; if(d<0)d+=360; cb(d); });
+  ["pointerup","pointercancel"].forEach(t=>hit.addEventListener(t,()=>on=false)); }
+const trim=x=>+x.toFixed(1);
+
+/* tabs */
+const ORDER=["unit-circle","angles","triangles","periodic"],NAMES=["Unit circle","Angles","Right triangles","Periodic functions"];
+ORDER.forEach((id,i)=>{ const d=document.createElement("div"); d.className="pager";
+  d.innerHTML=(i?`<button class="btn ghost" type="button" data-go="${ORDER[i-1]}">← Part ${i}: ${NAMES[i-1]}</button>`:"<span></span>")+(i<3?`<button class="btn" type="button" data-go="${ORDER[i+1]}">Part ${i+2}: ${NAMES[i+1]} →</button>`:"");
+  $(id).append(d); });
+function showTab(id,scroll){ if(!ORDER.includes(id))id=ORDER[0];
+  ORDER.forEach(k=>{$(k).hidden=k!==id});
+  document.querySelectorAll("[data-tab]").forEach(a=>{ if(a.dataset.tab===id)a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current") });
+  if(scroll)$(id).scrollIntoView(); }
+document.addEventListener("click",e=>{ const t=e.target.closest("[data-tab],[data-go]"); if(!t)return; e.preventDefault();
+  const id=t.dataset.tab||t.dataset.go; showTab(id,true); try{location.hash=id}catch(_){} });
+window.addEventListener("hashchange",()=>{ const id=location.hash.slice(1); if(ORDER.includes(id)&&$(id).hidden)showTab(id,true) });
+showTab(location.hash.slice(1),false);
+
+/* examples */
+document.querySelectorAll("[data-ex]").forEach(box=>{
+  box.innerHTML=EX[box.dataset.ex].map((e,i)=>`<article class="ex"><div class="ex-h"><span class="tag l${e.l}">${"●".repeat(e.l+1)+"○".repeat(2-e.l)} ${LV[e.l]}</span><span class="ex-n">Example ${i+1}</span></div><p class="ex-q">${fmt(e.q)}</p><ol class="steps">${e.s.map(s=>`<li hidden>${fmt(s)}</li>`).join("")}</ol><p class="ans" hidden><b>Answer</b>${fmt(e.a)}</p><div class="ex-ctl"><button class="btn" type="button" data-act="next">Show first step</button><button class="btn ghost" type="button" data-act="all">Show full solution</button></div></article>`).join("");
+});
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-act]"); if(!b)return;
+  const ex=b.closest(".ex"),lis=[...ex.querySelectorAll(".steps li")],ans=ex.querySelector(".ans");
+  const nb=ex.querySelector("[data-act=next]"),ab=ex.querySelector("[data-act=all]");
+  let hid=lis.filter(l=>l.hidden);
+  if(b.dataset.act==="all"){ const show=hid.length>0||ans.hidden; lis.forEach(l=>l.hidden=!show); ans.hidden=!show; }
+  else if(hid.length){ hid[0].hidden=false; if(hid.length===1)ans.hidden=false; }
+  hid=lis.filter(l=>l.hidden);
+  nb.disabled=hid.length===0; nb.textContent=hid.length===lis.length?"Show first step":hid.length?`Next step (${hid.length} left)`:"All steps shown";
+  ab.textContent=hid.length===0?"Hide solution":"Show full solution";
+});
+
+/* quizzes */
+document.querySelectorAll("[data-quiz]").forEach(box=>{
+  const gens=GEN[box.dataset.quiz]; let lvl=0,cur,right=0,tried=0;
+  box.innerHTML=`<div class="q-top"><div class="seg" role="group" aria-label="Difficulty">${LV.map((n,i)=>`<button type="button" data-l="${i}" aria-pressed="${i===0}">${n}</button>`).join("")}</div><span class="score">0 of 0 correct</span></div><p class="qq"></p><div class="opts"></div><p class="fb" aria-live="polite"></p><div><button class="btn" type="button" data-new>New question</button></div>`;
+  const qq=box.querySelector(".qq"),opts=box.querySelector(".opts"),fb=box.querySelector(".fb"),score=box.querySelector(".score");
+  function ask(){ cur=gens[lvl](); qq.innerHTML=fmt(cur.q); fb.innerHTML="Pick an answer.";
+    opts.innerHTML=cur.opts.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${fmt(o)}</button>`).join(""); }
+  box.addEventListener("click",e=>{ const l=e.target.closest("[data-l]"),o=e.target.closest(".opt");
+    if(l){ lvl=+l.dataset.l; box.querySelectorAll("[data-l]").forEach(b=>b.setAttribute("aria-pressed",b===l)); ask(); }
+    else if(e.target.closest("[data-new]")) ask();
+    else if(o&&!o.disabled){ const good=cur.opts[+o.dataset.i]===cur.correct; tried++; if(good)right++;
+      opts.querySelectorAll(".opt").forEach(b=>{b.disabled=true; if(cur.opts[+b.dataset.i]===cur.correct)b.classList.add("ok")});
+      if(!good)o.classList.add("no");
+      fb.innerHTML=`<b class="${good?"ok":"no"}">${good?"Correct.":"Not quite."}</b> `+fmt(cur.explain);
+      score.textContent=`${right} of ${tried} correct`; } });
+  ask();
+});
+
+/* lab 1: angle */
+(()=>{ const cx=160,cy=160,r=110,svg=$("ang-svg"),tk=$("ang-ticks");
+  for(let i=1;i<=6;i++){ const d=i*180/PI,a=pt(cx,cy,r-7,d),b=pt(cx,cy,r+7,d),c=pt(cx,cy,r+20,d);
+    tk.append(el("line",{class:"g-axis",x1:a[0],y1:a[1],x2:b[0],y2:b[1]}),el("text",{class:"g-t","text-anchor":"middle",x:c[0],y:c[1]+4},i)); }
+  function upd(d,src){ d=Math.max(0,Math.min(360,d));
+    if(src!=="rad") d=$("ang-snap").checked?Math.round(d/15)*15:Math.round(d); else d=trim(d);
+    const p=pt(cx,cy,r,d),w=pt(cx,cy,34,Math.min(d,359.9)),R=d*PI/180;
+    $("ang-arc").setAttribute("d",arc(cx,cy,r,0,d));
+    $("ang-wedge").setAttribute("d",d<0.05?"":`M${cx},${cy}L${cx+34},${cy}A34,34 0 ${d>180?1:0} 0 ${w[0].toFixed(1)},${w[1].toFixed(1)}Z`);
+    set($("ang-ray"),{x2:p[0],y2:p[1]}); set($("ang-dot"),{cx:p[0],cy:p[1]}); set($("ang-hit"),{cx:p[0],cy:p[1]});
+    const ex=Number.isInteger(d)?fracPi(d,180):null;
+    $("ang-rd").textContent=d+"°";
+    $("ang-rr").innerHTML=fmt((ex&&d?ex+" ≈ ":"")+R.toFixed(3));
+    $("ang-ra").textContent=R.toFixed(2)+" radius-lengths";
+    $("ang-rt").textContent=(d/360).toFixed(3).replace(/0+$/,"").replace(/\.$/,"")+" of a full turn";
+    $("ang-work").innerHTML=fmt(`${d}° × {{π/180}} = ${ex&&d?ex+" ≈ ":""}${R.toFixed(3)} rad`);
+    if(src!=="slider")$("ang-s").value=d; if(src!=="deg")$("ang-deg").value=d; if(src!=="rad")$("ang-rad").value=R.toFixed(2);
+  }
+  $("ang-s").addEventListener("input",e=>upd(+e.target.value,"slider"));
+  $("ang-deg").addEventListener("input",e=>{if(e.target.value!=="")upd(+e.target.value,"deg")});
+  $("ang-rad").addEventListener("input",e=>{if(e.target.value!=="")upd(+e.target.value*180/PI,"rad")});
+  $("ang-snap").addEventListener("change",()=>upd(+$("ang-s").value));
+  dragAngle(svg,$("ang-hit"),cx,cy,d=>upd(d>357?360:d)); upd(120);
+})();
+
+/* lab 2: right triangle */
+(()=>{ const ax=105,ay=270,u=13;
+  function upd(){ const t=+$("tri-t").value,H=+$("tri-h").value,s=Math.sin(rad(t)),c=Math.cos(rad(t)),o=H*s,a=H*c;
+    const bx=ax+a*u,cyy=ay-o*u,q=Math.min(14,o*u*.5,a*u*.5);
+    $("tri-fill").setAttribute("points",`${ax},${ay} ${bx.toFixed(1)},${ay} ${bx.toFixed(1)},${cyy.toFixed(1)}`);
+    set($("tri-adj"),{x1:ax,y1:ay,x2:bx,y2:ay}); set($("tri-opp"),{x1:bx,y1:ay,x2:bx,y2:cyy}); set($("tri-hyp"),{x1:ax,y1:ay,x2:bx,y2:cyy});
+    $("tri-arc").setAttribute("d",arc(ax,ay,30,0,t));
+    $("tri-sq").setAttribute("d",`M${(bx-q).toFixed(1)},${ay}v${(-q).toFixed(1)}h${q.toFixed(1)}`);
+    const lp=pt(ax,ay,46,t/2); set($("tri-lt"),{x:lp[0]-4,y:lp[1]+5});
+    set($("tri-la"),{x:(ax+bx)/2,y:ay+20}); $("tri-la").textContent="adj "+a.toFixed(2);
+    set($("tri-lo"),{x:bx+10,y:(ay+cyy)/2+4}); $("tri-lo").textContent="opp "+o.toFixed(2);
+    set($("tri-lh"),{x:(ax+bx)/2-12*s-4,y:(ay+cyy)/2-12*c}); $("tri-lh").textContent="hyp "+H.toFixed(1);
+    $("tri-tv").textContent=t+"°"; $("tri-hv").textContent=H.toFixed(1);
+    const f=(n,cl,top,bot,v)=>`<div class="ratio"><span class="rn ${cl}">${n} θ</span><span>{{${top.toFixed(2)}/${bot.toFixed(2)}}} = <b>${v.toFixed(3)}</b></span></div>`;
+    $("tri-r").innerHTML=fmt(f("sin","sin",o,H,s)+f("csc","",H,o,1/s)+f("cos","cos",a,H,c)+f("sec","",H,a,1/c)+f("tan","tan",o,a,s/c)+f("cot","",a,o,c/s));
+  }
+  $("tri-t").addEventListener("input",upd); $("tri-h").addEventListener("input",upd); upd();
+})();
+
+/* lab 3: unit circle */
+(()=>{ const cx=180,cy=180,r=130,SP=[0,30,45,60,90,120,135,150,180,210,225,240,270,300,315,330],g=$("uc-sp");
+  SP.forEach(d=>{const p=pt(cx,cy,r,d);g.append(el("circle",{class:"g-sp",cx:p[0].toFixed(1),cy:p[1].toFixed(1),r:3}))});
+  function upd(d){ d=norm(d);
+    d=$("uc-snap").checked?[...SP,360].reduce((b,x)=>Math.abs(x-d)<Math.abs(b-d)?x:b,0)%360:Math.round(d)%360;
+    const p=pt(cx,cy,r,d),x=Math.cos(rad(d)),y=Math.sin(rad(d)),q=quad(d),rf=refOf(d);
+    set($("uc-rad"),{x2:p[0],y2:p[1]}); set($("uc-cos"),{x2:p[0]}); set($("uc-sin"),{x1:p[0],x2:p[0],y2:p[1]});
+    set($("uc-dot"),{cx:p[0],cy:p[1]}); set($("uc-hit"),{cx:p[0],cy:p[1]});
+    $("uc-ref").setAttribute("d",q===1?arc(cx,cy,36,0,d):q===2?arc(cx,cy,36,d,180):q===3?arc(cx,cy,36,180,d):q===4?arc(cx,cy,36,d,360):"");
+    const v=(fn,n)=>{const e=exact(fn,d); return e&&e!=="0"&&e!=="1"&&e!=="−1"&&e!=="undefined"?`${e} ≈ ${n.toFixed(3)}`:e||n.toFixed(3)};
+    $("uc-ra").innerHTML=fmt(`${d}° = ${fracPi(d,180)}`);
+    $("uc-rq").textContent=q?QN[q]:"on an axis";
+    $("uc-rr").textContent=q?rf+"°":"none (on an axis)";
+    $("uc-rc").innerHTML=fmt(v("cos",x)); $("uc-rs").innerHTML=fmt(v("sin",y));
+    $("uc-rt").innerHTML=d%180===90?"undefined":fmt(v("tan",y/x));
+    document.querySelectorAll("#uc-astc span").forEach(s=>s.classList.toggle("on",+s.dataset.q===q));
+    $("uc-s").value=d;
+  }
+  $("uc-s").addEventListener("input",e=>upd(+e.target.value));
+  $("uc-snap").addEventListener("change",()=>upd(+$("uc-s").value));
+  dragAngle($("uc-svg"),$("uc-hit"),cx,cy,upd); upd(150);
+})();
+
+/* lab 4a: circle to wave */
+(()=>{ const cx=90,cy=110,r=70,x0=200,w=420,tk=$("wv-ticks");
+  ["π","2π","3π","4π"].forEach((s,i)=>{const x=x0+(i+1)*w/4; tk.append(el("line",{class:"g-axis",x1:x,y1:cy-5,x2:x,y2:cy+5}),el("text",{class:"g-t","text-anchor":"middle",x:x,y:cy+22},s))});
+  tk.append(el("text",{class:"g-t","text-anchor":"middle",x:x0,y:cy+22},"0"));
+  let raf=0,last=0;
+  function upd(t){ const p=pt(cx,cy,r,t),wx=x0+t/720*w; let d="";
+    for(let a=0;a<=t;a+=4)d+=(a?"L":"M")+(x0+a/720*w).toFixed(1)+","+(cy-r*Math.sin(rad(a))).toFixed(1);
+    d+=(d?"L":"M")+wx.toFixed(1)+","+p[1].toFixed(1);
+    $("wv-path").setAttribute("d",d);
+    set($("wv-rad"),{x2:p[0],y2:p[1]}); set($("wv-d1"),{cx:p[0],cy:p[1]}); set($("wv-d2"),{cx:wx,cy:p[1]});
+    set($("wv-h1"),{x1:p[0],y1:cy,x2:p[0],y2:p[1]}); set($("wv-h2"),{x1:wx,y1:cy,x2:wx,y2:p[1]});
+    set($("wv-link"),{x1:p[0],y1:p[1],x2:wx,y2:p[1]});
+    $("wv-tv").textContent=`${Math.round(t)}°, height ${Math.sin(rad(t)).toFixed(2)}`; $("wv-t").value=t;
+  }
+  function stop(){cancelAnimationFrame(raf);raf=0;$("wv-play").textContent="Play"}
+  function frame(ts){ const dt=last?Math.min(ts-last,50):16; last=ts; let t=+$("wv-t").value+dt*0.11; if(t>=720)t=0; upd(t); raf=requestAnimationFrame(frame); }
+  $("wv-play").addEventListener("click",()=>{ if(raf)stop(); else{last=0;$("wv-play").textContent="Pause";raf=requestAnimationFrame(frame)} });
+  $("wv-t").addEventListener("input",e=>{stop();upd(+e.target.value)}); upd(405);
+})();
+
+/* lab 4b: graph explorer */
+(()=>{ const x0=40,x1=620,y0=20,y1=300,xm=2*PI,ym=6,X=x=>x0+(x+xm)/(2*xm)*(x1-x0),Y=y=>y1-(y+ym)/(2*ym)*(y1-y0),g=$("gr-grid");
+  const xl={"-4":"−2π","-2":"−π","0":"0","2":"π","4":"2π"}; let fn="sin";
+  for(let k=-4;k<=4;k++){const x=X(k*PI/2); g.append(el("line",{class:k?"g-grid":"g-axis",x1:x,y1:y0,x2:x,y2:y1})); if(xl[k])g.append(el("text",{class:"g-t","text-anchor":"middle",x:x,y:y1+15},xl[k]))}
+  for(let j=-6;j<=6;j++){const y=Y(j); g.append(el("line",{class:j?"g-grid":"g-axis",x1:x0,y1:y,x2:x1,y2:y})); if(j&&j%2===0)g.append(el("text",{class:"g-t","text-anchor":"end",x:x0-6,y:y+4},num(j)))}
+  const path=(f,a,b)=>{let d="";const n=300;for(let i=0;i<=n;i++){const x=a+(b-a)*i/n;d+=(i?"L":"M")+X(x).toFixed(1)+","+Y(f(x)).toFixed(1)}return d};
+  function upd(){ const A=+$("gr-a").value,B=+$("gr-b").value,k=+$("gr-c").value,D=+$("gr-d").value,C=k*PI/4,P=2*PI/B,m=Math[fn];
+    const f=x=>A*m(B*(x-C))+D,cl="g-"+fn;
+    $("gr-base").setAttribute("d",path(m,-xm,xm));
+    const cv=$("gr-curve"),one=$("gr-one"); cv.setAttribute("class",cl); one.setAttribute("class",cl);
+    cv.setAttribute("d",path(f,-xm,xm)); one.setAttribute("d",path(f,Math.max(C,-xm),Math.min(C+P,xm)));
+    set($("gr-mid"),{y1:Y(D),y2:Y(D)});
+    const a=A===1?"":A===-1?"−":num(A)+" ",b=B===1?"":""+B;
+    const inner=k===0?b+"x":`${b}${b?"(":""}x ${k>0?"−":"+"} ${fracPi(Math.abs(k),4)}${b?")":""}`;
+    $("gr-eq").innerHTML=fmt(`y = ${a}${fn}(${inner})${D===0?"":` ${D>0?"+":"−"} ${Math.abs(D)}`}`);
+    $("gr-av").textContent=num(A); $("gr-bv").textContent=B; $("gr-cv").innerHTML=fmt(fracPi(k,4)); $("gr-dv").textContent=num(D);
+    $("gr-ra").textContent=Math.abs(A)+(A<0?" (flipped upside down)":"");
+    $("gr-rp").innerHTML=fmt(`${fracPi(4,B*2)} ≈ ${P.toFixed(2)}`);
+    $("gr-rc").innerHTML=k===0?"none":fmt(fracPi(Math.abs(k),4)+(k>0?" to the right":" to the left"));
+    $("gr-rm").textContent="y = "+num(D);
+    $("gr-rr").textContent=`[${num(D-Math.abs(A))}, ${num(D+Math.abs(A))}]`;
+  }
+  ["gr-a","gr-b","gr-c","gr-d"].forEach(i=>$(i).addEventListener("input",upd));
+  $("gr-fn").addEventListener("click",e=>{const b=e.target.closest("[data-fn]"); if(!b)return; fn=b.dataset.fn;
+    $("gr-fn").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b)); upd()});
+  upd();
+})();
+}
+</script>
